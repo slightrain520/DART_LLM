@@ -6,12 +6,17 @@ BASE_URL = "http://10.1.0.220:9002/api"
 # 请根据实际端口修改BASE_URL
 
 # 【重要！！！】 请修改 USER_NAME（把?替换为你的组号） 和 TOKEN（你的token）
+# 所有接口的前缀：http://10.1.0.220:9002/
+# 共享数据库的database_name：common_dataset（本数据库只允许查看，不允许删改，后端已做好限制）
+# 共享数据库的metric_type：cosine（即默认选项）
+# 共享数据库的token：token_common
+# db_name:student_Group12_{our_dbname}
 USER_NAME = "Group12"
 TOKEN = "e-1qa4tLR9N_AnEEBemwaiOBoyoRoFHr00W0Wb3Uk5tWE5ziWJiCHh7sM1b73T2s"
 
 # 1. 创建数据库
 def test_create_database(metric_type="cosine"):
-    db_name = f"student_{USER_NAME}_{int(time.time())}"
+    db_name = f"student_{USER_NAME}_{int(time.time())}"#测试创建数据库为时间戳后缀
     resp = requests.post(f"{BASE_URL}/databases", json={"database_name": db_name, "token": TOKEN, "metric_type": metric_type})
     print("创建数据库:", resp.status_code, resp.json())
     assert resp.status_code == 200
