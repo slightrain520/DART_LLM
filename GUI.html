@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DART_LLM AI 助手</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind主题 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36CFC9',
+                        neutral: {
+                            100: '#F5F7FA',
+                            200: '#E5E6EB',
+                            300: '#C9CDD4',
+                            400: '#86909C',
+                            500: '#4E5969',
+                            600: '#272E3B',
+                            700: '#1D2129',
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 4px 12px rgba(0, 0, 0, 0.05)',
+                        'hover': '0 8px 24px rgba(0, 0, 0, 0.1)',
+                    }
+                },
+            }
+        }
+    </script>
+    
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide {
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .text-balance {
+                text-wrap: balance;
+            }
+        }
+    </style>
+    
+    <style>
+        /* 全局动画定义 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes slide-up {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .animate-slide-up {
+            animation: slide-up 0.3s ease forwards;
+        }
+        
+        .typing-indicator span {
+            animation: pulse 1.4s infinite ease-in-out both;
+        }
+        
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    </style>
+</head>
+
+<body class="font-inter bg-neutral-100 text-neutral-700 min-h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">
+                    <i class="fa fa-bolt text-xl"></i>
+                </div>
+                <h1 class="text-xl font-bold text-neutral-700">DART_LLM 助手</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-neutral-100 transition-colors">
+                    <i class="fa fa-moon-o text-neutral-500"></i>
+                </button>
+                <button id="history-btn" class="p-2 rounded-full hover:bg-neutral-100 transition-colors">
+                    <i class="fa fa-history text-neutral-500"></i>
+                </button>
+                <button id="settings-btn" class="p-2 rounded-full hover:bg-neutral-100 transition-colors">
+                    <i class="fa fa-cog text-neutral-500"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="flex-1 container mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
+        <!-- 聊天窗口 -->
+        <div class="w-full lg:w-3/4 flex flex-col bg-white rounded-xl shadow-card overflow-hidden">
+            <!-- 聊天头部 -->
+            <div class="p-4 border-b border-neutral-200 flex justify-between items-center">
+                <h2 class="font-semibold text-neutral-600">对话</h2>
+                <div class="flex space-x-2">
+                    <button id="clear-chat" class="text-sm text-neutral-500 hover:text-primary transition-colors">
+                        <i class="fa fa-trash-o mr-1"></i> 清空
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 聊天内容区域 -->
+            <div id="chat-container" class="flex-1 p-4 overflow-y-auto scrollbar-hide space-y-6">
+                <!-- 欢迎消息 -->
+                <div class="animate-slide-up">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white">
+                            <i class="fa fa-robot"></i>
+                        </div>
+                        <div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
+                            <p class="text-neutral-700 text-balance">
+                                您好！我是 DART_LLM 网络安全问答助手，我可以为您解答网络安全相关问题。请问有什么可以帮助您的？
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 消息会通过JS动态添加到这里 -->
+            </div>
+            
+            <!-- 输入区域 -->
+            <div class="p-4 border-t border-neutral-200">
+                <form id="chat-form" class="relative">
+                    <textarea 
+                        id="user-input" 
+                        placeholder="请输入您的问题..." 
+                        class="w-full p-4 pr-12 rounded-xl border border-neutral-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-none transition-all min-h-[100px]"
+                    ></textarea>
+                    <button 
+                        type="submit" 
+                        class="absolute right-3 bottom-3 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                    >
+                        <i class="fa fa-paper-plane-o"></i>
+                    </button>
+                </form>
+                <div class="mt-2 text-xs text-neutral-400 flex justify-between">
+                    <span>支持 Markdown 格式</span>
+                    <span>按 Shift+Enter 换行</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 侧边栏 - 历史记录和配置信息 -->
+        <div class="w-full lg:w-1/4 space-y-6">
+            <!-- 会话历史 -->
+            <div class="bg-white rounded-xl shadow-card overflow-hidden">
+                <div class="p-4 border-b border-neutral-200">
+                    <h3 class="font-semibold text-neutral-600">会话历史</h3>
+                </div>
+                <div id="history-container" class="p-2 max-h-[300px] overflow-y-auto scrollbar-hide">
+                    <!-- 历史记录会通过JS动态添加 -->
+                    <div class="text-center text-neutral-400 py-8 text-sm">
+                        暂无历史记录
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 配置信息 -->
+            <div class="bg-white rounded-xl shadow-card overflow-hidden">
+                <div class="p-4 border-b border-neutral-200">
+                    <h3 class="font-semibold text-neutral-600">配置信息</h3>
+                </div>
+                <div class="p-4 text-sm space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-neutral-500">API 地址</span>
+                        <span class="text-neutral-700 truncate max-w-[60%]">http://10.1.0.220:9002/api</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-neutral-500">数据库</span>
+                        <span class="text-neutral-700">common_dataset</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-neutral-500">模型参数</span>
+                        <span class="text-neutral-700">temp=0.1, max=500</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-neutral-500">Token 状态</span>
+                        <span class="text-green-500"><i class="fa fa-check-circle mr-1"></i>已设置</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-neutral-200 py-4">
+        <div class="container mx-auto px-4 text-center text-sm text-neutral-500">
+            <p>© 2025 DART_LLM AI 助手 | 网络安全专用问答系统</p>
+        </div>
+    </footer>
+
+    <!-- 加载中模态框 -->
+    <div id="loading-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 flex flex-col items-center max-w-xs w-full mx-4">
+            <div class="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4"></div>
+            <h3 class="font-medium text-neutral-700 mb-2">正在处理</h3>
+            <p class="text-sm text-neutral-500 text-center" id="loading-message">正在检索知识库并生成回答...</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM 元素
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const chatContainer = document.getElementById('chat-container');
+        const clearChatBtn = document.getElementById('clear-chat');
+        const historyContainer = document.getElementById('history-container');
+        const loadingModal = document.getElementById('loading-modal');
+        const loadingMessage = document.getElementById('loading-message');
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // 存储聊天历史
+        let chatHistory = [];
+        let currentSessionId = generateSessionId();
+        
+        // 生成唯一会话ID
+        function generateSessionId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
+        
+        // 显示加载状态
+        function showLoading(message = '正在处理您的请求...') {
+            loadingMessage.textContent = message;
+            loadingModal.classList.remove('hidden');
+        }
+        
+        // 隐藏加载状态
+        function hideLoading() {
+            loadingModal.classList.add('hidden');
+        }
+        
+        // 添加用户消息到聊天窗口
+        function addUserMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'animate-slide-up flex items-start justify-end space-x-3';
+            messageDiv.innerHTML = `
+                <div class="max-w-[85%] bg-primary text-white rounded-2xl rounded-tr-none p-4">
+                    <p class="text-balance">${text}</p>
+                </div>
+                <div class="w-9 h-9 rounded-full bg-neutral-300 flex-shrink-0 flex items-center justify-center text-neutral-600">
+                    <i class="fa fa-user"></i>
+                </div>
+            `;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // 保存到历史记录
+            const messageObj = {
+                id: Date.now(),
+                role: 'user',
+                content: text,
+                timestamp: new Date()
+            };
+            chatHistory.push(messageObj);
+            updateHistoryPanel();
+        }
+        
+        // 添加AI消息到聊天窗口
+        function addAiMessage(text, isLoading = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'animate-slide-up flex items-start space-x-3';
+            
+            if (isLoading) {
+                // 显示加载指示器
+                messageDiv.innerHTML = `
+                    <div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white">
+                        <i class="fa fa-robot"></i>
+                    </div>
+                    <div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
+                        <div class="typing-indicator flex space-x-1">
+                            <span class="w-2 h-2 bg-neutral-400 rounded-full"></span>
+                            <span class="w-2 h-2 bg-neutral-400 rounded-full"></span>
+                            <span class="w-2 h-2 bg-neutral-400 rounded-full"></span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 显示AI回复
+                messageDiv.innerHTML = `
+                    <div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white">
+                        <i class="fa fa-robot"></i>
+                    </div>
+                    <div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
+                        <p class="text-neutral-700 text-balance">${formatMessage(text)}</p>
+                    </div>
+                `;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return messageDiv;
+        }
+        
+        // 格式化消息内容（简单处理换行和链接）
+        function formatMessage(text) {
+            // 处理换行
+            text = text.replace(/\n/g, '<br>');
+            // 处理链接
+            text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-primary hover:underline">$1</a>');
+            return text;
+        }
+        
+        // 更新历史记录面板
+        function updateHistoryPanel() {
+            if (chatHistory.length === 0) {
+                historyContainer.innerHTML = `
+                    <div class="text-center text-neutral-400 py-8 text-sm">
+                        暂无历史记录
+                    </div>
+                `;
+                return;
+            }
+            
+            // 只显示用户的问题作为历史记录条目
+            const userQuestions = chatHistory.filter(item => item.role === 'user');
+            
+            if (userQuestions.length === 0) return;
+            
+            historyContainer.innerHTML = '';
+            userQuestions.forEach((question, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'p-3 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer mb-1 text-sm';
+                historyItem.textContent = question.content.length > 50 
+                    ? question.content.substring(0, 50) + '...' 
+                    : question.content;
+                historyItem.addEventListener('click', () => {
+                    // 滚动到对应的消息
+                    scrollToMessage(question.id);
+                });
+                historyContainer.appendChild(historyItem);
+            });
+        }
+        
+        // 滚动到指定消息
+        function scrollToMessage(messageId) {
+            const messages = chatContainer.querySelectorAll('div[message-id]');
+            for (const msg of messages) {
+                if (parseInt(msg.getAttribute('message-id')) === messageId) {
+                    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // 高亮显示
+                    msg.classList.add('bg-primary/5');
+                    setTimeout(() => {
+                        msg.classList.remove('bg-primary/5');
+                    }, 2000);
+                    break;
+                }
+            }
+        }
+        
+        // 清空聊天记录
+        function clearChat() {
+            if (confirm('确定要清空当前聊天记录吗？')) {
+                chatContainer.innerHTML = `
+                    <div class="animate-slide-up">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white">
+                                <i class="fa fa-robot"></i>
+                            </div>
+                            <div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
+                                <p class="text-neutral-700 text-balance">
+                                    您好！我是 DART_LLM 网络安全问答助手，我可以为您解答网络安全相关问题。请问有什么可以帮助您的？
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                chatHistory = [];
+                currentSessionId = generateSessionId();
+                updateHistoryPanel();
+            }
+        }
+        
+        async function sendMessage(userMessage) {
+			try {
+				// 1. 显示加载状态
+				showLoading('🔍 正在检索知识库...');
+				
+				// 2. 添加用户消息到界面
+				addUserMessage(userMessage);
+				userInput.value = '';
+				
+				// 3. 添加AI加载消息
+				const loadingMessageEl = addAiMessage('', true);
+				
+				// 4. 调用后端API（核心步骤）
+				const response = await fetch('http://localhost:5000/api/chat', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						// 若有认证需求，添加Token（如JWT）
+						// 'Authorization': 'Bearer YOUR_TOKEN'
+					},
+					body: JSON.stringify({
+						query: userMessage  // 发送用户查询到后端
+					})
+				});
+				
+				// 5. 解析API响应
+				const result = await response.json();
+				
+				// 6. 移除加载消息
+				loadingMessageEl.remove();
+				
+				// 7. 处理响应结果
+				if (result.status === 'success') {
+					addAiMessage(result.answer);  // 显示AI回答
+					// 保存到历史记录
+					chatHistory.push({
+						id: Date.now(),
+						role: 'assistant',
+						content: result.answer,
+						timestamp: new Date()
+					});
+				} else {
+					// 显示错误信息
+					addAiMessage(`❌ 错误：${result.message}`);
+				}
+				
+				hideLoading();
+				
+			} catch (error) {
+				loadingMessageEl.remove();
+				addAiMessage(`抱歉，调用API失败：${error.message}`);
+				hideLoading();
+			}
+		}
+        
+        // 事件监听：表单提交
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (message) {
+                sendMessage(message);
+            }
+        });
+        
+        // 事件监听：清空聊天
+        clearChatBtn.addEventListener('click', clearChat);
+        
+        // 事件监听：支持Shift+Enter换行
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const message = userInput.value.trim();
+                if (message) {
+                    sendMessage(message);
+                }
+            }
+        });
+        
+        // 事件监听：主题切换
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (icon.classList.contains('fa-moon-o')) {
+                icon.classList.replace('fa-moon-o', 'fa-sun-o');
+                // 这里可以添加暗色模式的逻辑
+            } else {
+                icon.classList.replace('fa-sun-o', 'fa-moon-o');
+                // 这里可以添加亮色模式的逻辑
+            }
+        });
+    </script>
+</body>
+</html>

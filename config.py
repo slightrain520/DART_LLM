@@ -18,7 +18,7 @@ class Config:
     PROJECT_NAME = "DART_LLM"
 
     # 是否输出配置信息
-    DEBUG = os.getenv("DEBUG", "false").lower() == "true"
+    DEBUG = os.getenv("DEBUG", "false").lower() == "false"
     
     # API基础URL
     BASE_URL = os.getenv("DART_BASE_URL", "http://10.1.0.220:9002/api")
