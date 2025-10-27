@@ -1,6 +1,16 @@
 # DART_LLM
 DART平台大模型安全大作业
 
+## 运行方式：
+1. 配置项目环境（见requirements.txt）
+
+2. 运行config.py配置项目环境
+
+3. 开启VPN，运行main.py
+
+4. 打开GUI.html，查看前端页面并交互
+
+
 ### 大作业具体要求：
 ![大作业具体要求](./assets/need.png)
 
