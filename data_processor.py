@@ -31,6 +31,7 @@ class DataProcessor:
         top_k: int = None,
         metric_type: str = "cosine",
         score_threshold: float = 0.5
+
     ) -> Dict[str, Any]:
         """
         调用后端搜索接口，从知识库中检索相关文档
@@ -49,6 +50,7 @@ class DataProcessor:
         """
         if top_k is None:
             top_k = self.top_k
+
             
         search_url = f"{base_url}/databases/{db_name}/search"
         payload = {
@@ -242,13 +244,14 @@ class DataProcessor:
 
 
 def extract_context(
-    # 此处改为从配置文件中读取比较好
     query: str,
     base_url: str = "http://10.1.0.220:9002/api",
-    db_name: str = "common_dataset",
+    db_name: str = "common_dataset",# 默认使用共享数据库
     token: str = "token_common",
     max_context_length: int = 2000,
-    top_k: int = 5
+    top_k: int = 5,
+    score_threshold: float = 0.5,
+    metric_type: str = "cosine"
 ) -> Tuple[str, List[Dict[str, Any]], Dict[int, Dict[str, Any]]]:
     """
     这是主要的对外接口函数，完成完整的RAG检索流程：
@@ -266,20 +269,20 @@ def extract_context(
         
     Returns:
         (context_text, filtered_results, citations):
-            - context_text: 整理后的上下文文本
-            - filtered_results: 筛选后的结果列表
-            - citations: 引用信息字典
+            - context_text: 提取的上下文，会列出检索到的相关文档、相似度，并智能截断，建议给LLM使用
+            - filtered_results: 详细结果，包含引用ID，文件ID，相似度，内容预览，方便用户查看检索内容
+            - citations: 引用信息字典，包含文件ID，相似度和description（类似参考文献列表）
             
     Example:
         >>> context, results, citations = extract_context(
-        ...     query="什么是网络安全？",
-        ...     max_context_length=1500,
-        ...     top_k=3
+        ...     query="什么是网络安全？",#用户输入的查询
+        ...     max_context_length=1500,# 最大上下文长度，从配置文件读取
+        ...     top_k=3# 返回的最相似文档数量
         ... )
         >>> print(context)
         >>> print(citations)
     """
-    # 创建数据处理器
+    # 创建数据处理器,使用指定的最大上下文长度和top_k
     processor = DataProcessor(max_context_length=max_context_length, top_k=top_k)
     
     # 1. 调用搜索接口
@@ -288,7 +291,9 @@ def extract_context(
         base_url=base_url,
         db_name=db_name,
         token=token,
-        top_k=top_k
+        top_k=top_k,
+        score_threshold=score_threshold,
+        metric_type=metric_type
     )
     
     # 2. 提取上下文
@@ -311,7 +316,9 @@ if __name__ == "__main__":
     context, results, citations = extract_context(
         query=test_query,
         max_context_length=1500,
-        top_k=3
+        top_k=8,
+        score_threshold=0.69,
+        metric_type="cosine"
     )
     
     print("\n提取的上下文：")
@@ -331,4 +338,3 @@ if __name__ == "__main__":
         print(f"相似度: {result['score']:.4f}")
         print(f"内容预览: {result['content'][:100]}...")
         print("-" * 40)
-
