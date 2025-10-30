@@ -10,6 +10,7 @@ from data_processor import extract_context
 from api_client import dialogue, test_connection
 from data_processor import DataProcessor
 from conversation import conversation_manager
+from guard import validate_llm_output
 
 # 初始化Flask应用
 app = Flask(__name__)
@@ -67,6 +68,17 @@ def process_query(user_query: str, conversation_context: str = "") -> Dict[str, 
             return {
                 "status": "error",
                 "message": f"大模型调用失败：{llm_response.get('message', '未知错误')}"
+            }
+        
+        # 5. 调用 LLM 获取回答 ...
+        raw_answer = llm_response["response"]
+
+        # # 6. 对输出做安全审计
+        # from guard import validate_llm_output  # 与 validate_user_input/validate_prompt 同文件
+        if not validate_llm_output(raw_answer):
+            return {
+                "status": "error",
+                "message": "输出内容经安全审计判定为不安全，已拦截"
             }
         
         # 6. 格式化引用信息
