@@ -9,10 +9,11 @@ from prompt_builder import build_prompt
 from data_processor import extract_context
 from api_client import dialogue, test_connection
 from data_processor import DataProcessor
+from conversation import conversation_manager
 
 # 初始化Flask应用
 app = Flask(__name__)
-CORS(app)  # 允许所有跨域请求（生产环境可限制来源）
+CORS(app)  # 允许所有跨域请求
 
 # 初始化环境（只执行一次）
 ENV_SETUP_COMPLETED = False
@@ -21,8 +22,9 @@ if not ENV_SETUP_COMPLETED:
     ENV_SETUP_COMPLETED = True
 
 
-def process_query(user_query: str) -> Dict[str, Any]:
+def process_query(user_query: str, conversation_context: str = "") -> Dict[str, Any]:
     """处理用户查询的核心逻辑（复用原main函数逻辑）"""
+    
     # 1. 校验用户输入合法性
     if not validate_user_input(user_query):
         return {
@@ -43,7 +45,7 @@ def process_query(user_query: str) -> Dict[str, Any]:
         # 3. 构建Prompt
         final_prompt = build_prompt(
             user_input=user_query,
-            context=context_text
+            context=f"对话历史：\n{conversation_context}\n\n知识库上下文：\n{context_text}"
         )
         
         # 4. 校验Prompt安全性
@@ -89,22 +91,73 @@ def process_query(user_query: str) -> Dict[str, Any]:
 # 定义API接口（前端调用此接口）
 @app.route('/api/chat', methods=['POST'])
 def chat_api():
-    """接收前端请求，返回AI回答"""
-    # 1. 获取前端发送的JSON数据
     data = request.get_json()
     user_query = data.get('query', '').strip()
+    session_id = data.get('session_id')  # 获取前端传递的session_id
+    print("session_id: ", session_id)
+    # 关键修改：仅在session_id为空时创建新会话，否则验证是否存在
+    if not session_id:
+        session_id = conversation_manager.create_conversation()
+    else:
+        # 检查会话是否存在，不存在则用指定ID创建
+        if not conversation_manager.get_conversation(session_id):
+            # 尝试用指定ID创建会话
+            if not conversation_manager.create_conversation_with_id(session_id):
+                # 极端情况：ID冲突时使用自动生成ID
+                session_id = conversation_manager.create_conversation()
     
-    # 2. 校验输入
     if not user_query:
         return jsonify({
             "status": "error",
-            "message": "请输入有效的查询内容"
+            "message": "请输入有效的查询内容",
+            "session_id": session_id  # 返回新创建的会话ID
         })
     
-    # 3. 处理查询并返回结果
+    # 获取该会话的历史上下文
+    conversation_context = conversation_manager.get_conversation_context(session_id)
+    print("对话历史：", conversation_context)
+    # 处理查询（核心逻辑不变，新增 conversation_context 传入）
+    # result = process_query(user_query, conversation_context)
     result = process_query(user_query)
-    return jsonify(result)  # 返回JSON格式响应
+    
+    # 将用户查询和AI回答添加到会话历史
+    # print("result:", result)
+    if result["status"] == "success":
+        # print("添加消息！")
+        # 添加用户消息
+        conversation_manager.add_message_to_conversation(
+            session_id=session_id,
+            role="user",
+            content=user_query
+        )
+        # 添加AI消息（含引用信息）
+        conversation_manager.add_message_to_conversation(
+            session_id=session_id,
+            role="assistant",
+            content=result["answer"],
+            citations=result.get("citations", {})
+        )
+    
+    # 返回结果时附带 session_id
+    result["session_id"] = session_id
+    return jsonify(result)
 
+# 新增接口：获取会话列表（供前端展示历史会话）
+@app.route('/api/conversations', methods=['GET'])
+def get_conversations():
+    return jsonify({
+        "status": "success",
+        "conversations": conversation_manager.list_conversations()
+    })
+
+# 新增接口：删除指定会话
+@app.route('/api/conversations/<session_id>', methods=['DELETE'])
+def delete_conversation(session_id):
+    success = conversation_manager.delete_conversation(session_id)
+    return jsonify({
+        "status": "success" if success else "error",
+        "message": "会话删除成功" if success else "会话不存在"
+    })
 
 # 测试接口（可选）
 @app.route('/api/test', methods=['GET'])

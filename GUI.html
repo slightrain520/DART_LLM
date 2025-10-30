@@ -234,8 +234,13 @@
         const themeToggle = document.getElementById('theme-toggle');
         
         // 存储聊天历史
-        let chatHistory = [];
-        let currentSessionId = generateSessionId();
+		let currentSessionId = sessionStorage.getItem('dart_llm_session_id');
+		if (!currentSessionId) {
+			currentSessionId = generateSessionId();
+			sessionStorage.setItem('dart_llm_session_id', currentSessionId); // 改为sessionStorage
+			console.log("新会话ID（标签页独立）：", currentSessionId);
+		}
+		let chatHistory = [];
         
         // 生成唯一会话ID
         function generateSessionId() {
@@ -406,16 +411,15 @@
 				// 3. 添加AI加载消息
 				const loadingMessageEl = addAiMessage('', true);
 				
-				// 4. 调用后端API（核心步骤）
+				// 4. 调用后端API（核心步骤）- 新增传递session_id
 				const response = await fetch('http://localhost:5000/api/chat', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						// 若有认证需求，添加Token（如JWT）
-						// 'Authorization': 'Bearer YOUR_TOKEN'
 					},
 					body: JSON.stringify({
-						query: userMessage  // 发送用户查询到后端
+						query: userMessage,
+						session_id: currentSessionId  // 传递当前会话ID
 					})
 				});
 				
