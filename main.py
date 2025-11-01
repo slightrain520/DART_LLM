@@ -4,7 +4,7 @@ from typing import Dict, Any
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # 解决跨域问题
 from config import config, setup_environment
-from guard import validate_user_input, validate_prompt
+from guard import validate_user_input, validate_prompt, validate_history
 from prompt_builder import build_prompt
 from data_processor import extract_context
 from api_client import dialogue, test_connection
@@ -55,6 +55,7 @@ def process_query(user_query: str, conversation_context: str = "") -> Dict[str, 
                 "status": "error",
                 "message": "生成的Prompt包含潜在危险内容，已拦截"
             }
+        
         
         # 5. 调用LLM获取回答
         llm_response = dialogue(
@@ -130,7 +131,7 @@ def chat_api():
     print("对话历史：", conversation_context)
     # 处理查询（核心逻辑不变，新增 conversation_context 传入）
     # result = process_query(user_query, conversation_context)
-    result = process_query(user_query)
+    result = process_query(user_query, conversation_context=conversation_context)
     
     # 将用户查询和AI回答添加到会话历史
     # print("result:", result)
