@@ -1,5 +1,6 @@
 import re
 import json
+from deepseek_dialogue import dialogue
 
 # -------------- 可选：LLM 分类用的 System Prompts（改为中文+置信度） --------------
 _INPUT_SAFETY_SYSTEM_PROMPT = """你是一名“用户输入”安全分类器。任务：判断 USER TEXT 是否包含下列风险：
@@ -107,7 +108,6 @@ _HARMFUL_PATTERNS = []
 
 # -------------- 内部工具：尝试用大模型进行安全分类（失败则降级为纯规则） --------------
 def _llm_json_classify(text: str, system_prompt: str):
-    from api_client import dialogue
     res = dialogue(
         user_input=text,
         custom_prompt=system_prompt,
@@ -223,7 +223,6 @@ def _extract_first_json_obj(text: str) -> str:
     return ""
 
 def _llm_json_classify_output(assistant_text: str):
-    from api_client import dialogue
     res = dialogue(
         user_input=assistant_text,
         custom_prompt=_OUTPUT_SAFETY_SYSTEM_PROMPT,
@@ -309,7 +308,6 @@ def _truncate_text_from_tail(s: str, max_chars: int) -> str:
     return s[-max_chars:]
 
 def _llm_json_classify_history(history_text: str):
-    from api_client import dialogue
     res = dialogue(
         user_input=history_text,
         custom_prompt=_HISTORY_SAFETY_SYSTEM_PROMPT,
