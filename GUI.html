@@ -8,6 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 引入Font Awesome图标 -->
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 引入MathJax用于数学公式渲染 -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- 引入highlight.js用于代码高亮 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
     
     <!-- 配置Tailwind主题 -->
     <script>
@@ -40,7 +47,7 @@
     </script>
     
     <!-- 自定义工具类 -->
-    <style type="text/tailwindcss">
+    <style type="tailwindcss">
         @layer utilities {
             .content-auto {
                 content-visibility: auto;
@@ -81,6 +88,175 @@
         .typing-indicator span:nth-child(1) { animation-delay: 0s; }
         .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
         .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        /* Markdown 样式 */
+        .markdown-body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+        
+        .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+        
+        .markdown-body h1 {
+            font-size: 1.5em;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+        }
+        
+        .markdown-body h2 {
+            font-size: 1.25em;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+        }
+        
+        .markdown-body h3 {
+            font-size: 1.1em;
+        }
+        
+        .markdown-body p {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+        
+        .markdown-body ul, .markdown-body ol {
+            padding-left: 2em;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+        
+        .markdown-body li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .markdown-body code {
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            background-color: rgba(175, 184, 193, 0.2);
+            border-radius: 6px;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+        }
+        
+        .markdown-body pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f6f8fa;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+            font-size: 100%;
+            display: block;
+        }
+        
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #eaecef;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            font-size: 12px;
+            color: #586069;
+            border-bottom: 1px solid #d1d5da;
+        }
+        
+        .code-block-content {
+            padding: 16px;
+            margin: 0;
+            overflow-x: auto;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #586069;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .copy-btn:hover {
+            background-color: #d1d5da;
+        }
+        
+        .markdown-body blockquote {
+            padding: 0 1em;
+            color: #6a737d;
+            border-left: 0.25em solid #dfe2e5;
+            margin: 0 0 16px 0;
+        }
+        
+        .markdown-body table {
+            border-spacing: 0;
+            border-collapse: collapse;
+            margin-top: 0;
+            margin-bottom: 16px;
+            width: 100%;
+        }
+        
+        .markdown-body table th, .markdown-body table td {
+            padding: 6px 13px;
+            border: 1px solid #dfe2e5;
+        }
+        
+        .markdown-body table th {
+            font-weight: 600;
+            background-color: #f6f8fa;
+        }
+        
+        .markdown-body table tr:nth-child(2n) {
+            background-color: #f6f8fa;
+        }
+        
+        .markdown-body a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        
+        .markdown-body a:hover {
+            text-decoration: underline;
+        }
+        
+        .markdown-body strong {
+            font-weight: 600;
+        }
+        
+        .markdown-body em {
+            font-style: italic;
+        }
+        
+        /* 数学公式样式 */
+        .math-formula {
+            margin: 16px 0;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .math-inline {
+            display: inline-block;
+            margin: 0 2px;
+        }
     </style>
 </head>
 
@@ -132,9 +308,9 @@
                             <i class="fa fa-robot"></i>
                         </div>
                         <div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
-                            <p class="text-neutral-700 text-balance">
-                                您好！我是 DART_LLM 网络安全问答助手，我可以为您解答网络安全相关问题。请问有什么可以帮助您的？
-                            </p>
+                            <div class="markdown-body">
+                                <p>您好！我是 DART_LLM 网络安全问答助手，我可以为您解答网络安全相关问题。请问有什么可以帮助您的？</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -158,7 +334,7 @@
                     </button>
                 </form>
                 <div class="mt-2 text-xs text-neutral-400 flex justify-between">
-                    <span>支持 Markdown 格式</span>
+                    <span>支持 Markdown 和 LaTeX 数学公式</span>
                     <span>按 Shift+Enter 换行</span>
                 </div>
             </div>
@@ -223,6 +399,197 @@
     </div>
 
     <script>
+        // 初始化highlight.js
+        hljs.configure({
+            tabReplace: '    ', // 4 spaces
+            languages: ['python', 'javascript', 'java', 'c', 'cpp', 'html', 'css', 'sql', 'bash', 'json', 'xml']
+        });
+        
+        // 配置MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+
+        // 处理行内Markdown格式
+		function processInlineMarkdown(text) {
+			// 保护数学公式
+			text = text.replace(/\$\$(.*?)\$\$/g, '<div class="math-formula">$$$1$$</div>');
+			text = text.replace(/\$(.*?)\$/g, '<span class="math-inline">$ $1 $</span>');
+			
+			// 处理粗体
+			text = text.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
+			text = text.replace(/\*([^*\n]+?)\*/g, '<em>$1</em>');
+			
+			// 处理行内代码
+			text = text.replace(/`(.*?)`/g, '<code>$1</code>');
+			
+			// 处理链接
+			text = text.replace(/\[([^\[]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">$1</a>');
+			
+			return text;
+		}
+
+        // HTML转义函数 - 增强版本
+		function escapeHtml(text) {
+			const div = document.createElement('div');
+			div.textContent = text;
+			return div.innerHTML;
+		}
+
+		// 属性转义函数 - 专门用于HTML属性值
+		function escapeAttr(text) {
+			return text
+				.replace(/"/g, '&quot;')
+				.replace(/'/g, '&#39;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;');
+		}
+
+		// 完整的Markdown解析器 - 修复版本
+		function parseMarkdown(text) {
+			if (!text) return '';
+        
+			let output = '';
+			const lines = text.split('\n');
+			let inList = false;
+			let listType = ''; // 'ul' or 'ol'
+			let inCodeBlock = false;
+			let currentCodeBlock = '';
+			let codeLanguage = '';
+			
+			for (let i = 0; i < lines.length; i++) {
+				let line = lines[i];
+				
+				// 处理代码块开始
+				if (line.trim().startsWith('```')) {
+					if (!inCodeBlock) {
+						// 开始代码块
+						inCodeBlock = true;
+						codeLanguage = line.trim().substring(3).trim() || 'text';
+						currentCodeBlock = '';
+						continue;
+					} else {
+						// 结束代码块
+						inCodeBlock = false;
+						const escapedCode = escapeAttr(currentCodeBlock.trim());
+						const codeHtml = `
+							<div class="code-block">
+								<div class="code-block-header">
+									<span>${codeLanguage}</span>
+									<button class="copy-btn" data-code="${escapedCode}">
+										<i class="fa fa-copy mr-1"></i>复制
+									</button>
+								</div>
+								<pre class="code-block-content"><code class="language-${codeLanguage}">${escapeHtml(currentCodeBlock.trim())}</code></pre>
+							</div>
+						`;
+						output += codeHtml;
+						continue;
+					}
+				}
+				
+				// 如果在代码块中，直接添加行
+				if (inCodeBlock) {
+					currentCodeBlock += line + '\n';
+					continue;
+				}
+				
+				// 跳过空行
+				if (!line.trim()) {
+					if (inList) {
+						output += `</${listType}>`;
+						inList = false;
+						listType = '';
+					}
+					continue;
+				}
+				
+				// 处理标题
+				if (line.startsWith('### ')) {
+					if (inList) {
+						output += `</${listType}>`;
+						inList = false;
+						listType = '';
+					}
+					output += `<h3>${processInlineMarkdown(line.substring(4))}</h3>`;
+					continue;
+				}
+				
+				if (line.startsWith('## ')) {
+					if (inList) {
+						output += `</${listType}>`;
+						inList = false;
+						listType = '';
+					}
+					output += `<h2>${processInlineMarkdown(line.substring(3))}</h2>`;
+					continue;
+				}
+				
+				if (line.startsWith('# ')) {
+					if (inList) {
+						output += `</${listType}>`;
+						inList = false;
+						listType = '';
+					}
+					output += `<h1>${processInlineMarkdown(line.substring(2))}</h1>`;
+					continue;
+				}
+				
+				// 处理无序列表 - 替换"-"为"·"
+				if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
+					let content = line.trim().substring(2);
+					// 将列表标记替换为间隔号
+					content = '· ' + content;
+					
+					if (!inList || listType !== 'ul') {
+						if (inList) output += `</${listType}>`;
+						output += '<ul>';
+						inList = true;
+						listType = 'ul';
+					}
+					output += `<li>${processInlineMarkdown(content)}</li>`;
+					continue;
+				}
+				
+				// 处理有序列表
+				const olMatch = line.trim().match(/^(\d+)\.\s+(.*)/);
+				if (olMatch) {
+					const content = olMatch[2];
+					if (!inList || listType !== 'ol') {
+						if (inList) output += `</${listType}>`;
+						output += '<ol>';
+						inList = true;
+						listType = 'ol';
+					}
+					output += `<li>${processInlineMarkdown(content)}</li>`;
+					continue;
+				}
+				
+				// 如果不是列表项，结束当前列表
+				if (inList) {
+					output += `</${listType}>`;
+					inList = false;
+					listType = '';
+				}
+				
+				// 处理段落
+				output += `<p>${processInlineMarkdown(line)}</p>`;
+			}
+			
+			// 如果文本以列表结束，确保关闭标签
+			if (inList) {
+				output += `</${listType}>`;
+			}
+			
+			return output;
+		}
+
         // DOM 元素
         const chatForm = document.getElementById('chat-form');
         const userInput = document.getElementById('user-input');
@@ -234,13 +601,13 @@
         const themeToggle = document.getElementById('theme-toggle');
         
         // 存储聊天历史
-		let currentSessionId = sessionStorage.getItem('dart_llm_session_id');
-		if (!currentSessionId) {
-			currentSessionId = generateSessionId();
-			sessionStorage.setItem('dart_llm_session_id', currentSessionId); // 改为sessionStorage
-			console.log("新会话ID（标签页独立）：", currentSessionId);
-		}
-		let chatHistory = [];
+        let currentSessionId = sessionStorage.getItem('dart_llm_session_id');
+        if (!currentSessionId) {
+            currentSessionId = generateSessionId();
+            sessionStorage.setItem('dart_llm_session_id', currentSessionId);
+            console.log("新会话ID（标签页独立）：", currentSessionId);
+        }
+        let chatHistory = [];
         
         // 生成唯一会话ID
         function generateSessionId() {
@@ -284,50 +651,105 @@
             updateHistoryPanel();
         }
         
-        // 添加AI消息到聊天窗口
-        function addAiMessage(text, isLoading = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'animate-slide-up flex items-start space-x-3';
-            
-            if (isLoading) {
-                // 显示加载指示器
-                messageDiv.innerHTML = `
-                    <div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white">
-                        <i class="fa fa-robot"></i>
-                    </div>
-                    <div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
-                        <div class="typing-indicator flex space-x-1">
-                            <span class="w-2 h-2 bg-neutral-400 rounded-full"></span>
-                            <span class="w-2 h-2 bg-neutral-400 rounded-full"></span>
-                            <span class="w-2 h-2 bg-neutral-400 rounded-full"></span>
-                        </div>
-                    </div>
-                `;
-            } else {
-                // 显示AI回复
-                messageDiv.innerHTML = `
-                    <div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white">
-                        <i class="fa fa-robot"></i>
-                    </div>
-                    <div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
-                        <p class="text-neutral-700 text-balance">${formatMessage(text)}</p>
-                    </div>
-                `;
-            }
-            
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-            return messageDiv;
-        }
-        
-        // 格式化消息内容（简单处理换行和链接）
-        function formatMessage(text) {
-            // 处理换行
-            text = text.replace(/\n/g, '<br>');
-            // 处理链接
-            text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-primary hover:underline">$1</a>');
-            return text;
-        }
+        // 添加AI消息到聊天窗口 - 修复复制功能
+		function addAiMessage(text, isLoading = false) {
+			const messageDiv = document.createElement('div');
+			messageDiv.className = 'animate-slide-up flex items-start space-x-3';
+			
+			if (isLoading) {
+				// 显示加载指示器
+				messageDiv.innerHTML = `
+					<div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white">
+						<i class="fa fa-robot"></i>
+					</div>
+					<div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
+						<div class="typing-indicator flex space-x-1">
+							<span class="w-2 h-2 bg-neutral-400 rounded-full"></span>
+							<span class="w-2 h-2 bg-neutral-400 rounded-full"></span>
+							<span class="w-2 h-2 bg-neutral-400 rounded-full"></span>
+						</div>
+					</div>
+				`;
+			} else {
+				// 显示AI回复
+				const formattedText = parseMarkdown(text);
+				messageDiv.innerHTML = `
+					<div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white">
+						<i class="fa fa-robot"></i>
+					</div>
+					<div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
+						<div class="markdown-body">
+							${formattedText}
+						</div>
+					</div>
+				`;
+			}
+			
+			chatContainer.appendChild(messageDiv);
+			chatContainer.scrollTop = chatContainer.scrollHeight;
+			
+			// 渲染数学公式和代码高亮
+			if (!isLoading) {
+				setTimeout(() => {
+					// 渲染数学公式
+					if (window.MathJax) {
+						window.MathJax.typesetPromise([messageDiv]).catch(err => {
+							console.log('MathJax typeset error:', err);
+						});
+					}
+					
+					// 高亮代码
+					messageDiv.querySelectorAll('pre code').forEach((block) => {
+						hljs.highlightElement(block);
+					});
+					
+					// 添加复制按钮事件 - 修复版本
+					messageDiv.querySelectorAll('.copy-btn').forEach(btn => {
+						btn.addEventListener('click', function() {
+							const codeText = this.getAttribute('data-code');
+							// 解码HTML实体
+							const decodedText = decodeHtmlEntities(codeText);
+							
+							navigator.clipboard.writeText(decodedText).then(() => {
+								const originalText = this.innerHTML;
+								this.innerHTML = '<i class="fa fa-check mr-1"></i>已复制';
+								setTimeout(() => {
+									this.innerHTML = originalText;
+								}, 2000);
+							}).catch(err => {
+								console.error('复制失败:', err);
+								// 降级方案
+								fallbackCopyToClipboard(decodedText);
+							});
+						});
+					});
+				}, 100);
+			}
+			
+			return messageDiv;
+		}
+
+		// 解码HTML实体
+		function decodeHtmlEntities(text) {
+			const textarea = document.createElement('textarea');
+			textarea.innerHTML = text;
+			return textarea.value;
+		}
+
+		// 降级复制方案
+		function fallbackCopyToClipboard(text) {
+			const textarea = document.createElement('textarea');
+			textarea.value = text;
+			document.body.appendChild(textarea);
+			textarea.select();
+			try {
+				document.execCommand('copy');
+				console.log('降级复制成功');
+			} catch (err) {
+				console.error('降级复制失败:', err);
+			}
+			document.body.removeChild(textarea);
+		}
         
         // 更新历史记录面板
         function updateHistoryPanel() {
@@ -362,14 +784,15 @@
         
         // 滚动到指定消息
         function scrollToMessage(messageId) {
-            const messages = chatContainer.querySelectorAll('div[message-id]');
+            const messages = chatContainer.querySelectorAll('.animate-slide-up');
             for (const msg of messages) {
-                if (parseInt(msg.getAttribute('message-id')) === messageId) {
+                const messageText = msg.querySelector('p, .markdown-body');
+                if (messageText && messageText.textContent.includes(chatHistory.find(m => m.id === messageId)?.content)) {
                     msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     // 高亮显示
-                    msg.classList.add('bg-primary/5');
+                    msg.style.backgroundColor = 'rgba(22, 93, 255, 0.05)';
                     setTimeout(() => {
-                        msg.classList.remove('bg-primary/5');
+                        msg.style.backgroundColor = '';
                     }, 2000);
                     break;
                 }
@@ -386,9 +809,9 @@
                                 <i class="fa fa-robot"></i>
                             </div>
                             <div class="max-w-[85%] bg-neutral-100 rounded-2xl rounded-tl-none p-4">
-                                <p class="text-neutral-700 text-balance">
-                                    您好！我是 DART_LLM 网络安全问答助手，我可以为您解答网络安全相关问题。请问有什么可以帮助您的？
-                                </p>
+                                <div class="markdown-body">
+                                    <p>您好！我是 DART_LLM 网络安全问答助手，我可以为您解答网络安全相关问题。请问有什么可以帮助您的？</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -400,58 +823,63 @@
         }
         
         async function sendMessage(userMessage) {
-			try {
-				// 1. 显示加载状态
-				showLoading('🔍 正在检索知识库...');
-				
-				// 2. 添加用户消息到界面
-				addUserMessage(userMessage);
-				userInput.value = '';
-				
-				// 3. 添加AI加载消息
-				const loadingMessageEl = addAiMessage('', true);
-				
-				// 4. 调用后端API（核心步骤）- 新增传递session_id
-				const response = await fetch('http://localhost:5000/api/chat', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						query: userMessage,
-						session_id: currentSessionId  // 传递当前会话ID
-					})
-				});
-				
-				// 5. 解析API响应
-				const result = await response.json();
-				
-				// 6. 移除加载消息
-				loadingMessageEl.remove();
-				
-				// 7. 处理响应结果
-				if (result.status === 'success') {
-					addAiMessage(result.answer);  // 显示AI回答
-					// 保存到历史记录
-					chatHistory.push({
-						id: Date.now(),
-						role: 'assistant',
-						content: result.answer,
-						timestamp: new Date()
-					});
-				} else {
-					// 显示错误信息
-					addAiMessage(`❌ 错误：${result.message}`);
-				}
-				
-				hideLoading();
-				
-			} catch (error) {
-				loadingMessageEl.remove();
-				addAiMessage(`抱歉，调用API失败：${error.message}`);
-				hideLoading();
-			}
-		}
+            let loadingMessageEl;
+            try {
+                // 1. 显示加载状态
+                showLoading('🔍 正在检索知识库...');
+                
+                // 2. 添加用户消息到界面
+                addUserMessage(userMessage);
+                userInput.value = '';
+                
+                // 3. 添加AI加载消息
+                loadingMessageEl = addAiMessage('', true);
+                
+                // 4. 调用后端API
+                const response = await fetch('http://localhost:5000/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: userMessage,
+                        session_id: currentSessionId
+                    })
+                });
+                
+                // 5. 解析API响应
+                const result = await response.json();
+                
+                // 6. 移除加载消息
+                if (loadingMessageEl) {
+                    loadingMessageEl.remove();
+                }
+                
+                // 7. 处理响应结果
+                if (result.status === 'success') {
+                    addAiMessage(result.answer);
+                    // 保存到历史记录
+                    chatHistory.push({
+                        id: Date.now(),
+                        role: 'assistant',
+                        content: result.answer,
+                        timestamp: new Date()
+                    });
+                } else {
+                    // 显示错误信息
+                    addAiMessage(`❌ 错误：${result.message}`);
+                }
+                
+                hideLoading();
+                
+            } catch (error) {
+                if (loadingMessageEl) {
+                    loadingMessageEl.remove();
+                }
+                addAiMessage(`抱歉，调用API失败：${error.message}`);
+                hideLoading();
+            }
+        }
         
         // 事件监听：表单提交
         chatForm.addEventListener('submit', (e) => {
@@ -488,6 +916,38 @@
                 // 这里可以添加亮色模式的逻辑
             }
         });
+
+        // 测试函数 - 现在可以正确渲染代码块了
+        function testMarkdown() {
+            const testText = `### 2. 示例代码
+
+以下是一个Python示例：
+
+\`\`\`python
+# 定义两个变量a和b
+a = 5
+b = 3
+
+# 计算a和b的和
+sum = a + b
+
+# 打印结果
+print("a + b =", sum)
+\`\`\`
+
+### 3. 数学公式
+
+勾股定理：
+
+\\[a^2 + b^2 = c^2\\]
+
+线性回归公式：\\(y = \\beta_0 + \\beta_1 x + \\epsilon\\)`;
+
+            addAiMessage(testText);
+        }
+
+        // 页面加载后自动测试
+        // setTimeout(testMarkdown, 1000);
     </script>
 </body>
 </html>
