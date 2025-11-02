@@ -35,7 +35,7 @@ TOKEN = "e-1qa4tLR9N_AnEEBemwaiOBoyoRoFHr00W0Wb3Uk5tWE5ziWJiCHh7sM1b73T2s"  # �
 METRIC_TYPE = "cosine"
 
 # 批量上传时每批次的文件数量，避免单次请求过大
-UPLOAD_BATCH = 10
+UPLOAD_BATCH = 50  # 已从10增加到50以提速
 
 # PDF文件临时下载目录（Windows系统使用临时目录）
 PDF_TMP_DIR = os.path.join(os.getenv("TEMP", "."), "pdf_cache")

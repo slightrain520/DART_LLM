@@ -309,7 +309,7 @@ def extract_context(
 # 测试代码
 if __name__ == "__main__":
     # 测试RAG检索功能
-    test_query = "钓鱼邮件"
+    test_query = "what is sniff mode?"
     
     print(f"正在检索: {test_query}")
     print("=" * 60)
