@@ -15,7 +15,7 @@ USER_NAME = "Group12"
 TOKEN = "e-1qa4tLR9N_AnEEBemwaiOBoyoRoFHr00W0Wb3Uk5tWE5ziWJiCHh7sM1b73T2s"
 
 # 1. 创建数据库
-def test_create_database(metric_type="L2"):
+def test_create_database(metric_type="cosine"):
     db_name = f"student_{USER_NAME}_{int(time.time())}"#测试创建数据库为时间戳后缀
     resp = requests.post(f"{BASE_URL}/databases", json={"database_name": db_name, "token": TOKEN, "metric_type": metric_type})
     print("创建数据库:", resp.status_code, resp.json())
@@ -72,29 +72,6 @@ def test_search(db_name, metric_type, file_ids):
     print("无过滤条件搜索:", resp.status_code, resp.json())
     assert resp.status_code == 200
     
-    # 测试2: 使用单个file_id过滤（==操作符）
-    print("\n测试2 - 单个file_id过滤 (==):")
-    payload["expr"] = f"file_id == {file_ids[0]}"
-    resp = requests.post(f"{BASE_URL}/databases/{db_name}/search", json=payload)
-    print("单个file_id过滤:", resp.status_code, resp.json())
-    assert resp.status_code == 200
-    
-    # 测试3: 使用多个file_id过滤（in操作符）
-    print("\n测试3 - 多个file_id过滤 (in):")
-    file_ids_str = ", ".join(str(fid) for fid in file_ids[:3])  # 取前3个
-    payload["expr"] = f"file_id in [{file_ids_str}]"
-    resp = requests.post(f"{BASE_URL}/databases/{db_name}/search", json=payload)
-    print("多个file_id过滤:", resp.status_code, resp.json())
-    assert resp.status_code == 200
-    
-    # 测试4: 不合法expr测试
-    print("\n测试4 - 不合法expr测试:")
-    payload["expr"] = "not_a_field == 123"
-    resp = requests.post(f"{BASE_URL}/databases/{db_name}/search", json=payload)
-    try:
-        print("不合法expr相似文件检索:", resp.status_code, resp.json())
-    except Exception:
-        print("不合法expr相似文件检索: 非法响应", resp.status_code, resp.text)
 
 # 6. 删除文件
 def test_delete_file(db_name, file_id):
@@ -113,9 +90,11 @@ def test_dialogue():
     assert resp.status_code == 200
 
 if __name__ == "__main__":
-    # db_name, metric_type = test_create_database(metric_type="L2")
-    dbs = test_get_databases()
-    print(dbs)
+    test_get_databases()
+    # db_name, metric_type = test_create_database(metric_type="cosine")
+    # file_ids = test_upload_file(db_name)
+    # files = test_get_files(db_name)
+    # test_search(db_name, metric_type, file_ids)
     # file_ids = test_upload_file(db_name)
     # time.sleep(2)  # 等待Milvus flush
     # files = test_get_files(db_name)

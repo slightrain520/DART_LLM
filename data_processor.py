@@ -6,8 +6,9 @@
 """
 import requests
 from typing import List, Dict, Tuple, Any
-
-
+TOKEN = "e-1qa4tLR9N_AnEEBemwaiOBoyoRoFHr00W0Wb3Uk5tWE5ziWJiCHh7sM1b73T2s"
+DBNAME = "student_Group12_final"
+METRIC_TYPE = "cosine"
 class DataProcessor:
     """数据处理器，用于处理RAG检索结果"""
     
@@ -30,7 +31,7 @@ class DataProcessor:
         token: str = "token_common",
         top_k: int = None,
         metric_type: str = "cosine",
-        score_threshold: float = 0.5
+        score_threshold: float = 0.0
 
     ) -> Dict[str, Any]:
         """
@@ -250,7 +251,7 @@ def extract_context(
     token: str = "token_common",
     max_context_length: int = 2000,
     top_k: int = 5,
-    score_threshold: float = 0.5,
+    score_threshold: float = 0.0,
     metric_type: str = "cosine"
 ) -> Tuple[str, List[Dict[str, Any]], Dict[int, Dict[str, Any]]]:
     """
@@ -308,7 +309,7 @@ def extract_context(
 # 测试代码
 if __name__ == "__main__":
     # 测试RAG检索功能
-    test_query = "什么是SQL"
+    test_query = "钓鱼邮件"
     
     print(f"正在检索: {test_query}")
     print("=" * 60)
@@ -316,9 +317,11 @@ if __name__ == "__main__":
     context, results, citations = extract_context(
         query=test_query,
         max_context_length=1500,
-        top_k=8,
-        score_threshold=0.69,
-        metric_type="cosine"
+        top_k=5,
+        score_threshold=0.2,
+        metric_type=METRIC_TYPE,
+        db_name = DBNAME,
+        token=TOKEN
     )
     
     print("\n提取的上下文：")
@@ -336,5 +339,5 @@ if __name__ == "__main__":
         print(f"引用ID: {result['citation_id']}")
         print(f"文件ID: {result['file_id']}")
         print(f"相似度: {result['score']:.4f}")
-        print(f"内容预览: {result['content'][:100]}...")
+        print(f"内容预览: {result['content']}...")
         print("-" * 40)

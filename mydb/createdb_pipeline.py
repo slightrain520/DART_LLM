@@ -31,10 +31,8 @@ from pdfminer.high_level import extract_text
 # ==================== 配置区（修改为你的环境） ====================
 BASE_URL = "http://10.1.0.220:9002/api"   # 后端API地址，与test_api_20251015.py保持一致
 TOKEN = "e-1qa4tLR9N_AnEEBemwaiOBoyoRoFHr00W0Wb3Uk5tWE5ziWJiCHh7sM1b73T2s"  # 你的认证Token
-USER_NAME = "Group12"   # 用户组名称，用于生成数据库名称
-
 # 向量相似度计算方式：L2(欧氏距离) 或 cosine(余弦相似度) 或 IP(内积)
-METRIC_TYPE = "L2"
+METRIC_TYPE = "cosine"
 
 # 批量上传时每批次的文件数量，避免单次请求过大
 UPLOAD_BATCH = 10
@@ -392,9 +390,7 @@ def create_database(metric_type: str = METRIC_TYPE) -> Tuple[str, str]:
         - 参数: database_name(数据库名), token(认证令牌), metric_type(度量方式)
         - 数据库命名规则: student_{组名}_{时间戳}
     """
-    # 使用时间戳生成唯一数据库名
-    # int(time.time())获取当前Unix时间戳（秒）
-    db_name = f"student_{USER_NAME}_{int(time.time())}"
+    db_name = f"student_Group12_final"
     logging.info(f"创建数据库: {db_name}")
     
     # 发送POST请求，json参数自动将字典序列化为JSON并设置Content-Type
