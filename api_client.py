@@ -128,7 +128,7 @@ class APIClient:
         
         url = self.base_url + config.ENDPOINTS["dialogue"]
         
-        print(f"💬 对话请求: user_input='{user_input[:50]}...'")
+        print(f"对话请求: user_input='{user_input[:50]}...'")
         if custom_prompt:
             print(f"  使用自定义提示词: {len(custom_prompt)} 字符")
         
@@ -161,10 +161,10 @@ class APIClient:
         result = self._make_request(url, test_payload)
         
         if result.get("status") == "success":
-            print("✅ API连接测试成功")
+            print("API连接测试成功")
             return True
         else:
-            print(f"❌ API连接测试失败: {result.get('message')}")
+            print(f"API连接测试失败: {result.get('message')}")
             return False
 
 api_client = APIClient()
