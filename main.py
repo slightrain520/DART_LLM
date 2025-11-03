@@ -34,13 +34,16 @@ def process_query(user_query: str, conversation_context: str = "") -> Dict[str, 
         }
     
     try:
-        # 2. RAG检索（获取上下文）
+        # 2. RAG检索（获取上下文）- 使用配置文件中的参数
         context_text, filtered_results, citations = extract_context(
             query=user_query,
-            max_context_length=1500,
-            top_k=8,
-            score_threshold=0.69,
-            metric_type="cosine"
+            base_url=config.BASE_URL,
+            db_name=config.DATABASE_NAME,
+            token=config.TOKEN,
+            max_context_length=config.RAG_MAX_CONTEXT_LENGTH,
+            top_k=config.RAG_TOP_K,
+            score_threshold=config.RAG_SCORE_THRESHOLD,
+            metric_type=config.RAG_METRIC_TYPE
         )
         
         # 3. 构建Prompt

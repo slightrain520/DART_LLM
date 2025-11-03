@@ -1,0 +1,308 @@
+{
+  "processed": {
+    "01_zero_shot_prompts.json": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      47,
+      48,
+      49,
+      50,
+      51,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72
+    ],
+    "02_ontology_based_prompts.json": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "03_incontext_prompts.json": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72
+    ],
+    "04_chain_of_thought_prompts.json": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "05_multi_turn_prompts.json": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      14
+    ]
+  },
+  "failed": {
+    "01_zero_shot_prompts.json": [
+      36,
+      46,
+      52
+    ],
+    "02_ontology_based_prompts.json": [],
+    "03_incontext_prompts.json": [],
+    "04_chain_of_thought_prompts.json": [
+      1
+    ],
+    "05_multi_turn_prompts.json": [
+      12,
+      13
+    ]
+  },
+  "last_update": "2025-11-03T21:32:21.143962",
+  "upload_status": {
+    "01_zero_shot_prompts_part1": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T17:04:35.283312"
+    },
+    "01_zero_shot_prompts_part2": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T17:05:07.557551"
+    },
+    "01_zero_shot_prompts_part3": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T17:05:39.779259"
+    },
+    "01_zero_shot_prompts_part4": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T17:06:11.933029"
+    },
+    "01_zero_shot_prompts_part5": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T17:06:44.276450"
+    },
+    "01_zero_shot_prompts_part6": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T17:07:16.419428"
+    },
+    "01_zero_shot_prompts_part7": {
+      "uploaded": true,
+      "count": 49,
+      "timestamp": "2025-11-03T17:07:48.574866"
+    },
+    "02_ontology_based_prompts_part1": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T17:35:52.000977"
+    },
+    "02_ontology_based_prompts_part2": {
+      "uploaded": true,
+      "count": 24,
+      "timestamp": "2025-11-03T17:36:13.149585"
+    },
+    "03_incontext_prompts_part1": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T19:17:18.904208"
+    },
+    "03_incontext_prompts_part2": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T19:17:51.596459"
+    },
+    "03_incontext_prompts_part3": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T19:18:24.282919"
+    },
+    "03_incontext_prompts_part4": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T19:18:57.000715"
+    },
+    "03_incontext_prompts_part5": {
+      "uploaded": true,
+      "count": 19,
+      "timestamp": "2025-11-03T19:19:07.029832"
+    },
+    "04_chain_of_thought_prompts_part1": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T20:09:47.321663"
+    },
+    "04_chain_of_thought_prompts_part2": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T20:10:19.515310"
+    },
+    "04_chain_of_thought_prompts_part3": {
+      "uploaded": true,
+      "count": 50,
+      "timestamp": "2025-11-03T20:10:51.716678"
+    },
+    "04_chain_of_thought_prompts_part4": {
+      "uploaded": true,
+      "count": 4,
+      "timestamp": "2025-11-03T20:11:01.484535"
+    }
+  }
+}

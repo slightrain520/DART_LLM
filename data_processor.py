@@ -247,8 +247,8 @@ class DataProcessor:
 def extract_context(
     query: str,
     base_url: str = "http://10.1.0.220:9002/api",
-    db_name: str = "common_dataset",# 默认使用共享数据库
-    token: str = "token_common",
+    db_name: str = "student_Group12_final",# 使用最终版本数据库
+    token: str = "e-1qa4tLR9N_AnEEBemwaiOBoyoRoFHr00W0Wb3Uk5tWE5ziWJiCHh7sM1b73T2s",
     max_context_length: int = 2000,
     top_k: int = 5,
     score_threshold: float = 0.0,
@@ -309,7 +309,7 @@ def extract_context(
 # 测试代码
 if __name__ == "__main__":
     # 测试RAG检索功能
-    test_query = "what is sniff mode?"
+    test_query = "什么是防火墙？"
     
     print(f"正在检索: {test_query}")
     print("=" * 60)

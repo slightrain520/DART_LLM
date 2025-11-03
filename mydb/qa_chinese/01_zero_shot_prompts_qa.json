@@ -1,0 +1,3841 @@
+[
+  {
+    "question": "什么是SQL注入？",
+    "answer": "SQL注入是一种常见的网络安全漏洞，攻击者通过在Web应用程序的输入点（如表单或URL）中插入恶意SQL代码，来操纵数据库查询。这可能导致数据窃取、篡改或删除。例如，如果一个登录页面直接拼接用户输入到SQL语句中，攻击者可能输入 ' OR 1=1 -- ' 来绕过认证。SQL注入源于开发时未对用户输入进行充分验证和转义，危害包括敏感数据泄露和系统破坏。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SQL注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:16:27.675782"
+    }
+  },
+  {
+    "question": "SQL注入是如何工作的？",
+    "answer": "SQL注入的工作原理是利用应用程序直接拼接用户输入到SQL查询中，而没有使用参数化查询或转义机制。当攻击者输入恶意SQL代码时，数据库会执行该代码，从而操控查询结果。例如，正常查询是 'SELECT * FROM users WHERE username = 'admin' AND password = 'pass''，但攻击者可能注入 'admin' OR username = 'admin'-- '，导致查询返回所有数据。这依赖于SQL注入点，通常出现在动态SQL生成的场景中，攻击者通过分析错误消息或响应来逐步构建注入。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SQL注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:16:27.675782"
+    }
+  },
+  {
+    "question": "SQL注入有哪些常见类型？",
+    "answer": "SQL注入主要分为几种类型：1) 基于错误的注入（Error-Based），攻击者通过诱导数据库错误来获取信息；2) 基于联合的注入（Union-Based），使用UNION操作符合并查询结果以提取数据；3) 盲注（Blind SQL Injection），当应用不返回错误时，攻击者通过布尔或时间延迟来推断数据库内容；4) 二次注入（Second-Order Injection），当用户输入被存储并在后续查询中使用时触发。这些类型根据攻击方式和数据库响应分类，常见于Web应用中。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SQL注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:16:27.675782"
+    }
+  },
+  {
+    "question": "SQL注入在实际中如何应用？它有哪些优缺点？",
+    "answer": "SQL注入的实际应用包括攻击登录页面窃取用户数据、或在电商网站修改订单信息。优点对攻击者有利，如低成本高回报的数据访问；缺点对受害者有害，可能导致数据泄露、系统瘫痪或经济损失。例如，2017年Equifax数据泄露事件中，SQL注入导致147万条记录被盗。整体上，SQL注入易传播且难以检测，但通过教育可降低风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SQL注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:16:27.675782"
+    }
+  },
+  {
+    "question": "如何防御SQL注入？有哪些实战案例和最佳实践？",
+    "answer": "防御SQL注入的关键措施包括使用参数化查询（如PreparedStatement）、输入验证和输出编码，确保数据库查询安全。实战案例如OWASP Top 10中，通过启用Web应用防火墙（WAF）检测注入尝试。最佳实践包括遵循安全编码标准（如OWASP准则）、定期进行渗透测试和更新数据库软件。例如，Netflix通过自动化工具扫描代码，成功避免了注入攻击。总之，综合防御策略能有效降低风险，保护数据完整性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SQL注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:16:27.675782"
+    }
+  },
+  {
+    "question": "什么是XSS跨站脚本攻击？",
+    "answer": "XSS（Cross-Site Scripting）是一种常见的Web安全漏洞，攻击者通过在网页中注入恶意脚本（如JavaScript），当其他用户访问该页面时，脚本在用户的浏览器中执行，可能导致会话劫持、信息窃取或页面篡改。简单来说，XSS攻击利用了Web应用对用户输入验证不足的漏洞，影响用户隐私和安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "XSS跨站脚本攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:17:28.760136"
+    }
+  },
+  {
+    "question": "XSS攻击是如何工作的？",
+    "answer": "XSS攻击的工作机制是攻击者将恶意脚本注入到用户可访问的网页中。服务器存储或反射这些脚本，当用户访问时，浏览器执行脚本，窃取数据或执行恶意操作。例如，攻击者可能通过表单提交恶意代码，服务器未过滤直接返回，用户访问时触发攻击。这依赖于Web应用的输入点和输出点未做安全处理，导致脚本注入和执行。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "XSS跨站脚本攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:17:28.760136"
+    }
+  },
+  {
+    "question": "XSS有哪些常见类型？",
+    "answer": "XSS主要有三种类型：存储型XSS（攻击脚本永久存储在服务器，如数据库或评论区，用户每次访问都执行）、反射型XSS（攻击脚本临时存储在URL或表单中，通过欺骗用户点击链接触发）、DOM型XSS（基于浏览器DOM文档对象模型操作，脚本在客户端直接修改DOM结构执行）。每种类型针对不同场景，存储型持久性高，反射型易传播，DOM型依赖前端逻辑，需针对性防御。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "XSS跨站脚本攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:17:28.760136"
+    }
+  },
+  {
+    "question": "XSS攻击在实际中有哪些应用场景？",
+    "answer": "XSS攻击常用于窃取用户会话信息，如在社交媒体评论区注入脚本盗取Cookie；或用于钓鱼攻击，伪造页面诱导用户输入敏感数据。例如，攻击者可能篡改网页显示虚假登录界面，用户输入账号密码后被截获。实际场景包括企业网站、论坛或任何允许用户输入的Web应用，攻击者借此实施钓鱼、跨站请求伪造（CSRF）或信息泄露，造成经济损失或数据 breaches。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "XSS跨站脚本攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:17:28.760136"
+    }
+  },
+  {
+    "question": "如何防御XSS攻击？并分析其优缺点。",
+    "answer": "防御XSS的关键措施包括输入验证（过滤特殊字符）、输出编码（转义HTML实体）、使用内容安全策略（CSP）限制脚本来源，以及服务器端和客户端双重验证。优点：XSS攻击易于实施，成本低，能快速获取数据；缺点：防御复杂，需多层防护，可能误伤合法脚本。实战案例：攻击者在论坛留言注入<script>alert('XSS')</script>，防御后通过日志检测；最佳实践建议：采用Web应用防火墙（WAF）、定期安全测试和安全编码标准，确保代码最小权限原则，减少漏洞风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "XSS跨站脚本攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:17:28.760136"
+    }
+  },
+  {
+    "question": "什么是CSRF跨站请求伪造？",
+    "answer": "CSRF（Cross-Site Request Forgery）是一种网络安全攻击，攻击者通过诱导用户在已登录的网站上点击恶意链接，执行非本意的操作。简单来说，攻击者利用用户的会话 cookie，伪造请求，让服务器误认为是用户主动发起的。例如，用户可能在不知情的情况下修改账户设置或转账。防御关键在于验证请求来源，确保操作是用户真实意图。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CSRF跨站请求伪造",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:19:20.183889"
+    }
+  },
+  {
+    "question": "CSRF攻击的原理和工作机制是什么？",
+    "answer": "CSRF攻击的原理基于浏览器的同源策略漏洞，攻击者构造一个恶意请求，用户点击后，浏览器自动发送请求到目标网站。由于用户已登录，服务器使用其会话 cookie 认证，误判请求合法。工作机制包括：攻击者创建一个链接或表单，用户访问后，服务器执行操作而不验证请求来源。这依赖于缺乏CSRF保护的Web应用，常见于POST请求。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CSRF跨站请求伪造",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:19:20.183889"
+    }
+  },
+  {
+    "question": "CSRF有哪些常见类型或分类？",
+    "answer": "CSRF攻击常见类型包括：1) 基于链接的CSRF，通过URL参数伪造请求；2) 基于表单的CSRF，攻击者创建恶意表单让用户提交；3) 使用第三方网站的CSRF，如通过社交媒体链接诱导操作。分类上，可分为GET型（直接修改URL）和POST型（提交数据），后者更隐蔽。防御时需注意不同HTTP方法的应用。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CSRF跨站请求伪造",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:19:20.183889"
+    }
+  },
+  {
+    "question": "CSRF攻击的实际应用场景有哪些？",
+    "answer": "CSRF攻击常用于修改用户资料、删除账户、转账或更改权限等场景。例如，攻击者可能在论坛评论中嵌入链接，诱导用户点击后自动更改密码。实际中，它发生在缺乏CSRF保护的Web应用，如旧版系统或第三方集成。防御需检查请求上下文，确保操作符合用户意图。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CSRF跨站请求伪造",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:19:20.183889"
+    }
+  },
+  {
+    "question": "如何防御CSRF攻击？并分析其优缺点、实战案例和最佳实践。",
+    "answer": "防御CSRF攻击的主要方法包括使用CSRF令牌（随机token附加到请求）、双重验证或SameSite cookie属性。优点：有效防止非授权操作，提升安全性；缺点：可能增加开发复杂性和性能开销。实战案例：某电商平台未保护订单提交，攻击者诱导用户点击链接导致自动下单。最佳实践：始终使用CSRF保护机制，定期审计代码，并教育用户注意可疑链接。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CSRF跨站请求伪造",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:19:20.183889"
+    }
+  },
+  {
+    "question": "什么是DDoS分布式拒绝服务攻击？",
+    "answer": "DDoS（分布式拒绝服务）攻击是一种网络攻击方式，通过控制多个分散的计算机（如僵尸网络）向目标服务器发送海量无效请求，耗尽其带宽、CPU或内存资源，从而导致服务不可用。与DoS（拒绝服务）攻击不同，DDoS利用分布式网络，更难追踪和防御。简单来说，攻击者利用多台设备同时发起攻击，目的是瘫痪目标系统的正常运行，常见于网络攻击中，造成经济损失或服务中断。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DDoS分布式拒绝服务攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:22:18.757070"
+    }
+  },
+  {
+    "question": "DDoS攻击的技术原理和工作机制是什么？",
+    "answer": "DDoS攻击的技术原理基于反射放大或僵尸网络机制。攻击者首先招募或控制大量傀儡机（botnet），这些机器被植入恶意软件。然后，攻击者通过这些机器向目标发送伪造源IP的请求，例如SYN洪水攻击中，发送虚假SYN包，目标服务器响应但无法完成连接，资源被占用。工作机制包括：攻击准备阶段（建立botnet）、攻击执行阶段（发送海量流量）、目标响应阶段（资源耗尽）。常见技术包括IP分片攻击和反射放大攻击，其中反射放大利用中间服务器反射流量，放大攻击规模，增加防御难度。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DDoS分布式拒绝服务攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:22:18.757070"
+    }
+  },
+  {
+    "question": "DDoS攻击有哪些常见类型？",
+    "answer": "DDoS攻击常见类型包括：1. UDP洪水：向目标发送大量伪造源IP的UDP数据包，耗尽带宽；2. TCP洪水：如SYN洪水或ACK洪水，利用TCP协议漏洞，发送虚假连接请求；3. HTTP洪水：模拟大量合法HTTP请求，针对Web应用；4. ICMP洪水：发送大量ICMP回显请求（ping），耗尽网络资源；5. 分片攻击：利用IP分片漏洞，发送不完整数据包，导致处理错误。每种类型针对不同资源，攻击者可根据目标弱点选择，防御时需针对性策略。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DDoS分布式拒绝服务攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:22:18.757070"
+    }
+  },
+  {
+    "question": "DDoS攻击在实际中有哪些应用场景？",
+    "answer": "DDoS攻击常用于网络攻击中，目的是瘫痪目标服务，造成业务中断或经济损失。典型应用场景包括：攻击电商网站在促销高峰期，阻止用户访问；攻击在线游戏或论坛服务器，干扰正常玩家体验；作为DDoS放大攻击的一部分，利用反射服务器增加流量，如Mirai僵尸网络事件；还用于政治或商业报复，例如攻击言论批评的目标。这些场景往往针对高流量网站或关键基础设施，攻击者可能利用DDoS掩盖其他恶意活动，如数据窃取或勒索。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DDoS分布式拒绝服务攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:22:18.757070"
+    }
+  },
+  {
+    "question": "如何防御DDoS攻击？优缺点分析是什么？有哪些实战案例和最佳实践建议？",
+    "answer": "防御DDoS攻击的方法包括：部署防火墙过滤异常流量、使用DDoS防护服务（如云防护）、实施负载均衡分散请求、启用SYN cookies或IP黑名单。优点：攻击者可以暂时瘫痪服务，获取竞争优势；缺点：攻击者可能被追踪（如通过botnet IP），且高攻击成本可能暴露其资源。实战案例：2016年Mirai僵尸网络攻击了DNS服务商，造成大规模瘫痪；2018年GitHub遭受大规模DDoS攻击，使用了反射放大技术。最佳实践建议：使用CDN分发流量、定期监控网络流量、备份数据并制定应急响应计划，同时加强网络安全意识培训，以减少漏洞风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DDoS分布式拒绝服务攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:22:18.757070"
+    }
+  },
+  {
+    "question": "什么是中间人攻击？",
+    "answer": "中间人攻击（Man-in-the-Middle Attack，MITM）是一种网络攻击方式，攻击者在通信双方之间插入自己，拦截并可能篡改数据传输，而不被察觉。例如，在公共Wi-Fi中，攻击者可能窃听数据。这种攻击常见于未加密的通信，目的是窃取敏感信息如密码或信用卡号。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "中间人攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:23:51.324446"
+    }
+  },
+  {
+    "question": "中间人攻击的技术原理和工作机制是什么？",
+    "answer": "中间人攻击的原理基于网络协议的漏洞，攻击者通过技术如ARP欺骗或DNS spoofing，伪造IP或域名解析，将流量重定向到自己控制的设备。工作机制包括：1. 拦截通信（如使用中间路由器）；2. 解密或篡改数据；3. 重新注入合法数据。例如，ARP欺骗通过伪造ARP表，使攻击者成为默认网关，从而监听流量。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "中间人攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:23:51.325445"
+    }
+  },
+  {
+    "question": "中间人攻击有哪些常见类型？",
+    "answer": "中间人攻击常见类型包括：1. ARP poisoning，通过伪造ARP消息控制网络；2. SSL stripping，降级HTTPS连接到HTTP；3. Session hijacking，劫持用户会话；4. DNS spoofing，在DNS查询中插入虚假记录。这些类型根据攻击媒介不同，如无线网络或VPN环境，增加了攻击的隐蔽性和危害性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "中间人攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:23:51.325445"
+    }
+  },
+  {
+    "question": "中间人攻击在实际中有哪些应用场景？",
+    "answer": "中间人攻击常应用于公共Wi-Fi场景，如咖啡店网络，攻击者通过钓鱼或恶意软件窃取数据；在VPN滥用中，攻击者可能篡改加密流量；或在供应链攻击中，针对企业网络进行拦截。实际案例包括2011年维基解密事件，攻击者拦截了SSL通信，导致敏感信息泄露。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "中间人攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:23:51.325445"
+    }
+  },
+  {
+    "question": "如何防御中间人攻击？优缺点分析和最佳实践建议是什么？",
+    "answer": "防御中间人攻击的方法包括：使用HTTPS和SSL证书验证、启用VPN加密通信、定期更新软件以修补漏洞、采用双因素认证。优点：攻击可能造成数据泄露或财务损失；缺点：防御成本高，且攻击者可能利用社会工程学。最佳实践建议：教育用户避免在公共网络输入敏感信息，并使用安全工具如Wireshark检测异常流量，以降低风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "中间人攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:23:51.325445"
+    }
+  },
+  {
+    "question": "什么是钓鱼攻击？钓鱼攻击的基本概念是什么？",
+    "answer": "钓鱼攻击是一种常见的网络诈骗手段，通过伪装成合法机构（如银行或社交媒体平台），诱骗用户提供敏感信息（如账号、密码或信用卡细节）。例如，攻击者发送伪造的电子邮件或链接，声称是银行通知，诱导用户点击并输入数据。这种攻击利用了人性的弱点，如信任和好奇心，而非直接的黑客技术。钓鱼攻击是社会工程学的一种应用，常见于网络犯罪中，目的是窃取个人信息或财务数据。防范时，需保持警惕，验证来源，并使用多因素认证。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "钓鱼攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:24:48.777007"
+    }
+  },
+  {
+    "question": "钓鱼攻击的技术原理和工作机制是怎样的？",
+    "answer": "钓鱼攻击的技术原理基于社会工程学和伪装技术，攻击者通过创建高仿真的虚假界面（如伪造的登录页面）来欺骗用户。工作机制包括：发送诱饵（如虚假邮件），诱导用户行动（如点击链接），然后捕获输入数据。通常使用DNS欺骗、恶意软件或中间人攻击来增强效果。例如，攻击者可能劫持域名或注入脚本，以窃取会话cookie。这种攻击依赖于用户的认知漏洞，而非系统漏洞，因此防御需结合技术工具（如反钓鱼工具）和用户教育，以识别异常行为。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "钓鱼攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:24:48.777007"
+    }
+  },
+  {
+    "question": "钓鱼攻击有哪些常见类型或分类？",
+    "answer": "钓鱼攻击可分为多种类型，主要包括：1) 简单钓鱼（Spear Phishing），针对特定个人或组织；2) 仿冒钓鱼（Pharming），通过篡改DNS将用户重定向到恶意网站；3) 管理员钓鱼（Whaling），针对高层管理人员；4) Smishing或Vishing，分别通过短信或电话进行；5) 带附件钓鱼（Angler Phishing），使用恶意附件。这些分类基于攻击媒介和目标，帮助组织识别风险。例如，Spear Phishing更精准，而Pharming更注重基础设施攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "钓鱼攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:24:48.777007"
+    }
+  },
+  {
+    "question": "钓鱼攻击在实际应用场景中如何应用？它的优缺点是什么？",
+    "answer": "钓鱼攻击常应用于网络犯罪、身份盗窃或商业间谍中，例如攻击企业员工窃取商业机密，或针对个人盗取银行信息。优点是成本低、易实施，攻击者可快速获得大量数据；缺点是成功率依赖于用户警惕性，且可能被检测到，导致法律风险。实际案例包括2016年民主党选举邮件泄露事件，其中钓鱼攻击导致敏感信息暴露。组织需评估风险，平衡攻击的隐蔽性和可追踪性，以提升防御策略。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "钓鱼攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:24:48.777007"
+    }
+  },
+  {
+    "question": "如何防御钓鱼攻击？有哪些实战案例和最佳实践建议？",
+    "answer": "防御钓鱼攻击需采用多层次策略：技术上，使用反钓鱼软件、多因素认证和邮件过滤；教育上，定期培训员工识别可疑邮件（如检查URL和语法错误）；管理上，实施安全政策和事件响应计划。实战案例如2020年Twitter攻击事件，通过员工培训和系统审计成功防范。最佳实践包括启用双因素认证、定期安全演练和监控异常登录。这些措施能显著降低攻击成功率，但需持续更新以应对新型威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "钓鱼攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:24:48.777007"
+    }
+  },
+  {
+    "question": "什么是缓冲区溢出？",
+    "answer": "缓冲区溢出是一种常见的网络安全漏洞，当程序向固定大小的缓冲区写入超出其容量的数据时，会导致数据覆盖缓冲区边界外的内存区域。这可能破坏程序的正常执行，甚至允许攻击者执行任意代码。例如，在C语言中，如果未检查输入长度，直接复制字符串到固定大小的数组，就可能发生缓冲区溢出。缓冲区溢出是许多安全事件的根源，强调了输入验证的重要性，以防止潜在的系统崩溃或数据泄露。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "缓冲区溢出",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:26:20.963318"
+    }
+  },
+  {
+    "question": "缓冲区溢出是如何工作的？",
+    "answer": "缓冲区溢出的工作原理通常涉及覆盖程序的关键数据结构，如函数的返回地址或栈帧指针。当缓冲区溢出时，溢出的数据可以覆盖这些结构，使程序跳转到攻击者提供的地址执行恶意代码。这依赖于程序的内存布局和缺乏输入验证。例如，在栈缓冲区溢出中，函数调用时的栈帧被破坏，返回地址被篡改，导致控制流劫持。理解这一机制有助于开发更安全的代码，避免内存损坏问题。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "缓冲区溢出",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:26:20.963318"
+    }
+  },
+  {
+    "question": "缓冲区溢出有哪些常见类型？",
+    "answer": "缓冲区溢出常见的类型包括栈缓冲区溢出、堆缓冲区溢出和格式化字符串漏洞。栈缓冲区溢出发生在函数调用时，局部变量缓冲区被过度写入，可能覆盖返回地址。堆缓冲区溢出涉及动态分配的内存，可能导致使用无效指针或内存损坏。格式化字符串漏洞是当格式字符串函数如printf未正确使用时，可能泄露内存地址或执行任意代码。这些类型各有特点，栈溢出常见于本地攻击，而堆溢出可能用于远程代码执行，提醒开发者注意不同内存区域的安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "缓冲区溢出",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:26:20.963318"
+    }
+  },
+  {
+    "question": "缓冲区溢出在实际中有哪些应用场景？",
+    "answer": "缓冲区溢出常用于网络服务、操作系统和应用程序的攻击场景。例如，历史上的Morris蠕虫利用了Unix系统的缓冲区溢出漏洞，导致大规模拒绝服务。在现代Web应用中，缓冲区溢出可能通过SQL注入或文件上传间接触发，攻击者利用它进行权限提升、数据窃取或系统入侵。实际应用中，缓冲区溢出是蠕虫病毒和DDoS攻击的常见手段，强调了在开发和部署中加强输入验证和边界检查的重要性，以防范此类威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "缓冲区溢出",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:26:20.963318"
+    }
+  },
+  {
+    "question": "如何防御缓冲区溢出？",
+    "answer": "防御缓冲区溢出的措施包括使用安全编程实践（如检查输入长度）、启用编译器保护机制（如栈保护器或地址空间布局随机化ASLR）、采用安全语言（如Rust）和定期进行安全审计。优点是显著提高系统稳定性，减少漏洞风险；缺点可能增加开发复杂性和性能开销。最佳实践建议遵循OWASP安全编码标准，使用静态分析工具检测潜在问题，并结合测试框架模拟攻击，确保代码健壮性和安全性，从而构建更可靠的系统。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "缓冲区溢出",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:26:20.963318"
+    }
+  },
+  {
+    "question": "什么是代码注入？",
+    "answer": "代码注入是一种网络安全漏洞，攻击者通过向应用程序的输入点（如表单或URL参数）注入恶意代码，导致服务器执行非法操作，从而窃取数据或控制系统。简单来说，它是一种攻击方式，利用程序对用户输入的验证不足，注入恶意脚本（如SQL命令或命令行指令），造成安全威胁。例如，在Web应用中，攻击者可能通过输入特殊字符，让服务器执行额外代码，危害系统安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "代码注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:27:52.717183"
+    }
+  },
+  {
+    "question": "代码注入是如何工作的？",
+    "answer": "代码注入的工作原理是攻击者找到应用程序的输入点（如SQL查询或系统命令接口），然后注入恶意payload（如SQL语句或操作系统命令）。服务器在未充分验证输入的情况下执行这些代码，导致数据泄露或系统被控制。例如，在SQL注入中，攻击者插入SQL命令到查询中，绕过认证机制。工作机制包括：识别注入点、构造恶意输入、服务器执行注入代码，整个过程依赖于应用程序的不安全编码实践，如缺乏输入过滤和输出编码。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "代码注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:27:52.717183"
+    }
+  },
+  {
+    "question": "代码注入有哪些常见类型？",
+    "answer": "代码注入的主要类型包括SQL注入（通过数据库查询注入恶意SQL命令）、命令注入（注入操作系统命令，如Linux的shell命令）、OS命令注入（类似命令注入，但针对特定系统）、LDAP注入（注入LDAP查询以访问目录服务）、以及XSS注入（跨站脚本注入，通常在Web前端）。这些类型根据注入目标不同而分类，SQL注入和命令注入是最常见的，攻击者利用它们窃取数据或执行任意代码。每种类型都有其特定的攻击向量和防御挑战。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "代码注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:27:52.717183"
+    }
+  },
+  {
+    "question": "代码注入在哪些场景中发生？它的优缺点是什么？",
+    "answer": "代码注入常见于Web应用程序场景，如用户登录表单、搜索功能或API接口，攻击者通过这些点注入代码。优点是攻击者能获得强大控制，例如窃取敏感数据或篡改系统；缺点是可能导致系统崩溃、数据丢失或服务中断，对防御方造成严重损失。实际应用中，它被用于渗透测试，帮助识别系统漏洞，但非法使用会带来巨大风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "代码注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:27:52.717183"
+    }
+  },
+  {
+    "question": "如何防御代码注入？有哪些实战案例和最佳实践建议？",
+    "answer": "防御代码注入的关键措施包括：输入验证（检查并过滤用户输入，只允许安全字符）、参数化查询（使用预编译语句防止SQL注入）、输出编码（转义特殊字符以避免XSS）、使用安全框架（如OWASP ESAPI）和定期安全审计。实战案例：2017年Equifax数据泄露事件，攻击者通过SQL注入窃取145万条记录；最佳实践建议：采用Web应用防火墙（WAF）、实施最小权限原则，并进行代码安全培训，以减少漏洞风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "代码注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:27:52.717183"
+    }
+  },
+  {
+    "question": "什么是命令注入？",
+    "answer": "命令注入（Command Injection）是一种网络安全漏洞，攻击通过在输入中插入恶意系统命令，诱导应用程序执行非预期操作，从而导致数据泄露或系统破坏。例如，在Web表单中输入未过滤的代码，可能让服务器运行/bin/sh或cmd.exe命令。这通常发生在输入验证不足的应用中，攻击者利用它来提升权限或窃取信息。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "命令注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:11.300161"
+    }
+  },
+  {
+    "question": "命令注入的技术原理和工作机制是什么？",
+    "answer": "命令注入的原理是应用程序直接或间接调用系统命令（如通过shell函数），而不对输入进行充分过滤。攻击者注入恶意命令，系统解析并执行，造成非预期行为。工作机制包括：输入被视为命令字符串，而非纯数据；攻击者使用如'; echo \"hello\"'或'&& rm -rf /'等注入点，操作系统会逐条执行命令。这依赖于命令解释器（如bash或cmd.exe）的机制，增加了漏洞的危险性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "命令注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:11.300161"
+    }
+  },
+  {
+    "question": "命令注入有哪些常见类型或分类？",
+    "answer": "命令注入可分为多种类型：1) OS特定注入（如Linux的/bin/sh或Windows的cmd.exe）；2) 多层注入（注入多个命令，如命令链）；3) 通过API或脚本的注入（如数据库查询中的系统命令调用）。分类包括基于操作系统的注入（针对不同OS的命令集）、基于协议的注入（如HTTP头注入）和基于上下文的注入（如文件操作或网络命令）。常见分类还包括简单注入（单一命令）和复杂注入（结合多步操作）。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "命令注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:11.300161"
+    }
+  },
+  {
+    "question": "命令注入的实际应用场景和优缺点分析是什么？",
+    "answer": "命令注入常见于Web应用，如登录系统、搜索功能或日志记录，当输入未正确转义时。优点：攻击者可以灵活执行任意系统命令，实现权限提升或数据窃取；缺点：可能导致服务器崩溃、拒绝服务或敏感信息暴露。作为防御者，它增加了安全维护成本，但如果不防御，攻击成功率高。实际场景包括CVE-2019-16895中的漏洞，攻击者通过URL参数注入命令。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "命令注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:11.300161"
+    }
+  },
+  {
+    "question": "如何防御命令注入？有哪些实战案例和最佳实践建议？",
+    "answer": "防御命令注入的关键措施包括：1) 输入验证和转义（确保输入只包含预期字符）；2) 使用参数化查询或预编译语句（避免直接执行系统命令）；3) 禁用不必要的系统功能。实战案例：OWASP Top 10中，2021年示例显示某电商网站因未过滤搜索输入，导致攻击者注入'dir'命令获取目录列表。最佳实践：遵循OWASP安全开发指南，采用自动化工具扫描漏洞，并定期进行渗透测试，以减少风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "命令注入",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:11.300161"
+    }
+  },
+  {
+    "question": "什么是路径遍历？",
+    "answer": "路径遍历是一种网络安全漏洞，攻击者通过操纵用户输入（如文件名或路径参数），使用相对路径（如'..\\'）来访问服务器上的任意文件，可能泄露敏感数据。例如，如果一个Web应用未正确验证输入，攻击者可能读取配置文件或日志文件。这源于对用户输入缺乏严格过滤，常见于动态Web应用中。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "路径遍历",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:58.723370"
+    }
+  },
+  {
+    "question": "路径遍历的技术原理和工作机制是什么？",
+    "answer": "路径遍历的原理是攻击者利用相对路径语法（如'..\\'）来遍历目录结构，绕过正常路径限制。工作机制包括：应用接收用户输入后，直接拼接路径字符串而不进行充分验证，导致系统解析出错或访问非法文件。例如，输入'../../../etc/passwd'可能直接映射到根目录下的敏感文件。这依赖于操作系统对相对路径的支持，防范需在服务器端强制绝对路径或使用安全函数。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "路径遍历",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:58.723370"
+    }
+  },
+  {
+    "question": "路径遍历有哪些常见类型或分类？",
+    "answer": "路径遍历可分为几种类型：1) 相对路径遍历（使用'..\\'等符号），2) 绝对路径注入（直接提供绝对路径），3) 多层遍历（结合多次相对路径操作）。常见分类还包括基于HTTP请求的路径遍历（如文件上传或下载功能），以及基于命令行注入的路径遍历（如在shell命令中使用不安全的路径）。这些类型通常源于开发时未对输入进行严格校验，导致攻击者能操控文件访问。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "路径遍历",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:58.723370"
+    }
+  },
+  {
+    "question": "路径遍历在实际中如何应用？有哪些实战案例？",
+    "answer": "在实际应用中，路径遍历常出现在Web应用如文件下载功能中。例如，一个下载脚本未验证文件路径，攻击者输入'../../../../etc/shadow'可读取密码文件，造成数据泄露。另一个案例是论坛附件功能，攻击者通过修改URL参数访问系统文件。实战中，这可通过渗透测试工具（如OWASP ZAP）模拟，以发现并修复漏洞。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "路径遍历",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:58.723370"
+    }
+  },
+  {
+    "question": "如何防御路径遍历？其优缺点是什么？有什么最佳实践建议？",
+    "answer": "防御路径遍历的最佳实践包括：1) 输入验证，使用正则表达式过滤非法字符；2) 转换为绝对路径并限制访问范围；3) 使用安全库或框架函数（如PHP的realpath函数）。优点：有效防止文件泄露，提升系统安全。缺点：可能增加开发复杂度，过度验证可能影响性能。建议：定期进行安全审计、使用WAF（Web应用防火墙）检测，并遵循OWASP Top 10安全标准，确保代码最小权限原则。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "路径遍历",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:30:58.723370"
+    }
+  },
+  {
+    "question": "什么是会话劫持？",
+    "answer": "会话劫持是一种网络安全攻击，指攻击者通过窃取或伪造用户的网络会话，以非法访问其账户或数据。简单来说，攻击者截获用户与服务器之间的通信，接管会话。例如，在登录网站时，攻击者可能盗取会话ID，冒充合法用户。这强调了保护会话令牌的重要性，以防止未经授权的访问，常见于HTTP协议中。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "会话劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:32:00.158111"
+    }
+  },
+  {
+    "question": "会话劫持的技术原理和工作机制是什么？",
+    "answer": "会话劫持通常通过中间人攻击或协议漏洞实现。攻击者先拦截用户与服务器的通信，然后预测或窃取会话ID（如通过ARP欺骗或TCP序列号预测）。例如，在TCP/IP中，攻击者重放数据包，伪造序列号来接管会话。这依赖于会话管理的弱点，如未加密的会话令牌。防御时需使用加密协议和严格的身份验证机制，以增加攻击难度。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "会话劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:32:00.158111"
+    }
+  },
+  {
+    "question": "会话劫持有哪些常见类型或分类？",
+    "answer": "会话劫持主要分为几种类型：1) 基于ARP欺骗，如ARP缓存中毒攻击，常用于局域网；2) 基于TCP序列号预测，攻击者猜测序列号来注入数据；3) Cookie劫持，通过窃取浏览器Cookie接管会话；4) 中间人攻击，如HTTPS降级攻击。这些类型根据攻击媒介和协议不同而分类，强调了使用强加密和随机会话ID的重要性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "会话劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:32:00.158111"
+    }
+  },
+  {
+    "question": "会话劫持在实际中有哪些应用场景和实战案例？",
+    "answer": "会话劫持常用于攻击在线服务，如银行登录或社交媒体。例如，2017年的一个案例中，攻击者通过ARP欺骗劫持用户会话，盗取银行账户信息。另一个场景是Wi-Fi攻击，攻击者在公共网络中重放会话包，窃取登录凭证。这突显了会话劫持的高风险性，攻击者利用协议弱点实现快速数据窃取，造成经济损失。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "会话劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:32:00.158111"
+    }
+  },
+  {
+    "question": "如何防御会话劫持以及其优缺点分析和最佳实践建议？",
+    "answer": "防御会话劫持的关键措施包括使用SSL/TLS加密、实施严格会话超时、采用验证码和定期令牌刷新。优点是保护用户数据，减少攻击成功率；缺点是可能增加系统开销和复杂性。最佳实践建议：启用双因素认证、监控异常流量，并进行安全培训。优缺点分析显示，防御虽有效但需平衡性能。实战中，企业应采用这些措施来降低风险，确保网络安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "会话劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:32:00.158111"
+    }
+  },
+  {
+    "question": "什么是DNS劫持？",
+    "answer": "DNS劫持是一种网络攻击，攻击者通过篡改DNS解析过程，将用户从合法域名引导到恶意网站。例如，当你输入一个网站域名时，DNS服务器本应返回正确的IP地址，但被劫持后可能返回错误地址，导致访问钓鱼网站或下载恶意软件。这威胁用户隐私和网络安全，常见于攻击银行或社交媒体平台，造成数据泄露风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DNS劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:33:08.910578"
+    }
+  },
+  {
+    "question": "DNS劫持的技术原理和工作机制是什么？",
+    "answer": "DNS劫持的技术原理通常基于中间人攻击或DNS缓存中毒。攻击者利用ARP欺骗在网络中伪装成网关，拦截DNS查询并发送伪造响应；或通过污染DNS服务器缓存，使错误记录被存储一段时间。工作机制涉及篡改DNS请求/响应，绕过正常验证，依赖网络监听和欺骗技术，攻击者可隐蔽地重定向流量，影响范围从单个用户到整个网络。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DNS劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:33:08.910578"
+    }
+  },
+  {
+    "question": "DNS劫持有哪些常见类型或分类？",
+    "answer": "DNS劫持常见类型包括DNS缓存污染（如通过欺骗响应污染本地缓存）、中间人攻击（如ARP欺骗或BGP劫持）、DNS重定向（使用恶意软件修改hosts文件或浏览器设置），以及针对IoT设备的DNS劫持。分类上可分为基于网络层的（如ARP欺骗）和应用层的（如DNSSEC失效），每种类型针对不同场景，如攻击家庭网络或企业服务器，需针对性防御。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DNS劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:33:08.910578"
+    }
+  },
+  {
+    "question": "DNS劫持在实际中如何应用？",
+    "answer": "DNS劫持的实际应用场景包括网络钓鱼（如重定向到仿冒银行网站窃取登录信息）、分发恶意软件（通过虚假更新页面诱导下载）、或点击欺诈（重定向到广告网站增加流量）。实战案例如2016年Mirai僵尸网络攻击DNS服务器，导致大规模网站瘫痪，展示了其对关键基础设施的影响，提醒用户和企业注意潜在风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DNS劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:33:08.910578"
+    }
+  },
+  {
+    "question": "如何防御DNS劫持？优缺点分析及最佳实践建议是什么？",
+    "answer": "防御DNS劫持的措施包括启用DNSSEC（DNS安全扩展）验证响应、使用VPN加密流量、保持系统更新和安装反恶意软件。优点是攻击可能窃取敏感数据或用于犯罪，但缺点是影响用户信任和业务连续性，可能导致数据丢失。最佳实践建议：教育用户识别可疑链接、使用多因素认证、定期安全审计，并选择信誉良好的DNS提供商，以降低风险并提升整体网络安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "DNS劫持",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:33:08.910578"
+    }
+  },
+  {
+    "question": "什么是ARP欺骗？",
+    "answer": "ARP欺骗是一种网络安全攻击，利用ARP协议的缺陷，攻击者伪造ARP消息，欺骗网络设备（如电脑或路由器）将流量重定向到攻击者控制的设备。ARP协议用于将IP地址映射到MAC地址，但缺乏认证机制，因此攻击者可以发送虚假响应，导致数据被窃取或篡改。这种攻击常见于局域网，基础概念是通过欺骗使受害者信任攻击者而非合法设备，从而实施中间人攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ARP欺骗",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:34:30.297289"
+    }
+  },
+  {
+    "question": "ARP欺骗的技术原理和工作机制是什么？",
+    "answer": "ARP欺骗的核心原理是利用ARP协议的无状态特性。攻击者通过发送伪造的ARP响应包，声称自己是网关或其他设备的MAC地址，导致受害设备将本应发送给合法设备的数据转发到攻击者那里。工作机制包括：攻击者监听网络，识别受害者和网关的IP-MAC映射，然后广播伪造的ARP消息。这依赖于ARP缓存表的动态更新，攻击者可以快速替换合法条目，实现流量劫持。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ARP欺骗",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:34:30.297289"
+    }
+  },
+  {
+    "question": "ARP欺骗有哪些常见类型或分类？",
+    "answer": "ARP欺骗的主要类型包括ARP Spoofing、ARP Redirect和ARP Cache Poisoning。ARP Spoofing是最常见的，攻击者伪造多个ARP响应来欺骗受害者和网关；ARP Redirect通过伪造重定向包，强制流量经过攻击者；ARP Cache Poisoning则通过注入虚假ARP条目来污染缓存表。这些类型根据攻击目标和方法分类，通常针对局域网环境，目的是窃取数据或进行中间人攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ARP欺骗",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:34:30.297289"
+    }
+  },
+  {
+    "question": "ARP欺骗在实际中如何应用？它有哪些优缺点？",
+    "answer": "ARP欺骗常用于中间人攻击场景，例如攻击者在咖啡店WiFi网络中插入自己，窃取用户的登录凭证或敏感数据。优点是攻击成本低、易于实施，攻击者可以隐蔽地拦截和修改流量。缺点是可能导致数据泄露、网络瘫痪或设备信任被破坏，但防御措施如ARP监控可以减轻风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ARP欺骗",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:34:30.297289"
+    }
+  },
+  {
+    "question": "如何防御ARP欺骗？有哪些实战案例和最佳实践？",
+    "answer": "防御ARP欺骗的措施包括使用ARP监控工具（如arpwatch）检测异常、配置静态ARP表防止动态更新、启用网络分段和VPN加密流量。实战案例包括2017年某公司遭受ARP Spoofing攻击，导致员工数据被盗；最佳实践建议定期审计网络、教育用户识别可疑活动，并部署入侵检测系统。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ARP欺骗",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:34:30.297289"
+    }
+  },
+  {
+    "question": "什么是社会工程学攻击？",
+    "answer": "社会工程学攻击是一种利用人类心理弱点（如信任、恐惧或好奇心）来获取敏感信息或访问权限的网络安全威胁，而非直接攻击技术漏洞。它通过操纵人的行为，例如通过欺骗或伪装来诱导受害者泄露数据。这种攻击常见于网络钓鱼、身份盗窃等场景，强调了人为因素在安全中的关键作用。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "社会工程学攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:35:29.559897"
+    }
+  },
+  {
+    "question": "社会工程学攻击的技术原理和工作机制是什么？",
+    "answer": "社会工程学攻击的原理基于心理学和认知偏差，攻击者通过精心设计的诱饵（如伪造的电子邮件或电话）建立信任，操纵目标执行特定行动。工作机制包括：识别目标弱点、构建虚假情境、利用权威或紧急感施压，最终实现信息窃取或系统入侵。例如，攻击者可能使用 pretexting（虚构故事）来获取密码，这依赖于对人类行为的深刻理解，而非技术工具。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "社会工程学攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:35:29.559897"
+    }
+  },
+  {
+    "question": "社会工程学攻击有哪些常见类型或分类？",
+    "answer": "社会工程学攻击常见类型包括：1) 钓鱼攻击（Phishing），通过伪造邮件或网站诱骗信息；2) 前提攻击（Pretexting），创建虚假身份或故事获取信任；3) 诱惑攻击（Baiting），用虚假奖励吸引受害者；4) 互惠攻击（Quid Pro Quo），以交换条件诱导合作。这些类型可根据攻击媒介分类，如网络、电话或面对面互动，每种都有其特定机制和目标。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "社会工程学攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:35:29.559897"
+    }
+  },
+  {
+    "question": "社会工程学攻击在实际中有哪些应用场景？它们的优缺点是什么？",
+    "answer": "社会工程学攻击的实际应用场景包括：网络钓鱼用于窃取登录凭证、电话诈骗针对财务信息，或在企业中通过社交工程获取内部数据。优点：攻击成本低、易于实施，能绕过技术防护；缺点：成功率依赖于人性弱点，易被识破且道德争议大，可能导致法律风险。例如，2016年民主党电子邮件泄露事件中，攻击者通过钓鱼邮件获取了敏感信息。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "社会工程学攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:35:29.559897"
+    }
+  },
+  {
+    "question": "如何防御社会工程学攻击？有哪些实战案例和最佳实践建议？",
+    "answer": "防御社会工程学攻击的措施包括：加强安全意识培训、实施多因素认证、使用反钓鱼工具，并定期进行安全演练。实战案例如：2020年Zoom被攻击事件中，通过教育用户识别可疑链接避免了数据泄露。最佳实践建议：组织应制定应急响应计划，监控异常行为，并采用自动化工具检测潜在攻击，以构建多层次防御体系。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "社会工程学攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:35:29.559897"
+    }
+  },
+  {
+    "question": "什么是暴力破解？",
+    "answer": "暴力破解是一种网络安全攻击方法，通过系统地尝试所有可能的密码或密钥组合来猜测正确答案。例如，在攻击系统登录时，攻击者会从简单密码如'123456'开始尝试，逐步增加复杂性。这种技术基于穷举搜索原理，适用于密码强度较弱的情况。但它依赖于计算资源，攻击者可能使用自动化工具如暴力破解软件来提高效率。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "暴力破解",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:37:19.672900"
+    }
+  },
+  {
+    "question": "暴力破解的技术原理和工作机制是什么？",
+    "answer": "暴力破解的技术原理是利用穷举搜索算法，生成并逐一测试大量可能的组合，直到找到匹配。工作机制包括：定义字符集（如字母、数字、符号），生成组合序列（如从'A'到'Z'），并通过验证函数检查每个猜测是否正确。常见工具如字典攻击（使用预定义单词列表）或暴力攻击（尝试所有可能字符），这可以针对密码、密钥或加密数据。攻击效率取决于目标复杂性和计算能力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "暴力破解",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:37:19.672900"
+    }
+  },
+  {
+    "question": "暴力破解有哪些常见类型或分类？",
+    "answer": "暴力破解的常见类型包括密码暴力破解（针对用户登录）、Wi-Fi暴力破解（使用工具如Kismet尝试无线网络密钥）、加密暴力破解（如破解SSL/TLS会话）、验证码暴力破解等。其他分类有字典攻击（基于常见单词）、暴力攻击（穷举所有可能字符组合）、暴力破解生物识别系统等。每种类型针对不同目标，但核心是通过系统化尝试来突破安全措施，攻击者可根据目标选择合适方法。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "暴力破解",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:37:19.672900"
+    }
+  },
+  {
+    "question": "暴力破解的实际应用场景有哪些？",
+    "answer": "暴力破解常用于网络攻击中，例如攻击弱密码的在线账户、破解Wi-Fi网络以访问互联网、入侵系统或服务进行数据窃取。在实际场景中，攻击者可能使用工具如Hydra测试登录系统，或针对数据库进行暴力破解以获取敏感信息。防御者也使用暴力破解进行渗透测试，评估系统安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "暴力破解",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:37:19.672900"
+    }
+  },
+  {
+    "question": "如何防御暴力破解？它有哪些优缺点？能提供一个实战案例吗？",
+    "answer": "防御暴力破解的措施包括使用强密码策略（如长密码和混合字符）、多因素认证、账户锁定机制（如多次失败后锁定）、速率限制和哈希函数增强。优点是方法简单直接，易于实现；缺点是效率低，容易被检测到，且对强密码无效。实战案例：2016年，Mirai僵尸网络使用暴力破解攻击IoT设备登录凭据，入侵了大量摄像头，导致大规模DDoS攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "暴力破解",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:37:19.672900"
+    }
+  },
+  {
+    "question": "什么是字典攻击？",
+    "answer": "字典攻击是一种网络安全攻击方法，攻击者使用一个预定义的单词列表（字典文件）来尝试猜测系统的登录凭据，如用户名或密码。这种攻击基于密码的常见模式，例如简单单词、常见短语或键盘布局错误，目的是快速破解账户，而无需穷举所有可能组合。字典攻击常用于密码破解工具中，攻击者可能是黑客或安全研究人员。理解其基本概念有助于提升个人和组织的安全意识，防止敏感信息泄露。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "字典攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:39:34.087196"
+    }
+  },
+  {
+    "question": "字典攻击的技术原理和工作机制是什么？",
+    "answer": "字典攻击的技术原理是利用预计算的单词列表（字典文件），包含大量密码候选，通过自动化工具逐个尝试与目标系统交互（如登录界面）。工作机制包括：1. 收集字典文件（如常见单词或密码列表）；2. 选择攻击目标和协议（如SSH或FTP）；3. 自动化尝试，系统验证失败则继续；4. 分析结果以获得访问权限。工具如Hydra或Crunch可高效执行，攻击者根据目标调整字典内容，提高效率，但易被系统防护机制检测。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "字典攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:39:34.087196"
+    }
+  },
+  {
+    "question": "字典攻击有哪些常见类型或分类？",
+    "answer": "字典攻击可根据攻击模式和字典内容分类。常见类型包括：1. 基于单词的攻击：使用英语单词、常见短语或主题词汇；2. 基于常见密码的攻击：针对高频密码如'password123'；3. 变体攻击：修改单词，如添加数字或符号（键盘移位）；4. 针对用户名的攻击：尝试用户名列表而非密码；5. 分布式攻击：利用多个系统并行尝试，提高速度。这些类型展示了攻击的针对性，攻击者根据目标选择字典，增加攻击成功率。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "字典攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:39:34.087196"
+    }
+  },
+  {
+    "question": "字典攻击在实际中有哪些应用场景？它的优缺点是什么？",
+    "answer": "字典攻击的实际应用场景包括：1. 破解弱密码：针对公司或网站登录系统；2. 渗透测试：安全专家模拟攻击以评估系统漏洞；3. 黑客攻击：如攻击在线银行或社交媒体账户以窃取数据。优点：攻击高效，针对弱密码快速生效；缺点：易被强密码或防护措施（如账户锁定）阻挡，且可能被检测为恶意行为。例如，一个案例是黑客使用字典攻击破解电商平台登录，导致数据泄露。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "字典攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:39:34.087196"
+    }
+  },
+  {
+    "question": "如何防御字典攻击？有哪些实战案例和最佳实践建议？",
+    "answer": "防御字典攻击的措施包括：1. 强密码策略：要求密码复杂，包含大小写字母、数字和符号，长度至少12字符；2. 多因素认证（MFA）：添加额外验证层，如短信验证码；3. 系统限制：设置账户锁定策略，多次失败后锁定；4. 密码哈希和盐值：存储时使用不可逆哈希算法增加破解难度。实战案例：LinkedIn曾受字典攻击影响，通过实施强密码和MFA减少了损失。最佳实践建议：定期安全审计、教育用户使用密码管理器、监控登录日志。结合这些措施，能显著降低字典攻击风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "字典攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:39:34.087196"
+    }
+  },
+  {
+    "question": "彩虹表攻击是什么？",
+    "answer": "彩虹表攻击是一种密码破解技术，通过预先计算哈希值与密码的映射表来高效破解密码。它基于生日悖论，使用链式结构存储数据，减少了存储空间需求。简单来说，这是一种优化的密码本，攻击者可以快速查找已知哈希值对应的密码，常用于弱密码系统。优点是破解速度快；缺点是构建表需要大量资源。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "彩虹表攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:42:36.445181"
+    }
+  },
+  {
+    "question": "彩虹表攻击的技术原理是什么？",
+    "answer": "彩虹表攻击的核心原理是利用哈希函数和减少函数创建链式结构。它从随机盐值开始，应用多次哈希计算生成序列，每个链代表一个可能的密码路径。攻击时，通过给定哈希值逆向计算链，恢复原始密码。这种方式基于生日悖论，减少了存储需求，但计算构建表时需要高资源。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "彩虹表攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:42:36.445181"
+    }
+  },
+  {
+    "question": "彩虹表攻击有哪些常见类型？",
+    "answer": "彩虹表攻击的常见类型包括针对不同哈希算法（如 MD5、SHA-1）的定制表，以及支持盐值处理的表。盐值是一种随机字符串，添加到密码中增加唯一性，但某些彩虹表设计可以处理带盐哈希值。其他类型包括针对特定系统的定制表，如用于 WPA/WPA2 网络破解的表，这些表依赖于算法和盐值的变体。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "彩虹表攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:42:36.445181"
+    }
+  },
+  {
+    "question": "彩虹表攻击在哪些场景中常见？",
+    "answer": "彩虹表攻击常见于网络入侵、密码破解和安全审计场景。例如，攻击者用于破解网站登录密码、WPA/WPA2 无线网络，或在数据泄露事件中快速恢复密码。它依赖于目标系统的密码强度和哈希算法，如果密码弱或未使用盐值，攻击成功率高，常见于黑帽黑客的入侵活动中。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "彩虹表攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:42:36.445181"
+    }
+  },
+  {
+    "question": "如何防御彩虹表攻击？并分析其优缺点及实战案例。",
+    "answer": "防御 Rainbow Table 攻击的主要措施包括使用随机盐值增加哈希唯一性、采用强算法如 bcrypt、实施多因素认证和定期密码更新。优点是攻击高效，能快速破解大量密码；缺点是构建表需巨大存储空间，且对强密码无效。实战案例：2012 年 LinkedIn 数据泄露中，攻击者使用 Rainbow Table 破解密码，因为系统未使用盐值。最佳实践建议：始终启用盐值和迭代哈希，教育用户使用复杂密码，以增强系统安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "彩虹表攻击",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:42:36.445181"
+    }
+  },
+  {
+    "question": "什么是零日漏洞利用？它为什么被称为‘零日’？",
+    "answer": "零日漏洞利用是指攻击者在漏洞被发现和修补之前，利用未知的安全漏洞进行攻击的技术。‘零日’一词源于从漏洞发现到攻击之间的时间差为零，这意味着防御方没有时间准备补丁，因此风险极高。这种漏洞通常存在于操作系统、浏览器或应用程序中，攻击可能导致数据窃取或系统瘫痪。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零日漏洞利用",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:43:35.541325"
+    }
+  },
+  {
+    "question": "零日漏洞利用的技术原理和工作机制是怎样的？",
+    "answer": "零日漏洞利用的工作原理是通过编写或使用特定代码（exploit）来绕过安全机制，直接触发漏洞，实现未经授权的访问或控制。工作机制包括漏洞扫描、漏洞利用代码开发和执行。例如，攻击者可能利用缓冲区溢出漏洞来执行任意代码，但防御方无法提前检测，增加了攻击的隐蔽性和破坏力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零日漏洞利用",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:43:35.541325"
+    }
+  },
+  {
+    "question": "零日漏洞利用有哪些常见类型或分类？",
+    "answer": "零日漏洞利用可分为多种类型，包括操作系统漏洞（如Windows或Linux中的权限提升漏洞）、Web应用漏洞（如SQL注入或跨站脚本）、浏览器漏洞（如CVE-2019-0807）和固件漏洞。这些类型根据漏洞位置和影响范围分类，攻击者选择类型取决于目标系统和意图，常见于高级持续性威胁（APT）中。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零日漏洞利用",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:43:35.541325"
+    }
+  },
+  {
+    "question": "零日漏洞利用在哪些实际应用场景中被使用？",
+    "answer": "零日漏洞利用常用于高级持续性威胁（APT）攻击、间谍活动或勒索软件中。例如，在2017年WannaCry勒索软件攻击中，攻击者利用未修补的Windows SMB漏洞进行全球传播，造成巨大损失。实际场景包括政府监控、企业数据窃取和网络犯罪，攻击者通过零日漏洞实现隐蔽入侵，往往针对关键基础设施。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零日漏洞利用",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:43:35.541325"
+    }
+  },
+  {
+    "question": "如何防御零日漏洞利用？它的优缺点是什么？有哪些实战案例和最佳实践建议？",
+    "answer": "防御零日漏洞利用的措施包括使用行为监控、沙箱技术、定期漏洞扫描和补丁管理。优点是攻击隐蔽性强，能快速渗透系统；缺点是防御难度大，可能导致系统瘫痪。实战案例如Stuxnet蠕虫利用零日漏洞攻击伊朗核设施。最佳实践建议包括加强员工安全培训、采用零信任架构和及时更新系统，以减少风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零日漏洞利用",
+      "category": "攻击技术",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:43:35.541325"
+    }
+  },
+  {
+    "question": "什么是勒索软件的基本定义？",
+    "answer": "勒索软件是一种恶意软件，攻击者通过感染目标系统，加密用户数据，然后要求支付赎金以换取解密密钥。简单来说，它是一种通过威胁公开或删除数据来勒索金钱的攻击手段。勒索软件通常通过钓鱼邮件、恶意链接或漏洞传播，影响个人和企业用户，造成数据丢失和财务损失。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "勒索软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:44:45.301630"
+    }
+  },
+  {
+    "question": "勒索软件的技术原理和工作机制是怎样的？",
+    "answer": "勒索软件的工作原理包括：首先，通过传播途径（如钓鱼邮件附件或漏洞利用）感染系统；然后，植入后门程序，扫描并加密目标文件（如文档、图片）；接着，显示赎金通知，通常使用加密货币支付以保持匿名性。工作机制涉及加密算法（如AES或RSA），攻击者会删除或隐藏数据备份，增加受害者支付赎金的压力。这种攻击利用了系统的安全漏洞和用户的安全意识薄弱，造成数据不可访问。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "勒索软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:44:45.301630"
+    }
+  },
+  {
+    "question": "勒索软件有哪些常见类型或分类？",
+    "answer": "勒索软件主要分为几种类型：1) 文件加密型：加密特定文件，如文档和数据库；2) 双重勒索型：不仅加密数据，还窃取数据并在暗网上公开，增加支付压力；3) 分布式勒索软件：由僵尸网络控制，针对多个目标同时发动攻击；4) 针对特定行业的勒索软件：如针对医疗或能源行业的定制攻击。这些分类基于攻击方式、目标和传播机制，帮助用户了解不同风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "勒索软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:44:45.301630"
+    }
+  },
+  {
+    "question": "勒索软件在实际中有哪些应用场景？它有哪些优缺点？",
+    "answer": "勒索软件的实际应用场景包括：攻击公司服务器窃取商业机密、黑市出售；攻击医院系统威胁患者数据公开；或针对个人用户勒索赎金。优点是攻击者能快速获得高额收益，且操作相对简单隐蔽；缺点是可能导致数据永久丢失、法律后果严重，且对受害者造成巨大心理和财务负担。例如，WannaCry攻击全球数百家公司，显示了其破坏力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "勒索软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:44:45.301630"
+    }
+  },
+  {
+    "question": "如何防御勒索软件？有哪些实战案例和最佳实践建议？",
+    "answer": "防御勒索软件的最佳实践包括：定期备份数据并隔离系统、使用防病毒软件和防火墙、及时更新补丁、进行员工安全培训以识别钓鱼攻击。实战案例如2017年WannaCry事件，通过及时备份和网络隔离成功减轻损失。建议：实施多层次防御策略，包括加密数据备份、监控网络流量，并制定应急响应计划，以减少攻击影响。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "勒索软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:44:45.301630"
+    }
+  },
+  {
+    "question": "什么是木马病毒？",
+    "answer": "木马病毒是一种恶意软件，通常伪装成合法的程序（如游戏或工具），诱骗用户执行后获得系统控制权。它不自我复制，但能窃取信息或造成破坏。例如，用户下载免费软件时可能被植入木马。基本特征包括隐蔽性和欺骗性，常见于网络攻击中，危害包括数据泄露和系统入侵。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "木马病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:45:44.324820"
+    }
+  },
+  {
+    "question": "木马病毒的技术原理和工作机制是什么？",
+    "answer": "木马病毒的工作原理是通过社会工程学欺骗用户执行程序，一旦运行，便在后台激活恶意功能。其机制包括：伪装成正常文件（如.exe或脚本），利用系统漏洞注入代码，并通过远程控制协议（如HTTP或自定义协议）与攻击者通信。典型工作流程：感染阶段（用户执行）、隐藏阶段（修改系统路径或注册表）、执行阶段（窃取数据或控制设备）。防御时需注意文件来源验证和行为监控。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "木马病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:45:44.325851"
+    }
+  },
+  {
+    "question": "木马病毒有哪些常见类型？它们在实际中如何应用？",
+    "answer": "常见木马病毒类型包括银行木马（如Zeus，窃取金融数据）、远程访问木马（如NetBus，允许攻击者远程控制）、下载器木马（如Alureon，下载其他恶意软件）和DoS木马（如冲击波，发起拒绝服务攻击）。实际应用中，木马常用于企业数据窃取、间谍活动或勒索软件分发。例如，2017年WannaCry事件虽以勒索为主，但也涉及木马机制，通过伪装更新欺骗用户执行，导致全球网络瘫痪。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "木马病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:45:44.325851"
+    }
+  },
+  {
+    "question": "如何防御木马病毒？分析其优缺点。",
+    "answer": "防御木马病毒的关键措施包括：使用可靠防病毒软件（如基于启发式扫描的技术）、定期系统更新、用户教育（避免点击可疑链接或下载未知文件），以及网络防火墙监控。优点是攻击隐蔽性强，能长期潜伏而不易被发现；缺点是可能被安全工具检测到，导致攻击失败，且造成高破坏性（如数据丢失）。实战中，结合行为分析工具可提升防御效果，但需注意误报风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "木马病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:45:44.325851"
+    }
+  },
+  {
+    "question": "请提供一个木马病毒的实战案例，并给出最佳实践建议。",
+    "answer": "一个著名案例是2004年“Sasser”木马病毒，它伪装成系统更新文件，感染Windows系统后导致大量计算机崩溃。攻击者通过网络传播，利用缓冲区漏洞自动执行。最佳实践建议：采用多层防御策略，包括端点安全（如杀毒软件）、网络隔离、定期备份数据，以及实施最小权限原则。同时，进行渗透测试和安全培训，以模拟攻击场景提升免疫力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "木马病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:45:44.325851"
+    }
+  },
+  {
+    "question": "什么是蠕虫病毒？",
+    "answer": "蠕虫病毒是一种独立运行的恶意软件，通过网络自动传播，无需依赖宿主程序。它通常利用系统漏洞或弱密码进行复制和扩散，造成系统资源耗尽或数据破坏。例如，著名的冲击波蠕虫曾导致大量计算机瘫痪。蠕虫病毒与传统病毒不同，它不附着在其他文件上，而是自我复制。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蠕虫病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:46:59.651038"
+    }
+  },
+  {
+    "question": "蠕虫病毒的技术原理和工作机制是什么？",
+    "answer": "蠕虫病毒的工作原理基于网络扫描和利用漏洞。它通过扫描IP地址，找到易受攻击的主机，然后使用弱密码或已知漏洞进行传播。机制包括自我复制、网络渗透和执行恶意代码。例如，它会修改系统配置，创建后门，以便持续传播。防御时需关注漏洞扫描和及时打补丁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蠕虫病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:46:59.651038"
+    }
+  },
+  {
+    "question": "蠕虫病毒有哪些常见类型或分类？",
+    "answer": "蠕虫病毒常见类型包括基于邮件传播的如Melissa蠕虫，利用即时消息的如Worm.Sasser，以及通过文件共享传播的如Nimda。分类可按传播方式分为邮件型、即时消息型和网络共享型；按目标系统分为Windows型和跨平台型。这些类型根据传播速度和破坏力不同，影响范围广泛。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蠕虫病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:46:59.651038"
+    }
+  },
+  {
+    "question": "蠕虫病毒在实际应用场景中有哪些表现？它有哪些优缺点？",
+    "answer": "实际应用场景中，蠕虫病毒常用于DDoS攻击或信息窃取，如Anna Kondrach蠕虫曾导致全球网络拥堵。优点：从防御角度看，及时检测可提升网络安全意识；缺点：传播速度快，破坏力强，可能导致系统崩溃或数据泄露。例如，2003年冲击波蠕虫造成数十万台计算机瘫痪，凸显了其危害性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蠕虫病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:46:59.651038"
+    }
+  },
+  {
+    "question": "如何防御和应对蠕虫病毒？",
+    "answer": "防御蠕虫病毒需采用多层策略，包括安装杀毒软件、启用防火墙、定期更新系统补丁，以及教育用户避免点击可疑邮件。应对措施包括隔离受感染主机、使用专杀工具清除病毒，并分析传播源以防再次入侵。实战案例：在发现W32.Sobig蠕虫爆发时，企业通过网络监控及时阻断传播。最佳实践建议：实施自动更新机制和定期安全审计，以提升整体防御能力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蠕虫病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:46:59.651038"
+    }
+  },
+  {
+    "question": "什么是间谍软件？它的基本定义是什么？",
+    "answer": "间谍软件是一种恶意软件，旨在秘密地在用户设备上安装并收集敏感信息，如密码、聊天记录或位置数据，通常用于商业间谍活动或网络攻击。它通过欺骗或漏洞植入系统，能绕过用户察觉，造成隐私泄露。间谍软件常见于网络犯罪中，目的是窃取数据或监控活动。例如，它可能伪装成免费软件来诱骗下载，危害个人或企业安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "间谍软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:48:36.255656"
+    }
+  },
+  {
+    "question": "间谍软件是如何工作的？它的技术原理是什么？",
+    "answer": "间谍软件的工作原理包括：通过恶意链接、钓鱼邮件或漏洞利用植入系统，然后隐蔽地运行，窃取数据并通过加密通信发送到攻击者服务器。技术上，它使用rootkit或进程隐藏技术来避免检测，并可能结合键盘记录器（Keylogger）或屏幕捕获功能。工作机制涉及自动激活、数据加密和远程控制，确保长期潜伏。防御时需注意系统日志分析和行为监控，以识别异常活动。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "间谍软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:48:36.255656"
+    }
+  },
+  {
+    "question": "间谍软件有哪些常见类型？它们之间有什么区别？",
+    "answer": "常见间谍软件类型包括：键盘记录器（Keylogger，记录按键输入）、屏幕监控软件（捕获屏幕截图）、远程访问木马（RAT，允许攻击者远程控制设备）、和文件窃取器（如Zeus，专窃取银行数据）。区别在于功能侧重点：Keylogger针对输入数据，RAT强调远程控制，屏幕监控注重视觉信息。分类上，它们可基于传播方式（如蠕虫或钓鱼）或目标（个人 vs 企业）划分。这些类型常用于企业间谍或个人监控，需通过行为分析来区分。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "间谍软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:48:36.255656"
+    }
+  },
+  {
+    "question": "间谍软件在现实中有哪些应用场景？它有哪些优缺点？",
+    "answer": "间谍软件在现实中用于网络间谍活动，如企业窃取商业机密、政府监控对手或个人隐私侵犯。例如，Stuxnet病毒曾被用于破坏伊朗核设施。优点（从攻击者角度）是高效情报收集，但缺点是严重侵犯隐私，可能导致法律后果或设备性能下降。优缺点分析显示，它虽能提供战略优势，却易引发反制措施和道德争议，需权衡风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "间谍软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:48:36.255656"
+    }
+  },
+  {
+    "question": "如何防御间谍软件？有哪些实战案例和最佳实践建议？",
+    "answer": "防御间谍软件需采用多层策略，包括安装防病毒软件、启用防火墙、定期系统更新和用户教育（如识别钓鱼邮件）。实战案例中，2017年WannaCry攻击虽主要为勒索软件，但也涉及间谍组件，教训是及时打补丁。最佳实践建议：使用端点检测和响应（EDR）工具，实施网络监控，并定期进行渗透测试。结合AI驱动的安全工具，能提高检测率，确保全面防护。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "间谍软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:48:36.255656"
+    }
+  },
+  {
+    "question": "什么是Rootkit？它在网络安全中扮演什么角色？",
+    "answer": "Rootkit是一种恶意软件工具，旨在隐藏其他恶意软件或攻击者的存在，通常以root或管理员权限运行，从而在系统中保持隐蔽访问。它常用于后门入侵，允许攻击者长期控制系统而不被发现。例如，Rootkit可以隐藏进程、文件或网络连接，增加网络安全风险。理解Rootkit是防范高级持续性威胁的基础，帮助管理员检测和防御潜在攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Rootkit",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:49:32.979241"
+    }
+  },
+  {
+    "question": "Rootkit的技术原理和工作机制是什么？它如何实现隐藏功能？",
+    "answer": "Rootkit通过修改操作系统内核或底层系统调用，干扰正常监控机制来工作。例如，它可能篡改系统调用表或驱动程序，以屏蔽对受保护对象的检测。常见机制包括注入代码到关键进程（如ls或ps）来伪造输出，或使用root权限加载驱动程序来绕过安全检查。这使Rootkit能深度集成到系统中，难以被标准工具发现，但会消耗系统资源，可能导致性能下降。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Rootkit",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:49:32.979241"
+    }
+  },
+  {
+    "question": "Rootkit有哪些常见类型和分类？它们的区别是什么？",
+    "answer": "Rootkit主要分为内核级、用户级和驱动级类型。内核级Rootkit直接修改操作系统内核，提供最高级别的隐蔽性，但需要较高权限；用户级Rootkit通过用户空间进程隐藏，较易检测；驱动级Rootkit使用设备驱动程序来隐藏活动，常见于Windows系统。其他分类包括基于Linux的（如chrootkit）和基于Windows的（如Win32.Rootkit）。这些类型区别在于隐蔽性、安装方式和检测难度，内核级更隐蔽但风险更高，用户级相对易防。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Rootkit",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:49:32.979241"
+    }
+  },
+  {
+    "question": "Rootkit的实际应用场景有哪些？它有哪些优缺点？",
+    "answer": "Rootkit常用于实际场景，如创建后门访问系统、隐藏木马或僵尸网络活动，或用于企业监控（但非法使用）。优点是隐蔽性强，能长期潜伏而不被发现；缺点是可能导致系统不稳定、数据泄露或性能问题。例如，在APT攻击中，Rootkit帮助攻击者窃取敏感信息。优缺点分析显示，Rootkit虽有用武之地，但过度使用会增加安全漏洞，需严格控制。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Rootkit",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:49:32.979241"
+    }
+  },
+  {
+    "question": "如何防御Rootkit？有哪些实战案例和最佳实践建议？",
+    "answer": "防御Rootkit需使用专业工具如反Rootkit扫描器、定期系统审计和日志监控；结合防病毒软件和入侵检测系统。实战案例包括2005年Sony BMG Rootkit事件，该事件导致音乐播放器隐藏功能被滥用，引发隐私问题。最佳实践建议：保持系统和软件更新、使用强密码、启用内核模块签名验证，并进行定期渗透测试。这些措施能降低Rootkit风险，但需持续教育和培训以提升整体安全意识。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Rootkit",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:49:32.979241"
+    }
+  },
+  {
+    "question": "什么是僵尸网络？",
+    "answer": "僵尸网络（Botnet）是一种由受感染计算机组成的网络，这些计算机被攻击者远程控制，通常通过恶意软件感染。每个受感染的计算机被称为'僵尸'，它们在攻击者的命令下执行任务，如发起分布式拒绝服务攻击（DDoS）。这种网络常用于恶意活动，危害网络安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "僵尸网络",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:50:29.252725"
+    }
+  },
+  {
+    "question": "僵尸网络的技术原理和工作机制是什么？",
+    "answer": "僵尸网络的工作原理包括感染阶段：攻击者通过恶意软件（如蠕虫或木马）感染计算机，建立命令与控制（C&C）服务器进行通信。C&C服务器发送指令，僵尸计算机响应执行任务。通信方式多样，包括基于IRC协议、HTTP或P2P网络。工作机制涉及隐蔽性和持久性，攻击者可隐藏通信流量以避免检测，确保网络稳定运行。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "僵尸网络",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:50:29.252725"
+    }
+  },
+  {
+    "question": "僵尸网络有哪些常见类型或分类？",
+    "answer": "僵尸网络常见类型包括基于IRC的Botnet：使用Internet Relay Chat协议进行C&C通信；基于HTTP的Botnet：通过网页浏览器或HTTP请求传播命令；基于P2P的Botnet：采用点对点网络，提高抗攻击性；以及基于僵尸货币挖矿的Botnet：利用受感染计算机挖掘加密货币。这些类型根据传播方式和控制机制分类，影响网络的规模和隐蔽性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "僵尸网络",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:50:29.252725"
+    }
+  },
+  {
+    "question": "僵尸网络在哪些实际场景中被应用？",
+    "answer": "僵尸网络的实际应用场景包括发起大规模DDoS攻击，瘫痪网站或服务；用于垃圾邮件和钓鱼攻击，传播更多恶意软件；参与僵尸货币挖矿，利用受感染计算机的计算资源牟利；以及其他如僵尸点击欺诈或数据窃取。这些应用体现了僵尸网络的破坏性，常导致经济损失和数据泄露。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "僵尸网络",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:50:29.252725"
+    }
+  },
+  {
+    "question": "如何防御僵尸网络？并分析其优缺点，举例实战案例。",
+    "answer": "防御僵尸网络的措施包括部署入侵检测系统（IDS）监控异常流量、使用反恶意软件定期扫描、实施网络防火墙规则、以及进行员工安全培训以防止社会工程学攻击。优点是能保护网络资源，减少经济损失；缺点是防御成本高，僵尸网络可能具有高度隐蔽性。实战案例：2016年Mirai Botnet攻击利用IoT设备发起DDoS，造成大规模服务中断；最佳实践建议包括及时更新系统补丁和采用AI驱动的威胁检测工具。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "僵尸网络",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:50:29.252725"
+    }
+  },
+  {
+    "question": "什么是挖矿病毒？",
+    "answer": "挖矿病毒是一种恶意软件，它通过感染计算机系统并利用其CPU资源来挖取加密货币（如比特币），从而为攻击者牟利。简单来说，它就像偷偷占用你的电脑来挖矿，导致系统性能下降。挖矿病毒通常通过恶意链接、附件或系统漏洞传播，感染后会自动运行挖矿程序，对个人用户和企业都构成威胁。理解这个概念有助于提高网络安全意识，避免成为攻击目标。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "挖矿病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:51:38.454055"
+    }
+  },
+  {
+    "question": "挖矿病毒的工作原理是什么？",
+    "answer": "挖矿病毒的工作原理涉及几个步骤：首先，它通过传播途径（如钓鱼邮件或漏洞）感染系统；然后，注入恶意代码，利用计算机的CPU资源运行挖矿算法（如SHA-256）来生成加密货币；接着，通过网络将挖取的货币发送到攻击者的钱包。它通常伪装成正常程序，隐蔽性强，利用挖矿池（pool）分发计算任务。这种机制依赖于受害者的计算资源，导致系统过热和性能问题。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "挖矿病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:51:38.454055"
+    }
+  },
+  {
+    "question": "挖矿病毒有哪些常见类型？",
+    "answer": "挖矿病毒常见类型包括基于JavaScript的挖矿病毒（如Coinhive）、基于CPU挖矿的病毒（如XMRig）、以及基于GPU挖矿的病毒（如MinerGate）。它们根据传播方式和目标不同而分类：有些针对浏览器，通过恶意脚本注入；有些利用系统漏洞直接挖矿。这些类型往往通过僵尸网络（botnet）传播，形成大规模攻击。了解这些类型有助于针对性防护，例如使用特定的检测工具。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "挖矿病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:51:38.454055"
+    }
+  },
+  {
+    "question": "挖矿病毒在实际中是如何被利用的？",
+    "answer": "挖矿病毒在实际中常被用于DDoS攻击或作为僵尸网络的一部分，攻击者通过感染大量设备（如IoT设备）构建挖矿农场，非法挖取加密货币。例如，2017年曾有挖矿病毒通过浏览器漏洞传播，导致受害者的电脑持续挖矿，造成经济损失。应用场景包括企业网络被入侵后，挖矿病毒消耗大量电力，影响业务运行。这提醒我们，防范此类病毒需定期监控系统资源异常。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "挖矿病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:51:38.454055"
+    }
+  },
+  {
+    "question": "如何防御挖矿病毒？它的优缺点是什么？并给出最佳实践建议。",
+    "answer": "防御挖矿病毒的方法包括：安装并更新防病毒软件、启用防火墙、限制网络访问、使用资源监控工具（如Task Manager）检测异常CPU使用；优缺点：对攻击者，优点是低成本高收益；对受害者，缺点是系统性能下降、电费增加，甚至设备损坏；最佳实践建议：教育用户避免点击可疑链接、定期更新系统补丁、采用AI驱动的安全工具，并实施网络分段。这些措施能有效降低风险，保护系统安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "挖矿病毒",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:51:38.454055"
+    }
+  },
+  {
+    "question": "什么是广告软件？",
+    "answer": "广告软件（Adware）是一种通过显示广告来盈利的恶意软件，通常在用户安装免费软件时被捆绑。它会弹出广告、修改浏览器设置或推送无关内容，目的是为开发者带来收入，但可能侵犯用户隐私和数据安全。例如，免费下载工具或游戏可能包含广告软件。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "广告软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:53:17.478978"
+    }
+  },
+  {
+    "question": "广告软件的技术原理和工作机制是什么？",
+    "answer": "广告软件的技术原理基于恶意软件分发，通过API注入、浏览器挂钩（Browser Hooking）等技术修改用户界面，显示广告。工作机制包括：检测用户行为（如浏览习惯）、收集数据（如IP地址或搜索历史）、展示广告并通过点击或观看获利。专业术语如Ad Injection指软件注入广告代码，需解释为在用户界面中插入广告元素，以增加收入但降低用户体验。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "广告软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:53:17.478978"
+    }
+  },
+  {
+    "question": "广告软件有哪些常见类型或分类？",
+    "answer": "广告软件常见类型包括：弹出窗口广告（Pop-up Ads，通过弹出窗口干扰用户）、浏览器劫持（Browser Hijacking，改变主页和搜索引擎）、奖励视频广告（Rewarded Video Ads，用户观看广告换取奖励）、应用内广告（In-app Ads，嵌入移动应用中）。分类基于传播方式，如捆绑在免费软件中或通过钓鱼邮件分发，专业术语如Malware Distribution指恶意软件传播机制，需解释为通过欺骗性方式安装软件。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "广告软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:53:17.478978"
+    }
+  },
+  {
+    "question": "广告软件的实际应用场景有哪些？它有哪些优缺点？",
+    "answer": "广告软件的实际应用场景包括免费软件分发（如下载工具或游戏）、浏览器劫持（通过修改设置推广特定广告）、移动应用中（如免费应用内广告）。优点：为开发者提供资金支持，促进免费软件生态；缺点：侵犯隐私（收集用户数据）、降低系统性能、带来安全风险（如恶意重定向）。例如，用户安装免费软件时，广告软件可能跟踪浏览习惯，导致个人信息泄露。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "广告软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:53:17.478978"
+    }
+  },
+  {
+    "question": "如何防御或应对广告软件？包括实战案例和最佳实践建议。",
+    "answer": "防御措施包括：使用防病毒软件（如AV Tools）检测和移除、谨慎下载软件、阅读安装协议以避免捆绑、启用广告拦截工具（如AdBlock）。实战案例：某用户点击钓鱼链接感染广告软件，导致浏览器被劫持；通过运行杀毒软件扫描，清除后恢复系统。最佳实践建议：定期更新操作系统和浏览器、教育用户识别可疑软件、采用网络防火墙和加密通信，以减少感染风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "广告软件",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:53:17.478978"
+    }
+  },
+  {
+    "question": "什么是后门程序？",
+    "answer": "后门程序是网络安全中一种恶意代码或功能，允许攻击者在系统被重新保护后绕过正常认证机制进行非法访问。它通常由攻击者故意植入软件或系统中，目的是提供隐蔽的远程控制入口。例如，在漏洞利用或恶意软件中，攻击者可能添加后门以实现持久访问。理解后门程序有助于提高系统安全性，防范潜在威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "后门程序",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:54:17.576168"
+    }
+  },
+  {
+    "question": "后门程序是如何工作的？",
+    "answer": "后门程序通过修改系统文件、添加隐藏服务或利用漏洞来创建隐蔽入口。其工作机制包括监听特定端口、使用加密通信或绕过安全模块，以避免被检测。例如，攻击者可能注入一个简单的命令解释器或脚本，允许远程执行命令。这种机制依赖于隐蔽性和持久性，常见于木马或僵尸网络中，需要通过日志分析和行为监控来识别。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "后门程序",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:54:17.576168"
+    }
+  },
+  {
+    "question": "后门程序有哪些常见类型或分类？",
+    "answer": "后门程序可分类为基于软件的后门（如在应用程序中嵌入的后门代码）、硬件后门（物理层面的篡改，如植入恶意芯片）和网络后门（通过开放端口或服务实现远程访问）。其他类型包括逻辑后门（利用算法漏洞）和社交工程后门（通过欺骗获取访问）。每种类型针对不同场景，例如软件后门常见于恶意App，而网络后门用于DDoS攻击。了解这些类型有助于针对性防御。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "后门程序",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:54:17.576168"
+    }
+  },
+  {
+    "question": "后门程序在现实中有哪些应用场景？",
+    "answer": "后门程序常用于间谍活动、数据窃取或控制系统。例如，在APT攻击中，攻击者植入后门以长期监控目标网络；优缺点分析：优点（从攻击者角度）是持久访问和隐蔽性，缺点（从受害者角度）是隐私泄露和系统破坏。实战案例包括2017年Equifax数据泄露事件，其中后门程序导致敏感数据被盗，提醒我们后门可能源于未修复漏洞。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "后门程序",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:54:17.576168"
+    }
+  },
+  {
+    "question": "如何防御或应对后门程序？",
+    "answer": "防御措施包括定期代码审计、使用入侵检测系统（IDS）和更新补丁，以检测异常行为。优缺点分析：优点是防御能保护数据安全，缺点是可能误报正常活动。实战案例如Mirai僵尸网络事件，通过网络扫描发现后门并隔离设备。最佳实践建议：实施最小权限原则、教育员工识别钓鱼邮件，并使用端点安全工具，以减少后门植入风险，确保系统整体安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "后门程序",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:54:17.576168"
+    }
+  },
+  {
+    "question": "什么是键盘记录器？",
+    "answer": "键盘记录器是一种恶意软件或硬件设备，用于秘密记录用户键盘输入，常用于窃取敏感信息如密码、账号等。它通过监控键盘事件来捕获数据，常见于网络攻击中。键盘记录器可以是软件形式（如通过恶意脚本注入）或硬件形式（如USB设备），目的是非法获取用户输入，造成隐私泄露风险。理解其基本概念有助于防范潜在威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "键盘记录器",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:55:35.426207"
+    }
+  },
+  {
+    "question": "键盘记录器是如何工作的？",
+    "answer": "键盘记录器的工作原理是通过技术手段捕获键盘中断或输入事件。软件类型通常利用API hooking或键盘钩子机制，如Windows的WH_KEYBOARD钩子，来拦截并记录按键数据。硬件类型则通过物理连接（如USB设备）直接读取键盘信号。其工作机制涉及注入代码到系统进程中，隐藏自身以避免检测，然后将捕获的数据发送到攻击者控制的服务器。这依赖于操作系统漏洞或用户权限，解释清楚有助于识别攻击模式。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "键盘记录器",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:55:35.426207"
+    }
+  },
+  {
+    "question": "键盘记录器有哪些常见类型或分类？",
+    "answer": "键盘记录器可分为软件和硬件两大类。软件类型包括：1) 恶意脚本键盘记录器，通过浏览器或应用程序注入代码；2) API hooking键盘记录器，利用系统API拦截输入；3) 驱动级键盘记录器，直接操作底层系统驱动。硬件类型包括：1) USB键盘记录器，插入USB口后记录数据；2) 硬件键盘修改器，嵌入键盘内部。分类基于部署方式和隐蔽性，软件类型更常见，易于传播，而硬件类型更隐蔽但需物理访问。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "键盘记录器",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:55:35.426207"
+    }
+  },
+  {
+    "question": "键盘记录器在哪些实际场景下被使用？",
+    "answer": "键盘记录器常用于网络钓鱼攻击、企业间间谍活动或个人身份盗窃。例如，在网络钓鱼邮件中，攻击者发送恶意附件，用户打开后键盘记录器激活，窃取银行密码；或在企业环境中，用于窃取商业机密。其他场景包括：1) 黑帽黑客攻击政府系统；2) 个人用户遭受钓鱼网站诱导。实战案例：某用户因访问假冒银行网站而被键盘记录器窃取信用卡信息，导致财务损失。这些场景强调了其在现实中的危害性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "键盘记录器",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:55:35.426207"
+    }
+  },
+  {
+    "question": "如何防御键盘记录器攻击？",
+    "answer": "防御键盘记录器需采用多层次措施：1) 使用防病毒软件和定期扫描系统；2) 禁用不必要的键盘钩子或使用防键盘记录工具；3) 教育用户避免点击可疑链接；4) 使用硬件加密键盘或多因素认证。优缺点分析：优点是隐蔽性强、易部署；缺点是易被绕过或检测困难。实战案例：某公司通过更新防病毒软件和启用键盘监控，成功阻止了键盘记录器攻击。最佳实践建议：定期更新操作系统、使用强密码、实施网络安全培训，以降低风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "键盘记录器",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:55:35.426207"
+    }
+  },
+  {
+    "question": "什么是远程控制木马？",
+    "answer": "远程控制木马（Remote Access Trojan, RAT）是一种恶意软件，它伪装成合法的软件（如游戏或工具）欺骗用户安装。一旦运行，攻击者可以通过网络远程控制受感染的计算机，执行命令、窃取数据或安装其他恶意程序。它源于网络安全中的木马概念，即利用用户信任来传播。RAT通常用于间谍活动或恶意攻击，危害包括数据泄露和系统破坏。防范时，需使用防病毒软件和用户教育来减少风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程控制木马",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:57:08.135119"
+    }
+  },
+  {
+    "question": "远程控制木马的工作原理是什么？",
+    "answer": "远程控制木马的工作原理基于木马技术：它通过伪装成正常软件诱骗用户安装，然后在后台激活。核心机制包括：1) 感染阶段：恶意代码注入系统，常通过钓鱼邮件或漏洞利用；2) 控制阶段：攻击者通过预定义端口或协议（如HTTP或自定义协议）建立连接，发送命令；3) 持久化：RAT会修改注册表或系统文件，确保开机自启。这种机制允许攻击者隐蔽操作，但也会留下痕迹，可通过网络流量分析检测。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程控制木马",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:57:08.135119"
+    }
+  },
+  {
+    "question": "远程控制木马有哪些常见类型？",
+    "answer": "远程控制木马有多种常见类型，主要基于功能和传播方式分类：1) 基于协议的RAT：如使用HTTP/HTTPS的Web RAT，便于通过浏览器注入；2) 功能特化的RAT：如针对企业环境的TeamViewer RAT或用于间谍的GraySpy；3) 平台特定的RAT：如针对Windows的NetBus或针对移动设备的RATs。这些类型根据攻击者需求定制，可能包含加密通信或反分析功能，增加检测难度，但常见类型可通过安全数据库识别。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程控制木马",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:57:08.135119"
+    }
+  },
+  {
+    "question": "远程控制木马在哪些场景下被使用？",
+    "answer": "远程控制木马常用于网络攻击场景，例如：1) 间谍活动：攻击者窃取敏感数据如企业机密或个人隐私；2) 勒索软件分发：先用RAT控制系统，再加密数据勒索赎金；3) 分布式拒绝服务（DDoS）攻击：通过RAT控制多台设备发起攻击；4) 企业入侵：针对公司网络进行监控或破坏。实际案例中，RAT被用于APT（高级持续性威胁）攻击，如APT28组织利用RAT窃取情报。这些场景强调了RAT的隐蔽性和危害性，需通过日志审查来发现异常行为。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程控制木马",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:57:08.135119"
+    }
+  },
+  {
+    "question": "如何防御远程控制木马的攻击？",
+    "answer": "防御远程控制木马需采用多层次策略：1) 技术措施：使用防病毒软件和入侵检测系统（IDS）扫描恶意代码；2) 网络安全：配置防火墙限制不必要的端口开放，启用端点安全解决方案；3) 用户教育：培训员工识别钓鱼邮件和可疑软件，避免点击未知链接；4) 定期更新：保持操作系统和软件补丁最新，修复漏洞；5) 监控：实施网络流量监控，检测异常连接。例如，使用工具如Wireshark分析流量，可及时发现RAT通信。综合这些措施，能显著降低风险，但需持续维护以应对新威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程控制木马",
+      "category": "恶意软件",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:57:08.135119"
+    }
+  },
+  {
+    "question": "什么是防火墙？",
+    "answer": "防火墙是一种网络安全系统，用于监控和控制网络流量，基于预定义的安全规则决定是否允许数据包通过。它充当网络边界的安全屏障，防止未经授权的访问。例如，企业网络使用防火墙隔离内部网络与互联网，减少外部威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "防火墙",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:58:16.974282"
+    }
+  },
+  {
+    "question": "防火墙如何工作？",
+    "answer": "防火墙通过技术原理如包过滤和状态检测来工作。包过滤检查数据包的源IP、目标IP、端口和协议等信息，基于规则允许或阻止流量。状态检测则跟踪连接状态，确保只有合法的会话流量通过。这有助于实时防御网络攻击，但需配置规则以平衡安全性和性能。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "防火墙",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:58:16.974282"
+    }
+  },
+  {
+    "question": "防火墙有哪些常见类型？",
+    "answer": "常见类型包括包过滤防火墙、状态检测防火墙和代理防火墙。包过滤型基于简单规则过滤数据包；状态检测型跟踪连接状态，提供更强的安全性；代理防火墙则作为中间人，检查应用层数据，如HTTP请求。其他类型如下一代防火墙（NGFW）整合入侵检测系统，提升防护能力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "防火墙",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:58:16.974282"
+    }
+  },
+  {
+    "question": "防火墙在哪些实际场景中使用？",
+    "answer": "防火墙广泛应用于企业网络边界、家庭路由器和云环境。例如，企业使用防火墙保护内部服务器免受DDoS攻击，家庭用户通过路由器防火墙阻止恶意流量进入本地网络。在云环境中，防火墙用于隔离虚拟机，确保数据隐私。实战案例包括配置防火墙规则来防御 ransomware 分布攻击，有效减少安全事件发生。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "防火墙",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:58:16.974282"
+    }
+  },
+  {
+    "question": "防火墙的优缺点是什么？如何防御其局限性？",
+    "answer": "防火墙优点包括简单易用、成本低且能有效防御基础攻击；缺点是可能误阻合法流量，无法完全阻止应用层攻击，且配置不当会留下漏洞。防御措施包括定期更新规则、结合入侵检测系统，并使用防火墙日志进行监控。实战案例：某公司因防火墙未更新规则而遭受APT攻击，通过升级到下一代防火墙和实施多层次防御策略，成功提升了安全。最佳实践建议：定期审计配置、结合其他安全工具如VPN，并进行员工培训以减少人为错误。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "防火墙",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:58:16.974282"
+    }
+  },
+  {
+    "question": "什么是入侵检测系统（IDS）？",
+    "answer": "入侵检测系统（IDS）是一种网络安全技术，用于监控网络流量或系统活动，检测潜在的入侵行为或恶意活动，并发出警报。它通常被动工作，不干预正常流量，帮助组织及时发现安全威胁。IDS基于预定义的规则或异常模式进行分析，常见于防火墙后或关键服务器上，是网络安全防御的重要组成部分。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵检测系统IDS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:59:39.923110"
+    }
+  },
+  {
+    "question": "IDS的工作原理和工作机制是什么？",
+    "answer": "IDS的工作原理主要基于两种机制：签名匹配和异常检测。签名匹配通过比对网络流量或系统日志与已知攻击模式的数据库来识别威胁；异常检测则分析行为是否偏离正常基线，例如使用统计学或机器学习算法。工作机制包括数据采集（如从网络包或日志中提取信息）、分析处理和警报生成。基于网络的IDS（NIDS）监控流量，而基于主机的IDS（HIDS）聚焦系统日志，两者结合提高检测准确性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵检测系统IDS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:59:39.923110"
+    }
+  },
+  {
+    "question": "IDS有哪些常见类型或分类？",
+    "answer": "IDS主要分为两类：基于网络的IDS（NIDS）和基于主机的IDS（HIDS）。NIDS部署在网络中，监控流量，如Snort系统；HIDS安装在单个主机上，分析系统日志和文件活动。其他类型包括数据库IDS（DBIDS），专门保护数据库系统，以及分布式IDS（DIDS），用于大规模网络环境。这些类型各有优缺点，NIDS覆盖广但可能误报，HIDS精确但易受系统权限限制，选择时需考虑部署场景和资源。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵检测系统IDS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:59:39.923110"
+    }
+  },
+  {
+    "question": "IDS在实际应用场景中如何使用？以及如何应对检测到的入侵？",
+    "answer": "IDS常用于网络边界、服务器集群或关键基础设施中，例如监控企业内网流量以检测DDoS攻击或恶意软件。实际应用中，IDS可集成到安全信息和事件管理（SIEM）系统，提供实时警报和日志分析。应对入侵时，采取措施如隔离受感染主机、更新防火墙规则或启动响应计划。定期测试和校准IDS规则可提高有效性，避免误报影响正常运营。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵检测系统IDS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:59:39.924107"
+    }
+  },
+  {
+    "question": "IDS的优缺点是什么？能否举例说明实战案例？并给出最佳实践建议。",
+    "answer": "IDS优点包括实时监控、低成本部署和早期威胁发现；缺点是可能产生误报、需要持续维护和易被高级持续性威胁（APT）绕过。实战案例：2017年，某电商公司使用IDS检测到异常登录尝试，及时阻止了数据泄露。最佳实践建议：定期更新签名库、结合其他工具如SIEM、进行员工培训以减少误报，并制定应急响应计划。总之，IDS是网络安全的重要防线，但需与其他措施结合使用以提升整体防御能力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵检测系统IDS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T15:59:39.924107"
+    }
+  },
+  {
+    "question": "IPS是什么？解释其基本概念。",
+    "answer": "入侵防御系统（IPS）是一种网络安全技术，用于实时监控和阻止网络中的恶意活动。它不同于入侵检测系统（IDS），后者仅警报而不阻止攻击。基本概念包括通过分析网络流量，检测潜在威胁如病毒、蠕虫或DDoS攻击，并自动采取行动（如阻断连接）来保护系统。IPS通常部署在网络边界或服务器端，帮助组织防御主动攻击，提升整体安全防护能力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵防御系统IPS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:01:01.046504"
+    }
+  },
+  {
+    "question": "IPS的技术原理和工作机制是什么？",
+    "answer": "IPS的技术原理基于多种检测方法，包括基于签名的检测（匹配已知攻击模式）、基于异常的检测（分析流量与正常行为偏差）、基于状态的检测（跟踪连接上下文）。工作机制涉及流量捕获、数据包解析、规则匹配、决策引擎（决定是否阻断）和响应执行（如丢弃数据包或隔离设备）。IPS通过实时监控网络通信，使用预定义规则或机器学习算法识别威胁，并立即采取防御措施，以减少攻击窗口。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵防御系统IPS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:01:01.046504"
+    }
+  },
+  {
+    "question": "IPS有哪些常见类型？解释其分类。",
+    "answer": "IPS常见类型包括网络型IPS（部署在网络中，监控所有流量）、主机型IPS（安装在单个主机上，保护该主机）、下一代IPS（NGIPS，集成防火墙和应用层检测功能）。其他类型有基于云的IPS（适用于云环境）和应用层IPS（针对特定应用协议如HTTP）。分类依据功能、部署位置和检测方法，例如，网络型IPS适合边界防护，而主机型IPS用于内部系统保护，帮助用户根据需求选择合适类型。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵防御系统IPS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:01:01.046504"
+    }
+  },
+  {
+    "question": "IPS在实际中如何应用？举例说明应用场景和防御措施。",
+    "answer": "IPS实际应用包括部署在网络边界（如防火墙后）、服务器端或云环境中，用于防御DDoS攻击、缓冲区溢出和恶意软件传播。应用场景如企业网络防护：某公司使用IPS阻止APT攻击，通过实时监控日志。防御措施包括配置规则库、定期更新签名、与防火墙或SIEM系统集成，以及设置阈值以减少误报。同时，IPS可与其他工具结合，提高整体安全态势。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵防御系统IPS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:01:01.046504"
+    }
+  },
+  {
+    "question": "IPS的优缺点是什么？有实战案例吗？给出最佳实践建议。",
+    "answer": "IPS优点：实时防御，减少攻击窗口，提升安全性；缺点：可能产生误报，影响网络性能。实战案例：2016年，某电商公司IPS成功阻断Mirai僵尸网络DDoS攻击。最佳实践：定期更新规则库、监控日志以优化性能、测试部署环境、与安全团队协作，并集成其他安全工具如防火墙，以构建多层次防御体系。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "入侵防御系统IPS",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:01:01.046504"
+    }
+  },
+  {
+    "question": "什么是Web应用防火墙(WAF)？",
+    "answer": "Web应用防火墙(WAF)是一种网络安全系统，专门保护Web应用程序免受恶意攻击。它通过监控和过滤HTTP/S流量来检测和阻止常见威胁，如SQL注入、跨站脚本(XSS)等。WAF部署在Web服务器前端，作为第一道防线，帮助组织防御Web应用漏洞，提升整体安全性和合规性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Web应用防火墙WAF",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:02:34.453648"
+    }
+  },
+  {
+    "question": "WAF的工作原理是什么？",
+    "answer": "WAF的工作原理基于规则和策略，对HTTP/S请求进行实时分析。它使用技术如正则表达式匹配、异常检测和机器学习来识别恶意模式，例如匹配已知攻击签名或检测异常行为。工作流程包括请求检查、规则评估和响应决策，支持基于签名的防护（匹配已知威胁）和基于行为的防护（分析流量模式），提供多层次的安全防御机制。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Web应用防火墙WAF",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:02:34.453648"
+    }
+  },
+  {
+    "question": "WAF有哪些常见类型？",
+    "answer": "WAF常见类型包括基于网络的WAF、基于应用的WAF、云WAF和主机WAF。基于网络的WAF部署在网络边缘，通过代理处理流量；基于应用的WAF直接集成到应用服务器；云WAF托管在云端，适合多租户环境；主机WAF运行在应用服务器上。每种类型根据部署环境、性能需求和成本选择，例如云WAF适合中小型企业，而基于网络的WAF适用于大型企业。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Web应用防火墙WAF",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:02:34.453648"
+    }
+  },
+  {
+    "question": "WAF在哪些实际场景中应用？如何防御攻击？",
+    "answer": "WAF广泛应用于保护高流量网站、电子商务平台、银行和社交媒体登录页面等易受攻击的Web应用。实际场景包括防御SQL注入、XSS跨站脚本、文件包含等漏洞。防御措施包括配置精确的规则集、使用WAF日志进行审计和优化策略，以及结合入侵检测系统。例如，电商网站通过WAF阻挡恶意请求，减少攻击面，同时通过定期测试和更新规则来提升防护效果。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Web应用防火墙WAF",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:02:34.453648"
+    }
+  },
+  {
+    "question": "WAF的优缺点是什么？有实战案例吗？最佳实践建议是什么？",
+    "answer": "WAF优点包括高效防护Web应用漏洞、降低安全运维成本和提升合规性；缺点可能包括性能开销、误报风险和配置复杂性。实战案例：某银行使用Cloudflare WAF成功阻挡了多次SQL注入攻击，保护了用户数据。最佳实践建议：定期更新规则、进行压力测试、结合其他安全工具（如SIEM系统），并持续监控WAF日志以优化防护和减少误报。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "Web应用防火墙WAF",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:02:34.453648"
+    }
+  },
+  {
+    "question": "什么是安全审计？",
+    "answer": "安全审计是网络安全中的核心概念，指通过系统性地监控、记录和分析网络、系统或应用程序的活动日志，以检测潜在安全威胁、违规行为或漏洞，并评估是否符合安全策略和法规。简单来说，就是对系统的操作进行审查，确保其安全性和合规性。例如，审计可以包括检查用户登录记录或数据访问日志，帮助组织预防和响应安全事件，提升整体安全防护水平。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全审计",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:04:08.706580"
+    }
+  },
+  {
+    "question": "安全审计的技术原理和工作机制是什么？",
+    "answer": "安全审计的技术原理基于日志收集、事件监控、规则匹配和数据分析。工作机制包括部署审计代理或传感器来捕获系统事件（如登录尝试、文件更改），然后通过审计引擎进行过滤、关联分析和报告生成。常用工具如SIEM（安全信息和事件管理）系统，能实时处理海量日志数据，识别异常模式。例如，通过解析日志文件，审计系统能检测到未经授权的访问，从而及时警报。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全审计",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:04:08.706580"
+    }
+  },
+  {
+    "question": "安全审计有哪些常见类型或分类？",
+    "answer": "安全审计常见类型包括：1) 系统审计，针对服务器、操作系统等硬件和软件；2) 网络审计，监控路由器、交换机等网络设备；3) 数据审计，关注数据完整性、访问控制和隐私保护；4) 应用程序审计，审查代码和用户交互；5) 符合性审计，确保遵守法规如ISO 27001或GDPR。这些类型可根据审计目标分类，例如内部审计或外部审计，帮助组织全面评估安全风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全审计",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:04:08.706580"
+    }
+  },
+  {
+    "question": "安全审计在实际应用场景中有哪些例子？",
+    "answer": "安全审计的实际应用场景广泛，包括：1) 事后调查，如数据泄露事件后审计日志找出源头；2) 实时监控，检测异常活动如可疑登录；3) 合规性检查，满足法律要求如金融行业的PCI DSS标准；4) 安全评估，定期审计帮助改进安全策略；5) 事故响应，审计数据辅助调查和恢复。例如，在企业环境中，审计可以自动触发警报，防止内部威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全审计",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:04:08.706580"
+    }
+  },
+  {
+    "question": "安全审计的优缺点分析及防御措施是什么？",
+    "answer": "安全审计的优点包括及时发现安全漏洞、提高合规性，并提供证据支持事故响应；缺点是可能消耗系统资源、配置复杂，且误报率高。防御措施包括部署自动化审计工具、设置访问控制策略、定期培训员工和制定应急计划。例如，使用加密日志传输可减少数据篡改风险，但需权衡性能影响。最佳实践建议定期审计、集成到安全框架中，并持续优化以应对 evolving威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全审计",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:04:08.706580"
+    }
+  },
+  {
+    "question": "什么是漏洞扫描？",
+    "answer": "漏洞扫描是一种网络安全技术，通过自动化工具主动检测计算机系统、网络设备或应用程序中的已知安全漏洞。这些漏洞可能被攻击者利用来入侵系统。漏洞扫描是安全评估的基础，帮助组织识别弱点并及时修复，从而提升整体安全性。例如，使用Nessus或OpenVAS等工具进行扫描，能快速发现配置错误或未打补丁的软件，防止潜在威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "漏洞扫描",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:06:44.463447"
+    }
+  },
+  {
+    "question": "漏洞扫描的技术原理是什么？",
+    "answer": "漏洞扫描的技术原理基于扫描器发送探针和请求到目标系统，分析响应来识别潜在漏洞。常见机制包括端口扫描（检测开放端口）、服务版本检测（识别软件版本以匹配漏洞数据库）和漏洞签名匹配（使用如CVE数据库比较目标特征）。扫描器通过网络通信、协议解析和数据分析来工作，例如，它会模拟攻击尝试来测试系统反应，从而发现如缓冲区溢出或权限漏洞等风险点。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "漏洞扫描",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:06:44.463447"
+    }
+  },
+  {
+    "question": "漏洞扫描有哪些常见类型？",
+    "answer": "漏洞扫描主要分为几种类型：网络漏洞扫描（针对路由器、交换机等网络设备）、应用漏洞扫描（针对Web应用和服务器软件）、操作系统漏洞扫描（针对OS特定漏洞如Windows或Linux）、数据库漏洞扫描（针对MySQL或Oracle等数据库）和配置审计扫描（检查安全策略配置）。每种类型使用不同工具，如OWASP ZAP用于应用扫描，帮助识别如SQL注入或XSS漏洞，确保全面覆盖安全风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "漏洞扫描",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:06:44.463447"
+    }
+  },
+  {
+    "question": "漏洞扫描在哪些实际场景中使用？",
+    "answer": "漏洞扫描广泛应用于企业安全审计、渗透测试准备、合规性检查（如PCI-DSS标准）、日常监控和安全事件响应。例如，IT部门定期扫描服务器以发现未修补的漏洞，避免数据泄露；在云环境中，扫描帮助满足法规要求；此外，它还可用于第三方供应商评估，确保供应链安全，提升整体防御能力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "漏洞扫描",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:06:44.463447"
+    }
+  },
+  {
+    "question": "如何防御和应对漏洞扫描？漏洞扫描的优缺点是什么？",
+    "answer": "防御漏洞扫描包括使用防火墙限制扫描访问、定期更新系统补丁、部署入侵检测系统（如Snort）和加密通信。优缺点：优点是能主动发现并修复漏洞，提高安全性；缺点是可能产生误报、扫描过程消耗资源，且高级扫描可能被视为攻击。实战案例：某电商网站扫描发现Apache Struts漏洞，及时修复避免了数据泄露。最佳实践建议：定期扫描、使用权威工具（如Qualys）、结合手动测试和遵守NIST标准，以优化效果。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "漏洞扫描",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:06:44.463447"
+    }
+  },
+  {
+    "question": "什么是渗透测试？它在网络安全中扮演什么角色？",
+    "answer": "渗透测试是一种模拟真实攻击场景，评估计算机系统、网络或应用程序安全性的方法。它通过主动识别和利用潜在漏洞来测试防御能力，帮助组织发现并修复安全弱点，从而提升整体安全性。角色上，它类似于安全审计，但更注重实战性，目的是预防数据泄露和系统入侵。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "渗透测试",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:08:26.275047"
+    }
+  },
+  {
+    "question": "渗透测试的技术原理和工作机制是什么？",
+    "answer": "渗透测试的技术原理基于攻击者思维，模拟社会工程学、漏洞扫描和exploitation过程。工作机制包括：信息收集、漏洞探测、权限提升和目标破坏。例如，使用工具如Nmap进行扫描，或手动测试SQL注入漏洞。整个过程遵循道德规范，确保合法授权，避免对系统造成实际损害。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "渗透测试",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:08:26.275047"
+    }
+  },
+  {
+    "question": "渗透测试有哪些常见类型或分类？",
+    "answer": "渗透测试主要分为黑盒测试（无前期信息，模拟外部攻击）、白盒测试（有完整内部信息，针对代码审查）和灰盒测试（结合两者）。其他分类包括基于网络的渗透测试（针对网络设备）、基于应用的渗透测试（针对Web应用）和基于物理的渗透测试（针对物理安全）。这些类型帮助组织根据需求选择合适的测试方法，以全面评估不同层面的安全风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "渗透测试",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:08:26.275047"
+    }
+  },
+  {
+    "question": "渗透测试的实际应用场景有哪些？如何防御或应对渗透测试？",
+    "answer": "渗透测试常用于企业安全评估、合规审计（如PCI DSS）和事件响应前的准备。例如，银行系统定期进行渗透测试以发现支付漏洞。防御措施包括实施严格的访问控制、定期更新补丁、使用入侵检测系统（IDS）和员工安全培训。应对时，应确保测试有授权，并记录所有操作以避免误报。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "渗透测试",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:08:26.275047"
+    }
+  },
+  {
+    "question": "渗透测试的优缺点是什么？有哪些实战案例和最佳实践建议？",
+    "answer": "优点：能主动发现未知漏洞，提供改进建议，提升安全意识。缺点：可能干扰正常业务，成本较高，且测试结果依赖于测试者的技能。实战案例包括Target公司数据泄露事件，通过渗透测试发现配置错误。最佳实践建议：始终获得书面授权，制定详细测试计划，使用自动化工具与手动测试结合，并在测试后提供全面报告和修复指导。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "渗透测试",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:08:26.275047"
+    }
+  },
+  {
+    "question": "什么是访问控制？它在网络安全中的作用是什么？",
+    "answer": "访问控制是网络安全中的核心机制，指的是通过验证用户身份和权限，来决定是否允许访问特定资源。其作用是保护数据机密性、完整性和可用性，防止未经授权的访问，从而降低安全风险。例如，在企业网络中，访问控制可以限制员工只能访问与其工作相关的数据，避免敏感信息泄露。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "访问控制",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:07.256270"
+    }
+  },
+  {
+    "question": "访问控制的技术原理和工作机制是什么？",
+    "answer": "访问控制的工作机制包括身份验证（验证用户身份）和授权（检查用户权限）。常见原理如访问控制列表（ACL）通过规则列表匹配请求；基于角色的访问控制（RBAC）根据用户角色分配权限。系统会评估用户请求，对照预定义的访问矩阵或策略，如果权限符合则允许访问，否则拒绝。这确保了资源只对授权用户开放，提高了安全性，但可能增加系统开销。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "访问控制",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:07.256270"
+    }
+  },
+  {
+    "question": "访问控制有哪些常见类型或分类？",
+    "answer": "访问控制主要分为三种类型：自主访问控制（DAC），由资源所有者决定访问权限，常用于文件系统；强制访问控制（MAC），由系统管理员强制执行基于标签的规则，适用于军事或高安全环境；基于角色的访问控制（RBAC），根据用户角色分配权限，常见于企业应用。每种类型各有优缺点，DAC灵活但易误用，MAC严格但复杂，RBAC平衡了易用性和安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "访问控制",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:07.256270"
+    }
+  },
+  {
+    "question": "访问控制在哪些实际应用场景中使用？",
+    "answer": "访问控制广泛应用于各种场景，如企业网络中的文件共享、云存储服务、数据库管理系统和Web应用程序。例如，在社交媒体平台，访问控制确保只有认证用户能发布或查看内容；在医疗系统，保护患者数据隐私。通过实施访问控制，组织可以减少数据泄露风险，提升整体安全性和合规性，但需要定期维护策略。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "访问控制",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:07.256270"
+    }
+  },
+  {
+    "question": "如何防御访问控制相关的威胁？分析其优缺点，并举例说明。",
+    "answer": "防御访问控制威胁的方法包括使用多因素认证、定期审计和最小权限原则。优点是增强了安全性，易于实施；缺点是可能增加系统开销和管理复杂性。实战案例：某公司因未严格实施访问控制，导致内部员工数据泄露事件发生。最佳实践建议包括整合身份管理、使用自动化监控工具，并定期更新策略，以应对不断变化的威胁环境。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "访问控制",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:07.256270"
+    }
+  },
+  {
+    "question": "什么是身份认证？",
+    "answer": "身份认证是网络安全中验证用户身份的过程，确保只有授权用户才能访问系统或资源。它基于用户提供的凭证（如用户名和密码）与系统存储的信息进行比对。身份认证是保护数据隐私的基础，例如在登录网站时，系统通过认证确认你是合法用户，防止未授权访问。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:57.580185"
+    }
+  },
+  {
+    "question": "身份认证的技术原理和工作机制是什么？",
+    "answer": "身份认证的核心原理是基于认证因子（Authentication Factors），通常分为知识因子（如密码）、拥有因子（如U盾）、生物因子（如指纹）。工作机制包括挑战-响应模型：用户提交凭证，系统验证后生成会话令牌。例如，双因素认证（2FA）结合两种因子，提高安全性。认证过程涉及加密算法和哈希函数，确保凭证传输安全，防止窃听和重放攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:57.580185"
+    }
+  },
+  {
+    "question": "身份认证有哪些常见类型或分类？",
+    "answer": "身份认证主要分为单因素认证（如仅密码）、双因素认证（如密码加短信验证码）和多因素认证（如结合生物特征和设备）。其他分类包括基于密码的认证、基于生物识别的认证（如面部识别）、以及基于令牌的认证（如智能卡）。这些类型根据安全需求选择，双因素认证在金融领域广泛应用，提供更强保护。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:57.580185"
+    }
+  },
+  {
+    "question": "身份认证在哪些实际场景中应用？",
+    "answer": "身份认证广泛应用于日常场景，如银行网上银行登录（使用密码和验证码）、企业员工系统访问（单点登录）、社交媒体账号登录（OAuth认证）。在云服务中，身份认证确保只有授权用户访问数据；在物联网设备中，用于设备身份验证。这些应用提升了整体安全性，减少欺诈事件。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:57.580185"
+    }
+  },
+  {
+    "question": "如何防御身份认证威胁？分析优缺点，并给出案例和建议。",
+    "answer": "防御措施包括使用强密码策略、实施双因素认证、定期审计和监控异常登录。优点是增强安全性，缺点是可能增加用户操作复杂度。实战案例：2019年Facebook数据泄露事件中，认证漏洞导致黑客获取用户信息。最佳实践建议：采用多因素认证、教育用户防范钓鱼攻击，并使用安全协议如HTTPS。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:11:57.580185"
+    }
+  },
+  {
+    "question": "什么是多因素认证？",
+    "answer": "多因素认证（Multi-Factor Authentication, MFA）是一种安全访问控制方法，要求用户在登录或进行敏感操作时提供两种或更多不同的验证因素来证明身份。这些因素通常分为三类：知识因素（如密码或PIN码）、拥有因素（如手机或硬件令牌）、生物因素（如指纹或面部识别）。MFA能显著提高安全性，因为它增加了攻击者破解的难度，常用于保护账户免受身份盗窃。例如，使用密码加上短信验证码就是一个典型的MFA应用。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "多因素认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:13:22.261131"
+    }
+  },
+  {
+    "question": "多因素认证的技术原理和工作机制是什么？",
+    "answer": "多因素认证的技术原理基于多层验证机制，工作时系统会依次或并行要求用户提供多个因素。知识因素依赖用户知道的信息，如密码；拥有因素依赖用户持有的物品，如U盾或手机APP生成的验证码；生物因素依赖用户的生理特征，如指纹扫描。机制包括挑战-响应过程，例如，系统发送一个动态口令到用户设备，用户需输入正确响应才能通过验证。这利用了加密算法和密钥管理来确保安全，同时结合了身份验证协议如OAuth或SAML，以实现无缝集成。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "多因素认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:13:22.261131"
+    }
+  },
+  {
+    "question": "多因素认证有哪些常见类型或分类？",
+    "answer": "多因素认证的常见类型可分为基于软件、硬件和生物识别的分类。基于软件的MFA包括使用手机APP（如Google Authenticator）或软件令牌生成验证码；基于硬件的MFA使用物理设备，如USB钥匙或智能卡；基于生物因素的MFA则使用指纹、虹膜扫描或语音识别。其他分类包括双因素认证（2FA，一种简化版MFA）和多因素认证（MFA，涉及多个因素）。这些类型根据应用场景不同而选择，例如，企业常用硬件MFA保护服务器，而移动应用常用软件MFA用于日常登录。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "多因素认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:13:22.261131"
+    }
+  },
+  {
+    "question": "多因素认证在哪些场景中应用？它的优缺点是什么？",
+    "answer": "多因素认证广泛应用于高安全需求场景，如银行在线交易、企业远程访问系统、云服务登录和社交媒体账户保护。优点包括大幅降低账户被盗风险、提高用户身份验证的准确性，并减少密码破解攻击。缺点可能包括用户体验不便（如频繁验证）、潜在的兼容性问题，以及在某些情况下可能被社交工程攻击利用。例如，MFA可有效防御钓鱼攻击，但若用户忽略备用验证方式，可能造成访问失败或延迟。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "多因素认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:13:22.261131"
+    }
+  },
+  {
+    "question": "如何防御或应对多因素认证的威胁？有哪些实战案例和最佳实践建议？",
+    "answer": "防御MFA威胁的措施包括定期更新认证系统、使用强密码策略、教育用户警惕钓鱼攻击，并启用备用验证方法。实战案例显示，2020年某电商平台通过MFA阻止了大规模账户入侵，但攻击者利用SIM卡劫持攻击了部分用户。最佳实践建议是选择可靠的身份验证提供商、实施多层次MFA策略、监控异常登录行为，并结合日志审计和自动化响应系统。同时，建议用户启用所有可用的MFA选项，并定期测试系统以确保有效性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "多因素认证",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:13:22.261131"
+    }
+  },
+  {
+    "question": "什么是数据加密？",
+    "answer": "数据加密是一种将原始数据（明文）通过算法转换为不可读的密文的技术，目的是保护数据的机密性和完整性，防止未经授权的访问。简单来说，它就像给数据加锁，只有持有正确密钥的人才能解锁。数据加密在网络安全中至关重要，因为它能保护敏感信息如个人信息、财务数据等在传输和存储过程中不被窃取或篡改。常见的加密标准包括对称加密（如AES）和非对称加密（如RSA）。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据加密",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:14:33.391462"
+    }
+  },
+  {
+    "question": "数据加密的技术原理和工作机制是怎样的？",
+    "answer": "数据加密的核心原理是使用数学算法和密钥来转换数据。对称加密使用相同的密钥进行加密和解密，速度快但密钥分发复杂；非对称加密使用公钥和私钥对，公钥加密数据，私钥解密，安全性高但速度慢。工作机制包括：选择加密算法、生成密钥、应用算法转换数据、解密时使用相应密钥。密钥管理是关键，涉及密钥生成、存储和分发，确保密钥不被泄露。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据加密",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:14:33.391462"
+    }
+  },
+  {
+    "question": "数据加密有哪些常见类型或分类？",
+    "answer": "数据加密主要分为对称加密、非对称加密和哈希函数。对称加密使用单一密钥，例子是DES和AES，适用于高速数据处理；非对称加密使用公钥和私钥对，例子是RSA和ECC，常用于安全通信；哈希函数如SHA-256，将数据映射到固定长度的哈希值，用于完整性验证，但不提供加密。其他分类包括块加密（处理固定大小数据块）和流加密（连续处理数据流）。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据加密",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:14:33.391462"
+    }
+  },
+  {
+    "question": "数据加密在哪些实际场景中应用？以及如何防御加密相关的威胁？",
+    "answer": "数据加密广泛应用于实际场景，如保护HTTPS通信（使用TLS协议加密网页数据）、VPN隧道（加密远程访问流量）、电子邮件加密（如PGP）和数据库存储。防御加密威胁需采用强算法（如AES-256）、定期轮换密钥、实施访问控制和监控异常活动。同时，确保密钥安全存储（如使用硬件安全模块HSM），避免弱密码，并结合多因素认证增强整体安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据加密",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:14:33.391462"
+    }
+  },
+  {
+    "question": "数据加密的优缺点是什么？能举一些实战案例吗？并给出最佳实践建议。",
+    "answer": "数据加密的优点包括高安全性、保护隐私和符合法规要求；缺点是计算开销大、密钥管理复杂和潜在的后门风险。实战案例包括Heartbleed漏洞（暴露了OpenSSL库的加密密钥管理缺陷），以及TLS 1.2协议升级提升了安全性。最佳实践建议：使用AES-256等强算法、定期更新加密标准、结合对称和非对称加密、教育员工安全意识，并采用自动化工具监控加密性能和潜在威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据加密",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:14:33.391462"
+    }
+  },
+  {
+    "question": "什么是安全沙箱？",
+    "answer": "安全沙箱是一种网络安全机制，通过隔离代码执行环境来限制程序的访问权限，从而防止恶意软件或可疑代码对系统造成损害。简单来说，它就像一个虚拟的容器，代码在其中运行，而不会直接影响主机系统。这常用于安全分析和测试，帮助组织评估潜在威胁，同时确保系统安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全沙箱",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:15:25.164252"
+    }
+  },
+  {
+    "question": "安全沙箱是如何工作的？",
+    "answer": "安全沙箱的工作原理基于沙盒技术，它创建一个独立的执行环境，限制被隔离程序的资源访问，如文件系统、网络接口和硬件设备。通过沙箱引擎或虚拟机监控器（hypervisor），可以控制程序的权限，例如只允许读取特定文件，而不允许修改或删除。这通常使用沙箱化技术实现，确保代码在受限环境中运行，从而隔离潜在风险，防止恶意行为扩散到主机系统。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全沙箱",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:15:25.164252"
+    }
+  },
+  {
+    "question": "安全沙箱有哪些常见类型？",
+    "answer": "安全沙箱常见的类型包括：1. 浏览器沙箱，用于隔离网页内容，防止跨站脚本攻击；2. 应用程序沙箱，如Android的沙箱机制，每个应用运行在独立的沙箱中；3. 虚拟机沙箱，使用虚拟机如VMware来隔离环境；4. 软件沙箱，如Sandboxie，用于测试恶意软件。这些类型根据应用场景不同而有所区分，帮助组织根据需求选择合适的沙箱技术。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全沙箱",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:15:25.164252"
+    }
+  },
+  {
+    "question": "安全沙箱在哪些实际场景中使用？",
+    "answer": "安全沙箱广泛应用于：1. 恶意软件分析，帮助安全分析师在隔离环境中研究病毒；2. 软件测试和开发，确保代码在发布前不会引入安全漏洞；3. 企业安全策略，如沙箱用于自动扫描和阻止可疑文件；4. 教育和培训，用于演示安全概念。例如，在网络安全团队中，沙箱常用于沙盒环境中的威胁检测，提高整体防御能力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全沙箱",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:15:25.164252"
+    }
+  },
+  {
+    "question": "如何使用安全沙箱进行防御和最佳实践是什么？",
+    "answer": "使用安全沙箱进行防御时，应配置沙箱工具以自动扫描和隔离可疑文件。优缺点：优点是提供强隔离，缺点是可能有性能开销。实战案例：例如，使用Cuckoo Sandbox分析恶意样本。最佳实践包括：定期更新沙箱引擎、监控沙箱行为、结合其他安全工具使用、并设置严格的访问控制策略。这有助于提高防御效率，同时减少误报和性能影响。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "安全沙箱",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:15:25.164252"
+    }
+  },
+  {
+    "question": "什么是蜜罐技术？",
+    "answer": "蜜罐技术是一种网络安全概念，通过部署虚假的系统或服务来诱骗攻击者，从而监控和分析其攻击行为。简单来说，它是一个'诱饵'系统，模拟真实环境（如服务器或数据库），吸引恶意流量进行攻击，帮助安全团队收集情报、识别威胁。蜜罐技术源于20世纪90年代，常用于入侵检测和威胁研究。例如，一个低交互蜜罐可能模拟一个Web服务器的漏洞，记录攻击者的扫描和尝试行为。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蜜罐技术",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:17:05.523465"
+    }
+  },
+  {
+    "question": "蜜罐技术的工作原理和工作机制是什么？",
+    "answer": "蜜罐技术的工作原理基于诱骗和监控：它通过模拟真实的系统漏洞和服务，吸引攻击者进行攻击。工作机制包括：1) 设置蜜罐环境，模拟特定协议或服务；2) 当攻击者连接时，蜜罐记录所有交互数据（如IP地址、攻击类型）；3) 数据被分析以识别攻击模式。蜜罐分为低交互（仅模拟基本系统调用，降低风险）和高交互（模拟完整系统，但需严格隔离）。例如，一个蜜罐可能响应SQL注入尝试，记录攻击细节，帮助完善防火墙规则。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蜜罐技术",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:17:05.523465"
+    }
+  },
+  {
+    "question": "蜜罐技术有哪些常见类型或分类？",
+    "answer": "蜜罐技术主要分为三种类型：低交互蜜罐（如Kippo或Dionaea），模拟系统基本功能（如文件系统调用），主要用于轻量级威胁检测；高交互蜜罐（如Ganglia或实验性蜜罐），模拟完整操作系统，提供深度攻击分析，但风险较高；混合蜜罐结合两者，平衡安全性和信息量。其他分类包括基于协议的蜜罐（如HTTP蜜罐）和基于应用的蜜罐（如数据库蜜罐）。选择类型时需考虑攻击场景和资源限制，例如低交互蜜罐适合大规模部署，而高交互蜜罐用于高级威胁研究。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蜜罐技术",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:17:05.523465"
+    }
+  },
+  {
+    "question": "蜜罐技术在实际中有哪些应用场景和优缺点？",
+    "answer": "蜜罐技术的应用场景包括：入侵检测（如捕获DDoS攻击流量）、威胁情报收集（分析APT攻击模式）、安全培训和漏洞测试。优点是低成本、高信息价值，能主动吸引攻击者而不暴露真实系统；缺点是可能被忽略或误配置，导致资源浪费，且高交互蜜罐可能被滥用。例如，蜜罐曾帮助识别Mirai僵尸网络的攻击模式，但也需注意隐私和法律问题。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蜜罐技术",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:17:05.523465"
+    }
+  },
+  {
+    "question": "如何防御和应对蜜罐技术相关的威胁？以及有哪些实战案例和最佳实践？",
+    "answer": "防御蜜罐威胁的关键是部署蜜罐作为主动防御工具，并结合其他安全措施，如隔离网络、日志审计和自动化分析。实战案例包括：2016年，蜜罐捕获了针对物联网设备的Mirai botnet攻击，帮助安全团队追踪源头。最佳实践建议：使用开源蜜罐工具（如Marek），定期更新配置，避免真实数据泄露，并与SIEM系统集成进行实时警报。同时，确保蜜罐环境与生产环境隔离，以最小化风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "蜜罐技术",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:17:05.523465"
+    }
+  },
+  {
+    "question": "什么是零信任架构？",
+    "answer": "零信任架构（Zero Trust Architecture）是一种网络安全模型，基于'从不信任、始终验证'的原则。它假设所有用户、设备和应用程序，无论位于内部还是外部网络，都必须经过严格的身份验证和授权才能访问资源。核心概念包括持续监控、最小权限访问和微分段，以减少潜在威胁的影响。与传统模型不同，零信任不依赖网络位置作为信任依据，而是通过动态策略确保安全，适用于现代分布式环境，帮助组织应对日益复杂的网络攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零信任架构",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:18:18.976852"
+    }
+  },
+  {
+    "question": "零信任架构的技术原理和工作机制是什么？",
+    "answer": "零信任架构的技术原理包括持续验证、最小权限原则和微分段。工作机制涉及对每个访问请求进行实时评估，使用多因素认证（MFA）、设备健康检查和策略引擎来决定访问权限。例如，当用户尝试访问资源时，系统会检查其身份、设备状态和网络位置，并动态调整策略，确保只有合法用户获得访问。这种持续监控和验证过程，基于微服务架构和AI驱动的分析，能快速响应威胁，但需要集成各种工具如SIEM系统和IAM平台。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零信任架构",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:18:18.976852"
+    }
+  },
+  {
+    "question": "零信任架构有哪些常见类型或分类？",
+    "answer": "零信任架构可以根据组件或部署方式分类。常见类型包括：1. 端点安全：确保设备合规，使用工具如EDR；2. 网络安全：通过微分段隔离网络，减少攻击面；3. 身份和访问管理：基于身份的认证，如OAuth；4. 数据保护：实施加密和访问控制。这些类型相互集成，形成一个全面框架，常见部署方式有云原生、混合和渐进式，适用于不同规模企业。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零信任架构",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:18:18.976852"
+    }
+  },
+  {
+    "question": "零信任架构在哪些场景下应用？它的优缺点是什么？",
+    "answer": "零信任架构适用于云环境、混合工作设置和远程办公等场景，因为它能应对网络边界模糊化的挑战。优点包括提高安全性、减少攻击面和快速响应威胁；缺点包括部署复杂、成本较高和可能影响用户体验。例如，在云环境中，零信任可以防止数据泄露，但初始配置需大量资源，且需要持续维护以适应变化。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零信任架构",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:18:18.976852"
+    }
+  },
+  {
+    "question": "如何防御或应对零信任架构的挑战？有哪些实战案例和最佳实践建议？",
+    "answer": "防御零信任挑战的措施包括逐步实施、使用自动化工具和员工培训。实战案例如Google的BeyondCorp项目，通过移除网络边界实现了零信任环境，提升安全性。最佳实践建议：从评估当前安全态势开始，优先保护关键资产，采用分阶段部署，并结合AI和监控工具优化策略。同时，定期审计和员工教育能减少人为错误，确保长期成功。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "零信任架构",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:18:18.976852"
+    }
+  },
+  {
+    "question": "什么是SIEM（安全信息和事件管理）？",
+    "answer": "SIEM是Security Information and Event Management的缩写，是一种网络安全技术，用于收集、分析和报告来自网络设备（如防火墙、服务器）的安全事件数据。它的核心目的是检测潜在威胁、监控系统活动并提供合规性报告。SIEM系统通常包括数据源集成、中央数据库存储、分析引擎和警报功能。通过实时监控，SIEM帮助组织快速响应安全事件，提升整体安全态势，但需注意数据隐私和集成复杂性问题。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SIEM安全信息和事件管理",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:19:31.121701"
+    }
+  },
+  {
+    "question": "SIEM系统是如何工作的？",
+    "answer": "SIEM系统的工作原理基于三个主要组件：数据收集、数据存储和数据分析。首先，它从各种来源（如日志文件、网络设备）收集事件数据；然后，这些数据被传输到中央数据库进行存储；接着，分析引擎使用规则引擎和模式识别技术来检测异常或可疑活动，并生成警报。整个过程依赖于数据相关性和阈值设置，通过事件相关性管理（ERM）实现高效威胁检测，但可能面临性能瓶颈和配置复杂性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SIEM安全信息和事件管理",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:19:31.121701"
+    }
+  },
+  {
+    "question": "SIEM有哪些常见类型或分类？",
+    "answer": "SIEM系统可以根据部署方式和功能进行分类。常见类型包括：基于云的SIEM（如AWS GuardDuty）、本地部署的SIEM（如传统企业级系统）和混合型SIEM。组件方面，SIEM通常包括事件源管理器（ESM，负责数据收集）、事件处理模块（EPM，处理数据过滤）、事件相关性管理（ERM，分析事件间关系）和配置管理数据库（CMDB，管理资产信息）。这些类型帮助组织根据需求选择合适的SIEM，但需考虑兼容性和扩展性问题。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SIEM安全信息和事件管理",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:19:31.121701"
+    }
+  },
+  {
+    "question": "SIEM在哪些实际场景中应用？",
+    "answer": "SIEM广泛应用于网络安全场景，如入侵检测、恶意软件分析和访问控制监控。例如，在金融行业，SIEM用于实时监控交易系统以检测欺诈；在医疗领域，用于保护患者数据隐私和符合HIPAA合规要求。SIEM还能与SIEM-SEC（安全事件相关性）集成，提供威胁情报，帮助组织快速响应攻击事件，如DDoS防护和日志审计，但应用时需注意数据量过大可能导致警报疲劳。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SIEM安全信息和事件管理",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:19:31.121701"
+    }
+  },
+  {
+    "question": "SIEM系统的优缺点是什么？以及有什么最佳实践建议？",
+    "answer": "SIEM的优点包括提高威胁检测能力、简化日志管理、增强合规性；缺点可能包括高成本、复杂部署和潜在性能开销。最佳实践建议包括：定期更新规则引擎、集成其他安全工具（如SIEM-SEC和SIEM-SEC），进行员工培训和定期审计系统日志，以优化性能和减少误报。通过这些措施，组织可以最大化SIEM的价值，但需平衡成本与收益，并持续改进安全策略。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SIEM安全信息和事件管理",
+      "category": "防御机制",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:19:31.121701"
+    }
+  },
+  {
+    "question": "对称加密是什么？",
+    "answer": "对称加密是一种加密方法，其中加密和解密使用相同的密钥。这意味着发送方和接收方必须事先共享一个密钥，才能进行数据的加密和解密操作。例如，在通信中，A和B需要事先约定一个密钥，A用它加密消息，B用相同密钥解密。这种方法的优点是加密速度快、计算资源消耗低，但缺点是密钥分发可能不安全，如果密钥泄露，数据将易受攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "对称加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:20:38.077200"
+    }
+  },
+  {
+    "question": "对称加密的工作原理是什么？",
+    "answer": "对称加密的工作原理基于一个密钥和加密算法。加密时，明文通过算法和密钥转换为密文；解密时，密文使用相同的密钥和逆向算法恢复为明文。例如，AES算法将数据分成固定大小的块，然后应用密钥进行变换。密钥必须保密，因为如果密钥泄露，加密数据就可能被破解。这种方法高效，但依赖于密钥的安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "对称加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:20:38.077200"
+    }
+  },
+  {
+    "question": "有哪些常见的对称加密算法？",
+    "answer": "常见的对称加密算法包括高级加密标准（AES）、数据加密标准（DES）、三重DES（3DES）和IDEA（用于Blowfish）。AES是目前最安全的算法，支持128/192/256位密钥长度；DES由于密钥长度短（56位），已被认为不安全；3DES通过多次DES加密提高安全性。这些算法广泛应用于数据保护，如文件加密和网络传输。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "对称加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:20:38.077200"
+    }
+  },
+  {
+    "question": "对称加密在哪些场景中使用？它的优缺点是什么？",
+    "answer": "对称加密常用于需要高速加密的场景，如SSL/TLS协议中的数据传输、文件加密和数据库保护。优点是加密速度快、计算开销低，适合大量数据处理；缺点是密钥管理复杂，如果密钥泄露，所有加密数据都会被暴露，且无法解决密钥分发问题。例如，在VPN和无线网络中使用对称加密时，必须确保密钥安全交换。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "对称加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:20:38.077200"
+    }
+  },
+  {
+    "question": "如何安全地使用对称加密？有哪些实战案例和最佳实践？",
+    "answer": "安全使用对称加密的关键在于强密钥生成、定期更换密钥和安全分发机制。结合非对称加密进行密钥交换，如RSA用于初始密钥分发。实战案例包括WPA2-PSK无线网络使用AES加密，以及IPsec VPN协议采用AES-GCM模式。最佳实践包括使用AES-256算法、实施密钥生命周期管理（创建、存储、销毁），并结合入侵检测系统监控潜在威胁，以提升整体安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "对称加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:20:38.077200"
+    }
+  },
+  {
+    "question": "什么是哈希算法？",
+    "answer": "哈希算法是一种数学函数，也称为哈希函数，它接收任意长度的输入数据（如文本或文件），并输出一个固定长度的、通常是唯一的哈希值。在网络安全中，哈希算法常用于确保数据完整性、密码存储和数字签名。例如，输入'hello'可能输出一个特定的哈希值。哈希算法具有确定性（相同输入总是产生相同输出）、不可逆性和抗碰撞性（很难找到两个不同输入产生相同输出）。这些特性使其成为网络安全的基础工具，但需注意，弱哈希算法可能被破解。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "哈希算法",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:24:19.572197"
+    }
+  },
+  {
+    "question": "哈希算法的工作原理是什么？",
+    "answer": "哈希算法的工作原理是通过一系列数学运算将输入数据分解为固定大小的块，然后通过压缩和混合函数（如位运算、模运算）生成固定长度的哈希值。例如，SHA-256算法会将输入数据分组，每组处理后产生256位输出。这个过程确保了即使输入微小变化，哈希值也会大幅改变（雪崩效应），从而增强安全性。哈希函数是单向的，即从输入到输出容易，但从输出反推输入极难，这在密码学中称为单向哈希。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "哈希算法",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:24:19.572197"
+    }
+  },
+  {
+    "question": "常见的哈希算法有哪些？",
+    "answer": "常见的哈希算法包括MD5、SHA-1、SHA-2系列（如SHA-256）和SHA-3。MD5产生128位哈希值，但已被证明易受碰撞攻击，安全性较低；SHA-1产生160位，虽比MD5安全，但仍不推荐用于高安全场景；SHA-2系列（如SHA-256产生256位）是目前主流，广泛应用于TLS/SSL和比特币；SHA-3（如Keccak）是较新的标准，提供更强的安全性。选择算法时，需考虑输出长度和抗碰撞性，SHA-256和SHA-3是网络安全中的优选。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "哈希算法",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:24:19.572197"
+    }
+  },
+  {
+    "question": "哈希算法在网络安全中有哪些应用场景？它的优缺点是什么？",
+    "answer": "哈希算法在网络安全中的应用场景包括：密码存储（哈希用户密码以保护原始数据）、数据完整性验证（如文件校验，确保未被篡改）、数字签名（确保消息完整性和来源真实性）、区块链（如比特币使用SHA-256）。优点：计算高效、输出固定长度、支持快速比较；缺点：弱算法易被碰撞攻击，且哈希值可能被彩虹表破解。例如，MD5的碰撞漏洞已导致其在安全关键应用中被弃用，而SHA-256的强抗碰撞性使其更可靠，但计算资源消耗较高。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "哈希算法",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:24:19.572197"
+    }
+  },
+  {
+    "question": "如何防御哈希算法相关的安全威胁？有哪些实战案例和最佳实践？",
+    "answer": "防御哈希算法威胁的方法包括：使用强算法（如SHA-256或SHA-3）、加盐（添加随机值到输入前再哈希，防止彩虹表攻击）、迭代哈希（多次应用哈希函数增加破解难度）、结合其他技术（如AES加密）。实战案例：2017年LinkedIn数据泄露事件中，攻击者利用弱哈希算法破解密码；最佳实践建议：在密码存储中始终使用带随机盐的迭代哈希（如BCrypt），定期更新算法以应对新威胁，并在代码审计中检查哈希实现。遵循NIST标准和使用开源库可提升安全性，确保哈希操作在安全环境中执行。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "哈希算法",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:24:19.572197"
+    }
+  },
+  {
+    "question": "什么是数字签名？",
+    "answer": "数字签名是一种网络安全机制，用于验证数字信息的完整性和来源身份。它通过公钥加密技术，使用发送方的私钥对信息摘要进行加密，接收方用发送方的公钥解密验证。这类似于手写签名，但数字签名确保数据未被篡改，并提供不可否认性。基本原理是哈希函数生成唯一摘要，签名过程涉及非对称加密，确保安全性和可靠性，是数字通信中不可或缺的工具。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数字签名",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:25:15.349732"
+    }
+  },
+  {
+    "question": "数字签名的技术原理和工作机制是什么？",
+    "answer": "数字签名的技术原理基于非对称加密和哈希函数。首先，发送方使用哈希函数（如SHA-256）生成消息的唯一摘要。然后，用发送方的私钥对摘要进行加密，形成签名。发送方将签名附加到消息中发送给接收方。接收方使用发送方的公钥解密签名，得到摘要，并用相同的哈希函数计算消息的新摘要。如果两者匹配，则验证成功，证明消息完整且来源可靠。工作机制包括签名生成（私钥加密）和验证（公钥解密比较），确保了安全性和防篡改性，但依赖于密钥管理的安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数字签名",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:25:15.349732"
+    }
+  },
+  {
+    "question": "数字签名有哪些常见类型或分类？",
+    "answer": "数字签名常见类型包括标准非对称签名算法，如RSA签名和椭圆曲线数字签名算法（ECDSA），这些基于不同的数学难题提供安全性。另一种是带消息恢复的签名（如Schnorr签名），能减少签名长度，提高效率。分类还包括批量签名、群签名和可验证加密签名等，后者允许第三方验证签名而无需查看原始消息。每种类型针对不同场景优化，例如ECDSA常用于比特币，RSA用于SSL证书，确保灵活性和适应性，但需根据应用场景选择合适的算法以平衡性能和安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数字签名",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:25:15.349732"
+    }
+  },
+  {
+    "question": "数字签名在哪些实际应用场景中使用？",
+    "answer": "数字签名广泛应用于网络安全领域，例如在SSL/TLS证书中验证网站身份，确保HTTPS通信安全；在电子邮件系统中用于发送方身份认证和防钓鱼；在软件分发中签名代码以防止篡改，如Android应用市场；在区块链和加密货币中用于交易验证，如比特币交易；以及在电子合同和数字文档中提供法律效力。这些场景依赖数字签名的不可否认性和完整性保护，帮助实现身份认证、数据完整性和信任建立，是现代数字基础设施的核心组成部分。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数字签名",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:25:15.349732"
+    }
+  },
+  {
+    "question": "如何防御数字签名攻击并分析其优缺点？",
+    "answer": "防御数字签名攻击需采用强算法（如SHA-3哈希）、安全密钥管理、定期审计和使用PKI（公钥基础设施）。优缺点分析：优点包括高安全性、不可否认性和效率提升；缺点包括计算开销大、易受量子计算威胁和潜在的碰撞攻击。实战案例如2017年比特币签名漏洞，通过改进算法修复；最佳实践建议包括使用后量子密码学、多因素认证和定期更新签名方案，以增强鲁棒性和适应性，确保在不断演化的威胁环境中保持可靠。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数字签名",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:25:15.349732"
+    }
+  },
+  {
+    "question": "什么是数字证书？",
+    "answer": "数字证书是一种基于公钥基础设施(PKI)的安全凭证，用于验证网络通信中实体的身份（如网站、个人或设备）。它由可信赖的证书颁发机构(CA)签发，包含持有者的公钥、身份信息、有效期等。简单来说，数字证书就像在线世界的身份证，确保数据传输的机密性和完整性，防止身份盗用。例如，HTTPS网站使用数字证书来加密通信，保护用户隐私。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数字证书",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:26:31.330907"
+    }
+  },
+  {
+    "question": "数字证书的技术原理和工作机制是怎样的？",
+    "answer": "数字证书的核心原理基于非对称加密，使用公钥和私钥配对。CA通过签名过程验证申请者的身份，然后将公钥与身份绑定到证书中。工作机制包括：申请者生成密钥对，CA验证身份后用其私钥签名证书；通信时，客户端用证书中的公钥加密数据，服务器用私钥解密。这确保了身份认证和数据完整性，但依赖于CA的可信度和密钥管理的安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数字证书",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:26:31.330907"
+    }
+  },
+  {
+    "question": "数字证书有哪些常见类型或分类？",
+    "answer": "数字证书主要分为三类：1) SSL/TLS证书，用于网站HTTPS加密；2)代码签名证书，验证软件开发者身份，确保代码未被篡改；3)电子邮件证书，用于S/MIME加密邮件。其他类型包括客户端证书（用于双向认证）和对称证书。分类基于用途和信任级别，如域名验证(DV)、组织验证(OV)或扩展验证(EV)证书，后者提供最高身份验证。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数字证书",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:26:31.330907"
+    }
+  },
+  {
+    "question": "数字证书在哪些实际场景中应用？",
+    "answer": "数字证书广泛应用于安全通信场景，如HTTPS网站保护用户数据、VPN连接加密远程访问、安全电子邮件发送敏感信息，以及代码签名确保软件可信。防御措施包括使用强CA、定期更新证书和实施证书 pinning技术，以防止伪造证书攻击。实战案例显示，证书漏洞（如Heartbleed）可能导致大规模数据泄露，因此最佳实践是定期审计证书和采用自动化管理工具。这提高了整体网络安全性和用户信任。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数字证书",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:26:31.330907"
+    }
+  },
+  {
+    "question": "什么是公钥基础设施（PKI）？",
+    "answer": "公钥基础设施（PKI）是一种网络安全框架，用于管理数字证书和公钥加密，确保数据的机密性、完整性和身份验证。它基于非对称加密，使用一对密钥：公钥（公开用于加密）和私钥（私有用于解密）。PKI的核心组件包括证书颁发机构（CA）、数字证书和注册机构（RA）。简单来说，PKI帮助验证在线身份，防止伪造和窃听，是安全通信的基础。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "公钥基础设施PKI",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:27:46.737670"
+    }
+  },
+  {
+    "question": "PKI的工作原理是什么？",
+    "answer": "PKI的工作原理基于非对称加密和数字证书。证书颁发机构（CA）验证用户身份后，颁发数字证书，绑定公钥到身份。证书生命周期包括申请、颁发、吊销和更新。数据传输时，发送方用接收方的公钥加密，接收方用私钥解密。PKI还涉及哈希函数确保数据完整性，并通过PKI协议（如X.509）实现安全认证。这种机制支持安全电子邮件、VPN和SSL/TLS等应用，提供端到端加密。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "公钥基础设施PKI",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:27:46.737670"
+    }
+  },
+  {
+    "question": "PKI有哪些常见类型或分类？",
+    "answer": "PKI的常见类型包括基于硬件的（如智能卡）、软件的（如PKI软件模块）和云基的（如托管PKI服务）。分类上，根据部署规模，有企业级PKI（大型组织使用）和联邦PKI（跨组织共享证书）。另外，PKI可按加密方式分为对称PKI（使用相同密钥加密解密，如AES）和非对称PKI（使用公钥私钥对，如RSA）。PKI层级结构包括根CA（最高权威）和子CA（分级管理），确保可扩展性和安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "公钥基础设施PKI",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:27:46.737670"
+    }
+  },
+  {
+    "question": "PKI在哪些实际场景中应用？",
+    "answer": "PKI广泛应用于安全通信和身份验证场景。例如，在HTTPS协议中，通过数字证书验证网站身份，确保数据传输安全；在VPN中，PKI用于用户和设备的身份认证；在电子邮件中，S/MIME或PEM使用PKI加密和签名邮件；在企业环境中，PKI支持单点登录和访问控制。其他应用包括电子签名、安全票据系统和物联网设备认证，帮助实现可靠的身份管理和数据保护。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "公钥基础设施PKI",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:27:46.737670"
+    }
+  },
+  {
+    "question": "PKI的优缺点是什么？以及如何实施最佳实践？",
+    "answer": "PKI的优点包括高安全性（通过加密和数字签名防止篡改）、可扩展性（支持大规模部署）和广泛兼容性。缺点包括管理复杂（需定期更新证书和监控吊销列表）、成本较高（涉及硬件和软件投资），且易受攻击如证书伪造。最佳实践包括使用强加密算法（如AES-256）、定期轮换证书、实施自动化吊销机制（如OCSP），并结合多因素认证。同时，培训员工和审计PKI系统，能有效提升防御能力，减少安全风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "公钥基础设施PKI",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:27:46.737670"
+    }
+  },
+  {
+    "question": "SSL/TLS协议是什么？它在网络安全中扮演什么角色？",
+    "answer": "SSL/TLS协议是一种标准的安全通信协议，用于在客户端和服务器之间建立加密链接，确保数据传输的机密性和完整性。它通过数字证书验证服务器身份，防止中间人攻击。在网络安全中，它广泛应用于保护敏感信息，如登录凭据和信用卡交易，是HTTPS等安全通信的基础。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SSL/TLS协议",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:30:18.536906"
+    }
+  },
+  {
+    "question": "SSL/TLS协议的工作原理是什么？请解释握手过程。",
+    "answer": "SSL/TLS协议的工作原理基于握手过程，涉及客户端和服务器协商加密参数。握手包括：1) 客户端发送'Hello'消息，列出支持的协议版本和密码套件；2) 服务器选择版本和密码套件，并发送其数字证书；3) 客户端验证证书并生成预主密钥；4) 双方计算主密钥用于对称加密。之后，通信使用对称加密密钥，确保数据机密性和完整性，同时使用非对称加密（如RSA或ECDSA）进行密钥交换和身份验证。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SSL/TLS协议",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:30:18.536906"
+    }
+  },
+  {
+    "question": "SSL/TLS协议有哪些常见版本和类型？",
+    "answer": "SSL/TLS协议有多个版本，从SSL 2.0到SSL 3.0（已过时且不安全），然后是TLS 1.0、1.1、1.2和TLS 1.3。SSL 3.0之后，TLS成为标准，TLS 1.2支持如AES-GCM等加密算法，TLS 1.3优化了性能，减少了握手往返次数。常见类型包括基于密码套件的版本，如支持RSA或ECC的密钥交换机制，这些类型根据加密算法和协议版本分类，以平衡安全性和效率。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SSL/TLS协议",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:30:18.536906"
+    }
+  },
+  {
+    "question": "SSL/TLS协议在哪些场景中应用？它的优缺点是什么？如何防御相关威胁？",
+    "answer": "SSL/TLS协议广泛应用于保护Web浏览（如HTTPS）、虚拟专用网络（VPN）、电子邮件和数据库连接。优点包括提供加密、身份验证和数据完整性，确保安全通信；缺点是计算开销大，可能影响性能，且旧版本存在漏洞（如POODLE）。防御措施包括使用最新TLS版本（如TLS 1.3）、实施强密码策略、证书透明度和定期审计，以防止证书伪造和攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SSL/TLS协议",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:30:18.536906"
+    }
+  },
+  {
+    "question": "有哪些SSL/TLS相关的安全案例？最佳实践是什么？",
+    "answer": "实战案例包括Heartbleed漏洞（影响OpenSSL库，导致内存泄露）和POODLE攻击（利用SSL 3.0漏洞）。最佳实践建议：禁用不安全协议版本（如TLS 1.0），使用强加密套件（如AES-256），实施证书 pinning 以防止证书伪造，定期更新软件和监控证书有效期，同时教育用户使用复杂密码，以增强整体安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "SSL/TLS协议",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:30:18.536906"
+    }
+  },
+  {
+    "question": "什么是端到端加密？",
+    "answer": "端到端加密（End-to-End Encryption, E2EE）是一种网络安全机制，确保数据从发送方直接加密到接收方，中间任何节点（如服务器）无法解密。简单来说，它保护通信隐私，防止第三方窃听。例如，在消息应用中，只有对话双方能读取消息。E2EE依赖于公钥或对称密钥技术，但核心在于加密发生在应用层，而非传输层，从而提升数据机密性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "端到端加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:33:27.455501"
+    }
+  },
+  {
+    "question": "端到端加密的技术原理和工作机制是怎样的？",
+    "answer": "E2EE的原理基于加密算法：发送方使用接收方的公钥或共享密钥加密数据，接收方用私钥解密。常见机制包括：对称加密（如AES，双方共享密钥）和非对称加密（如RSA，使用公钥加密、私钥解密）。在实际中，E2EE通常结合混合加密，先用非对称加密交换对称密钥，然后用对称密钥加密数据，以平衡安全性和效率。这确保了即使数据被截获，未经授权的用户也无法访问内容，但需要用户管理密钥以维持安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "端到端加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:33:27.455501"
+    }
+  },
+  {
+    "question": "端到端加密有哪些常见类型或分类？",
+    "answer": "E2EE可分为几种类型：基于对称密钥的E2EE（如Signal协议中使用的预共享密钥），基于非对称密钥的E2EE（如PGP电子邮件加密，使用RSA或椭圆曲线加密），以及混合型E2EE（如WhatsApp结合TLS和端到端加密）。分类还包括应用层实现（如即时通讯应用）和协议层实现（如SSH或VPN的扩展）。这些类型根据密钥分发方式和算法选择，提供不同程度的安全性和灵活性，但需注意E2EE不保护端点自身安全，需结合其他措施。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "端到端加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:33:27.455501"
+    }
+  },
+  {
+    "question": "端到端加密在哪些实际应用场景中使用？",
+    "answer": "E2EE广泛应用于需要高度隐私的场景，如即时通讯（WhatsApp、Signal）、电子邮件（PGP加密）、云存储（如Dropbox的私密链接）和视频通话（如端到端加密的Zoom会议）。在这些应用中，E2EE确保只有授权用户访问数据，即使服务器被攻击也无法泄露内容。例如，Signal使用Sodium库实现E2EE，保护消息免遭监听。其他场景包括区块链交易和文件共享，但E2EE依赖于用户正确使用密钥管理，以避免安全漏洞。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "端到端加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:33:27.455501"
+    }
+  },
+  {
+    "question": "端到端加密的优缺点是什么？",
+    "answer": "E2EE的优点包括强隐私保护，防止中间人攻击和数据泄露；缺点是如果用户设备被破解或密钥管理不当，加密可能失效，且实现复杂可能影响性能。例如，在聊天应用中，E2EE能有效抵御窃听，但若用户未启用，或密钥存储在云端，安全性会降低。防御措施包括使用强密码和定期更新密钥，但最佳实践建议用户教育和标准合规，以最大化E2EE的安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "端到端加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:33:27.455501"
+    }
+  },
+  {
+    "question": "量子加密的基本定义和概念解释是什么？",
+    "answer": "量子加密是一种基于量子力学原理的网络安全技术，旨在提供信息论上的无条件安全通信。其核心概念利用量子态的特性，如叠加态和不确定性原理，来检测和防止窃听。例如，量子密钥分发（QKD）允许两方安全共享密钥，任何第三方的观测都会破坏量子态，从而被立即发现。这与传统加密不同，后者依赖数学难题，可能被量子计算机破解，量子加密在保护敏感数据如政府通信和金融交易中具有革命性潜力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "量子加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:35:52.378864"
+    }
+  },
+  {
+    "question": "量子加密的技术原理和工作机制是怎样的？",
+    "answer": "量子加密的技术原理基于量子力学的基本定律，如不确定性原理和量子叠加。典型机制是BB84协议，由Alice发送一系列量子比特（qubits），每个处于特定偏振态；Bob使用随机基测量这些qubits。如果无窃听，Alice和Bob通过经典信道比较基，生成共享密钥。任何窃听者（Eve）的干预会引入测量误差，导致密钥不一致，从而被检测。这种机制确保了通信的实时安全，但需要高精度设备和量子态维持技术，易受环境噪声影响。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "量子加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:35:52.378864"
+    }
+  },
+  {
+    "question": "量子加密有哪些常见类型或分类？",
+    "answer": "量子加密的主要类型包括量子密钥分发（QKD），如BB84、B92和E91协议；BB84使用qubits偏振，B92基于两个非正交态，E91利用量子纠缠。另一种类型是量子直接通信（QDC），直接传输消息而不需密钥共享。基于应用分类，有光纤QKD和自由空间QKD；光纤适用于短距离城市网络，自由空间用于卫星通信。此外，量子安全直接通信（QSDC）利用量子纠缠实现消息保密，常见于军事和科研领域，这些类型展示了量子加密的多样性和适应性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "量子加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:35:52.378864"
+    }
+  },
+  {
+    "question": "量子加密在哪些实际应用场景中使用？",
+    "answer": "量子加密的实际应用场景主要涉及高安全需求领域，如政府和军事通信、金融交易、医疗数据保护。例如，瑞士电信使用QKD保护网络数据，防止间谍活动；美国军方在卫星通信中部署QKD确保战略信息安全；金融行业如银行采用量子加密保护跨境交易，抵御量子计算威胁。在医疗领域，量子加密用于存储患者隐私数据，避免数据泄露。此外，量子互联网的发展中，量子加密是构建安全节点的核心，应用于未来5G/6G网络和量子云计算，确保数据传输的不可监听性和完整性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "量子加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:35:52.378864"
+    }
+  },
+  {
+    "question": "量子加密的优缺点分析是什麼？",
+    "answer": "量子加密的优点包括理论上提供无条件安全性，任何窃听都会被检测，且能抵御未来量子计算机攻击，相比传统加密更可靠。缺点包括设备成本高昂，系统复杂，传输距离有限（通常需中继器处理退相干），易受环境干扰如温度变化。此外，实施难度大，需要专业维护，且依赖量子技术成熟度。总体而言，量子加密在高风险场景优势明显，但其高成本和局限性限制了广泛应用，需结合传统加密方法以平衡安全性和实用性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "量子加密",
+      "category": "密码学",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:35:52.378864"
+    }
+  },
+  {
+    "question": "什么是远程代码执行漏洞？",
+    "answer": "远程代码执行漏洞是一种网络安全漏洞，允许攻击者通过远程接口在受害者的系统上执行任意代码。这种漏洞通常发生在软件未能正确验证或过滤用户输入时，攻击者可以注入并执行恶意指令，导致系统被完全控制。例如，在Web应用中，如果输入验证不足，攻击者可能执行系统命令，造成数据泄露或服务中断。这种漏洞的危险性在于其高破坏性，但防御关键在于安全编码实践。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程代码执行漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:37:48.764353"
+    }
+  },
+  {
+    "question": "远程代码执行漏洞的技术原理和工作机制是什么？",
+    "answer": "远程代码执行漏洞的原理基于程序对输入数据的不当处理，攻击者利用漏洞通过网络发送恶意输入，触发代码执行。常见工作机制包括缓冲区溢出、格式化字符串漏洞或注入攻击。例如，在C语言中，strcpy函数未正确使用可能导致内存破坏和代码注入；在Web应用中，SQL注入可能间接导致RCE。攻击者通过精心构造的输入，绕过安全检查，执行任意代码，实现远程控制。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程代码执行漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:37:48.764353"
+    }
+  },
+  {
+    "question": "远程代码执行漏洞有哪些常见类型或分类？",
+    "answer": "远程代码执行漏洞的常见类型包括命令注入（如通过系统命令执行恶意操作）、代码注入（直接执行恶意代码，常见于脚本语言）、脚本注入（如在Web应用中执行恶意脚本）和API注入（通过网络API执行代码）。这些类型根据攻击媒介分类，命令注入涉及操作系统命令，代码注入涉及编程语言如Python或Java，脚本注入多见于前端技术如JavaScript，API注入则针对RESTful或RPC接口。每种类型都有特定的攻击向量和防御重点。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程代码执行漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:37:48.764353"
+    }
+  },
+  {
+    "question": "远程代码执行漏洞在哪些实际应用场景中常见？",
+    "answer": "远程代码执行漏洞常见于Web应用、API端点、远程管理协议和IoT设备。例如，在Web应用中，如登录表单验证不足可能导致RCE；API端点如未认证的RESTful服务可能被利用；远程协议如SSH或RDP配置不当也可能引发漏洞；IoT设备中，通过固件漏洞执行远程代码。实际场景包括企业系统、云服务和移动应用，攻击者利用这些漏洞进行大规模蠕虫传播或DDoS攻击，造成业务中断和数据损失。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程代码执行漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:37:48.764353"
+    }
+  },
+  {
+    "question": "如何防御远程代码执行漏洞？它的优缺点是什么？并提供实战案例和最佳实践建议。",
+    "answer": "防御远程代码执行漏洞的措施包括：严格输入验证、使用安全编码标准（如OWASP Top 10）、输出编码、定期更新软件和部署WAF。优点是攻击者可获得系统完全控制权，便于横向移动和数据窃取；缺点是漏洞一旦被利用，可能导致系统崩溃或持久化威胁。实战案例：Log4Shell漏洞（2021年）允许通过日志注入执行任意代码，影响全球系统。最佳实践建议：采用自动化安全测试、实施最小权限原则，并遵循NIST框架进行风险管理，以减少漏洞风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "远程代码执行漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:37:48.764353"
+    }
+  },
+  {
+    "question": "什么是权限提升漏洞？",
+    "answer": "权限提升漏洞是一种网络安全漏洞，允许攻击者从较低的权限级别（如普通用户）提升到更高的权限级别（如系统管理员）。这通常由于软件错误或配置不当引起，例如在本地系统或网络应用中。专业术语包括本地提权（Local Privilege Escalation）和垂直提权（Vertical Privilege Escalation）。这种漏洞可能导致攻击者获得完整系统控制，增加安全风险。示例包括未正确验证用户输入导致的权限膨胀。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "权限提升漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:39:14.016572"
+    }
+  },
+  {
+    "question": "权限提升漏洞的技术原理和工作机制是什么？",
+    "answer": "权限提升漏洞的技术原理基于系统权限管理机制的缺陷，例如通过漏洞利用代码执行、缓冲区溢出或错误处理不当来获取更高权限。工作机制通常涉及攻击者利用低权限进程执行恶意代码，绕过访问控制，从而提升到目标权限级别。专业术语如权限继承或权限注入，解释了如何在系统调用或进程上下文中实现提升。这种机制常见于操作系统或应用程序中，攻击者通过分析漏洞点（如内核漏洞）来实现权限跳跃，示例包括Linux系统中的SUID滥用。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "权限提升漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:39:14.016572"
+    }
+  },
+  {
+    "question": "权限提升漏洞有哪些常见类型或分类？",
+    "answer": "权限提升漏洞常见类型包括本地提权（如通过系统命令注入提升权限）、垂直提权（从用户到管理员权限）、水平提权（在相同权限级别内移动）和路径遍历漏洞。分类基于攻击向量，如软件错误（如缓冲区溢出）、配置错误或输入验证不足。专业术语如权限升级漏洞（Privilege Escalation Bug），常见于Web应用、数据库系统或操作系统中。这些类型可根据影响范围分为本地或远程漏洞，示例包括Apache Struts漏洞导致的权限提升。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "权限提升漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:39:14.016572"
+    }
+  },
+  {
+    "question": "权限提升漏洞在实际中有哪些应用场景和如何防御？",
+    "answer": "权限提升漏洞的实际应用场景包括Web应用中攻击者利用SQL注入或文件包含漏洞提升权限，以访问敏感数据或控制系统。防御措施包括实施最小权限原则（如使用sudo限制权限）、定期安全审计和更新软件补丁。专业术语如权限分离（Privilege Separation），建议使用入侵检测系统（IDS）监控异常行为。优缺点分析：优点是攻击者可快速获得系统控制；缺点是增加了防御难度和潜在数据泄露风险。实战案例包括Heartbleed漏洞被用于权限提升，最佳实践建议是采用多层次防御策略，如结合防火墙和加密技术。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "权限提升漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:39:14.016572"
+    }
+  },
+  {
+    "question": "权限提升漏洞的优缺点是什么？有哪些实战案例和最佳实践建议？",
+    "answer": "权限提升漏洞的优点是攻击者能快速获得系统控制，便于进一步攻击；缺点是增加了系统安全风险，可能导致数据丢失或服务中断。实战案例包括2017年Equifax数据泄露事件，攻击者通过漏洞提升权限访问个人信息。最佳实践建议：使用自动化工具进行漏洞扫描、实施严格访问控制和定期员工安全培训。专业术语如权限最小化（Least Privilege），强调在设计阶段避免权限滥用，以降低漏洞发生概率。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "权限提升漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:39:14.016572"
+    }
+  },
+  {
+    "question": "什么是信息泄露漏洞？",
+    "answer": "信息泄露漏洞是指在软件、系统或网络中，由于设计缺陷或配置错误，导致敏感信息（如密码、个人数据）被未经授权的用户访问或窃取的漏洞。简单来说，它是一种安全弱点，攻击者可以利用它来获取本不该他们看到的数据，这在网络安全中是一个常见威胁。例如，一个不安全的API调用可能导致用户凭证泄露。理解这个概念有助于提高整体安全意识，防范潜在风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "信息泄露漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:40:58.427251"
+    }
+  },
+  {
+    "question": "信息泄露漏洞是如何工作的？",
+    "answer": "信息泄露漏洞通常通过技术原理如缓冲区溢出、SQL注入或不安全的直接对象引用工作。攻击者利用这些漏洞绕过安全控制，直接访问内存或数据库中的敏感信息。工作机制涉及漏洞的触发点（例如，用户输入被恶意利用）、数据暴露路径（如从后端数据库到前端界面）和攻击者的利用方式（如通过脚本提取数据）。理解这些原理有助于开发更安全的系统，例如通过输入验证来阻止常见攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "信息泄露漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:40:58.427251"
+    }
+  },
+  {
+    "question": "信息泄露漏洞有哪些常见类型？",
+    "answer": "信息泄露漏洞的常见类型包括：1) SQL注入漏洞，攻击者通过恶意SQL查询窃取数据库数据；2) 跨站脚本（XSS）漏洞，用于窃取用户会话cookie；3) 不安全的直接对象引用，允许访问未授权资源；4) 服务器端请求伪造（SSRF），可能泄露内部网络信息。每种类型都有其特定的攻击向量，例如XSS常用于Web应用，SQL注入则针对数据库交互。了解这些类型有助于针对性地加强防御措施，如使用参数化查询来防止SQL注入。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "信息泄露漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:40:58.427251"
+    }
+  },
+  {
+    "question": "信息泄露漏洞的实际应用场景是什么？",
+    "answer": "信息泄露漏洞在实际中常用于网络攻击场景，例如2017年Equifax数据泄露事件中，攻击者利用Apache Struts漏洞窃取了大量个人信息。优缺点分析：优点是帮助安全研究人员发现系统弱点，促进改进；缺点是攻击者利用它造成巨大损害，如身份盗窃和财务损失。应用场景包括企业数据泄露、身份盗窃和间谍活动，这些案例提醒我们，漏洞可能导致敏感信息暴露，影响组织和个人安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "信息泄露漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:40:58.427251"
+    }
+  },
+  {
+    "question": "如何防御信息泄露漏洞？",
+    "answer": "防御信息泄露漏洞的措施包括：输入验证、输出编码、使用参数化查询防止SQL注入、实施最小权限原则、定期安全审计和漏洞扫描。实战案例：如OWASP Top 10中提到，通过Web应用防火墙（WAF）检测和阻止攻击，例如在2021年Twitter泄露事件中，WAF帮助缓解了部分风险。最佳实践建议：采用安全开发生命周期（SDLC），进行代码审查和渗透测试，以减少漏洞风险，并定期更新系统以应对新威胁。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "信息泄露漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:40:58.427251"
+    }
+  },
+  {
+    "question": "什么是拒绝服务漏洞？",
+    "answer": "拒绝服务漏洞（Denial of Service, DoS）是一种网络安全威胁，指攻击者通过消耗目标系统的资源（如CPU、内存或带宽），使其无法正常提供服务，导致合法用户无法访问。例如，攻击者发送大量无效请求，占用系统资源，造成服务中断。这种漏洞源于系统设计缺陷或配置不当，常见于网络、服务器或应用程序中。理解其本质有助于防范潜在风险，保护业务连续性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "拒绝服务漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:42:33.141526"
+    }
+  },
+  {
+    "question": "拒绝服务攻击的技术原理和工作机制是什么？",
+    "answer": "拒绝服务攻击（DoS）的原理是通过模拟大量合法用户请求或发送恶意数据包，耗尽目标系统的资源，如CPU时间、网络带宽或内存，从而阻止正常服务。工作机制包括：攻击者控制僵尸网络（botnet）发送洪水式攻击（如SYN洪水攻击，伪造TCP连接请求，占用半开连接队列），或利用协议漏洞（如UDP泛洪，消耗带宽）。系统资源被过度使用后，响应变慢或崩溃，攻击者借此实现服务拒绝。这种攻击通常依赖于高可用性需求的系统，防御需结合流量监控和资源限制。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "拒绝服务漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:42:33.141526"
+    }
+  },
+  {
+    "question": "拒绝服务攻击有哪些常见类型或分类？",
+    "answer": "拒绝服务攻击主要分为洪水攻击和协议攻击两大类。洪水攻击包括：SYN洪水攻击（耗尽半开TCP连接资源）、UDP洪水攻击（发送大量伪造UDP数据包消耗带宽）、HTTP洪水攻击（模拟大量HTTP请求针对Web服务器）。协议攻击如ICMP洪水（发送大量ping请求耗尽网络带宽）。DDoS（分布式拒绝服务）是常见变体，利用多个受控主机发起攻击，更难防御。这些类型根据攻击向量和目标不同，影响范围从个人电脑到大型数据中心，了解其分类有助于针对性防护。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "拒绝服务漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:42:33.141526"
+    }
+  },
+  {
+    "question": "拒绝服务攻击在实际中有哪些应用场景？",
+    "answer": "拒绝服务攻击（DoS/DDoS）常用于网络攻击案例，如2016年Mirai僵尸网络攻击导致DNS服务商崩溃，影响全球网站访问；或针对电商平台在促销期间发起攻击，造成销售中断。应用场景包括：攻击政府网站、银行系统或社交媒体平台，以报复、勒索或测试系统韧性。实战中，攻击者利用开源工具（如LOIC或HOIC）或商业服务发起，造成经济损失和声誉损害。防御需结合实时监控和弹性架构，以减少实际影响。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "拒绝服务漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:42:33.141526"
+    }
+  },
+  {
+    "question": "如何防御拒绝服务攻击？有哪些最佳实践建议？",
+    "answer": "防御拒绝服务攻击（DoS/DDoS）的关键是多层次策略，包括：使用防火墙和入侵检测系统过滤异常流量、部署负载均衡器分散请求、启用DDoS缓解服务（如云服务提供商的防护）。优缺点分析：优点是能显著降低攻击影响；缺点是可能误杀正常流量，增加配置复杂性。最佳实践包括：定期进行渗透测试、实施速率限制和冗余设计、培训团队快速响应。结合AI驱动的流量分析工具，能更高效地识别和缓解攻击，确保系统高可用性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "拒绝服务漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:42:33.141526"
+    }
+  },
+  {
+    "question": "什么是身份验证绕过？",
+    "answer": "身份验证绕过是一种网络安全攻击，攻击者通过各种手段绕过或破坏系统身份验证机制，直接访问受保护资源。例如，利用弱密码、默认设置或软件漏洞，攻击者可以跳过登录过程，导致数据泄露或系统入侵。基本概念是，身份验证是确认用户身份的机制，而绕过则是通过欺骗、漏洞或重放攻击来模拟合法用户，增加系统安全风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份验证绕过",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:45:27.039336"
+    }
+  },
+  {
+    "question": "身份验证绕过的技术原理和工作机制是什么？",
+    "answer": "身份验证绕过的原理通常涉及攻击者利用系统漏洞、配置错误或协议缺陷。例如，通过SQL注入篡改数据库查询参数，或使用会话劫持窃取令牌。工作机制包括识别验证点（如登录表单）、注入恶意代码（如修改请求参数），或重放合法请求来模拟用户。攻击者通过分析系统逻辑，绕过验证层，实现未经授权的访问。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份验证绕过",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:45:27.039336"
+    }
+  },
+  {
+    "question": "身份验证绕过的常见类型或分类有哪些？",
+    "answer": "身份验证绕过的常见类型包括基于密码的绕过（如弱密码攻击或哈希碰撞）、基于会话的绕过（如会话固定攻击）、基于协议的绕过（如OAuth漏洞），以及其他如错误配置绕过或物理绕过。每种类型针对不同的验证机制：密码类型针对身份输入，会话类型针对状态管理，协议类型针对标准流程，帮助攻击者针对性地选择方法。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份验证绕过",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:45:27.039336"
+    }
+  },
+  {
+    "question": "身份验证绕过在实际中有哪些应用场景？它有什么优缺点？",
+    "answer": "实际应用场景包括攻击Web应用（如电商系统窃取用户数据）、企业内部系统或云服务，以获取敏感信息。优点从攻击者角度：低成本、高效率，可快速入侵；但从防御者角度，缺点是可能导致数据泄露、系统瘫痪，并增加安全维护成本。优缺点分析显示，绕过攻击易实施但危害大，需平衡安全性和可用性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份验证绕过",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:45:27.039336"
+    }
+  },
+  {
+    "question": "如何防御身份验证绕过？有哪些实战案例和最佳实践建议？",
+    "answer": "防御措施包括实施强密码策略、多因素认证、定期安全审计和输入验证。实战案例如Heartbleed漏洞事件中，攻击者通过TLS协议漏洞绕过验证，窃取数据。最佳实践建议：使用安全框架（如OWASP Top 10）、实施最小权限原则和持续员工培训，以减少漏洞风险和快速响应攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "身份验证绕过",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:45:27.039336"
+    }
+  },
+  {
+    "question": "什么是逻辑漏洞？",
+    "answer": "逻辑漏洞是指在软件或系统设计中，由于逻辑错误导致的安全缺陷，它可能允许攻击者在不遵循预期逻辑的情况下执行操作。例如，用户可能通过输入特定数据来绕过身份验证或访问控制。这种漏洞不同于典型的注入漏洞，因为它涉及业务逻辑而非数据处理错误，常见于Web应用和企业系统中，危害包括数据泄露或权限滥用。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "逻辑漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:46:32.390365"
+    }
+  },
+  {
+    "question": "逻辑漏洞的技术原理和工作机制是什么？",
+    "answer": "逻辑漏洞的原理基于程序执行路径的错误，攻击者通过输入特定参数或序列来触发异常逻辑，从而获得未授权访问或执行。工作机制包括输入验证失败、状态管理错误或条件判断失误。例如，在一个登录系统中，如果未正确检查用户输入，攻击者可能伪造会话令牌，导致权限绕过。这种漏洞源于开发时对逻辑边界的忽视，增加了系统的脆弱性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "逻辑漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:46:32.390365"
+    }
+  },
+  {
+    "question": "常见的逻辑漏洞类型有哪些？",
+    "answer": "常见的逻辑漏洞类型包括权限控制漏洞（如权限提升或降级）、业务逻辑漏洞（如无限循环或资源耗尽）、认证和授权漏洞（如绕过登录机制）、以及数据处理逻辑错误（如信息泄露）。这些漏洞通常源于开发时对复杂逻辑的简化或异常处理不足，例如在电商平台中，逻辑错误可能导致免费商品获取或支付漏洞，影响系统安全性和完整性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "逻辑漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:46:32.390365"
+    }
+  },
+  {
+    "question": "逻辑漏洞在实际应用中有哪些场景？",
+    "answer": "逻辑漏洞在实际应用中常见于Web应用、移动应用和企业系统，例如社交网络中逻辑错误可能允许用户查看他人隐私信息，或电商网站中购物车逻辑漏洞导致免费商品获取。这些场景往往源于复杂业务逻辑的实现错误，如未正确处理用户输入或状态变化，导致攻击者利用逻辑缺陷进行欺诈或数据窃取，造成经济损失或隐私泄露。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "逻辑漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:46:32.390365"
+    }
+  },
+  {
+    "question": "如何防御逻辑漏洞？分析其优缺点，并提供实战案例和最佳实践。",
+    "answer": "防御逻辑漏洞包括代码审查、静态分析工具、单元测试和渗透测试。优点是针对性强，能发现复杂逻辑问题；缺点是检测难度大，需要深度理解业务逻辑。实战案例：某银行系统因未检查输入长度导致资金转移漏洞，通过加强输入验证修复。最佳实践包括遵循安全设计原则、使用自动化工具辅助检测，并定期进行安全审计，以减少逻辑漏洞风险，提升系统整体安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "逻辑漏洞",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:46:32.390365"
+    }
+  },
+  {
+    "question": "什么是配置错误在网络安全中？",
+    "answer": "配置错误是指在网络安全领域，由于系统、网络或应用程序的配置不当（如未更改默认设置、错误设置访问控制或协议配置）导致的安全漏洞。这些错误可能源于人为疏忽、自动化工具缺陷或缺乏验证，导致未经授权的访问、数据泄露或其他安全事件。常见例子包括未禁用不必要的服务或使用弱密码，从而增加攻击面。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "配置错误",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:47:57.884828"
+    }
+  },
+  {
+    "question": "配置错误的技术原理和工作机制是什么？",
+    "answer": "配置错误的技术原理基于系统或设备的配置加载和执行过程，如果配置验证机制不严格或配置文件解析错误，错误设置可能被激活。工作机制涉及配置文件的读取、解析、应用和监控；例如，防火墙规则未正确加载时，可能允许恶意流量通过。这通常源于默认配置或手动输入错误，导致安全边界失效。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "配置错误",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:47:57.884828"
+    }
+  },
+  {
+    "question": "常见的配置错误类型有哪些？",
+    "answer": "常见的配置错误类型包括：1) 默认配置保留，如未更改默认密码或端口；2) 访问控制错误，如权限过高或过低；3) 协议配置错误，如使用未加密的通信协议；4) 服务启用错误，如开启不必要的端口或服务；5) 日志配置错误，导致审计信息缺失。这些类型往往源于疏忽或缺乏标准化流程。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "配置错误",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:47:57.884828"
+    }
+  },
+  {
+    "question": "配置错误在实际网络安全中有哪些应用场景？",
+    "answer": "配置错误在实际场景中常导致数据泄露或系统入侵。例如，在企业网络中，未正确配置数据库访问控制可能导致SQL注入攻击；在云环境中，错误设置的存储桶权限可能暴露敏感数据；另一个案例是物联网设备未更改默认配置，被用于DDoS攻击。这些场景强调了配置错误在现实中的高风险性和普遍性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "配置错误",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:47:57.884828"
+    }
+  },
+  {
+    "question": "如何防御和应对配置错误？",
+    "answer": "防御配置错误的措施包括：1) 实施严格的变更管理流程，确保配置更改经过审核；2) 使用自动化工具（如配置管理软件）进行定期审计和验证；3) 培训员工提高安全意识；4) 遵循安全配置基线和最佳实践；5) 定期进行渗透测试和漏洞扫描。应对时，及时检测错误并修复，同时监控系统日志以减少潜在损害。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "配置错误",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:47:57.884828"
+    }
+  },
+  {
+    "question": "什么是弱密码？",
+    "answer": "弱密码是指那些容易被猜测或破解的密码，例如简单如'123456'或'password'。它们的危险在于攻击者可以通过暴力破解或字典攻击快速获得访问权，导致数据泄露或系统入侵。用户应避免使用弱密码，以保护账户安全。弱密码往往源于用户习惯，如使用个人信息或简单组合，这增加了安全风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "弱密码",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:48:58.679434"
+    }
+  },
+  {
+    "question": "弱密码的技术原理和工作机制是什么？",
+    "answer": "弱密码的技术原理主要基于攻击者利用密码的弱点进行破解。工作机制包括暴力破解（尝试所有可能组合）和字典攻击（使用常见单词列表），攻击者通过反复尝试，直到找到正确密码。例如，字典攻击会优先尝试高频词汇，提高效率。这依赖于密码哈希算法的弱点，如果哈希未加盐，攻击者能更快破解。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "弱密码",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:48:58.679434"
+    }
+  },
+  {
+    "question": "弱密码有哪些常见类型？",
+    "answer": "弱密码常见类型包括：简单密码（如仅数字或短单词，如'111111'）、重复使用相同密码、基于个人信息的密码（如生日或姓名）、以及默认系统密码（如'admin/admin'）。这些类型源于用户便利性，但容易被预测。分类上，还包括基于模式的密码（如'abc123'）和过期密码。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "弱密码",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:48:58.679434"
+    }
+  },
+  {
+    "question": "弱密码在实际应用场景中如何应用？它的优缺点是什么？",
+    "answer": "在实际场景中，弱密码常用于用户登录系统，如网站或设备认证。攻击者通过猜测弱密码入侵，造成数据泄露。优点是方便用户快速访问，提高效率；但缺点是安全风险高，易导致身份盗窃或系统入侵。例如，2016年LinkedIn数据泄露事件部分源于弱密码，暴露数百万账户。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "弱密码",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:48:58.679434"
+    }
+  },
+  {
+    "question": "如何防御弱密码？有哪些实战案例和最佳实践？",
+    "answer": "防御弱密码的措施包括实施密码复杂度策略（要求至少8字符，包含大小写和特殊符号）、启用多因素认证（如短信验证码）、定期更换密码和使用密码管理器。实战案例：2017年Equifax事件中，弱密码导致大规模数据泄露。最佳实践建议：教育用户避免常见弱密码，采用强密码生成器，并监控异常登录尝试，以降低风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "弱密码",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:48:58.679434"
+    }
+  },
+  {
+    "question": "什么是默认凭证？",
+    "answer": "默认凭证是指系统或设备在安装时预设的用户名和密码，用于初始身份验证。这些凭证通常简单且公开，如路由器默认使用'admin'/'password'，便于用户快速配置，但容易被攻击者猜测或利用，导致安全风险。例如，在企业环境中，未更改的默认凭证可能让黑客轻易入侵网络设备，造成数据泄露或系统控制。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "默认凭证",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:50:58.635077"
+    }
+  },
+  {
+    "question": "默认凭证是如何工作的？",
+    "answer": "默认凭证的工作原理基于系统初始化时加载的配置文件或数据库中的预设值。当设备首次启动或用户访问时，系统使用这些凭证进行身份验证。攻击者通过扫描网络或暴力破解常见凭证（如标准用户名和密码组合），可以绕过安全机制，未经授权访问系统。这源于厂商为方便部署而简化设计，但增加了攻击面，常见于物联网设备和软件应用中。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "默认凭证",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:50:58.635077"
+    }
+  },
+  {
+    "question": "默认凭证有哪些常见类型？",
+    "answer": "默认凭证的常见类型包括：1. 设备级默认凭证，如路由器的'admin'/'password'用于网络管理；2. 软件应用默认凭证，如数据库的'root'/'root'用于初始配置；3. 操作系统默认凭证，如Windows的'Administrator'账户。这些类型往往缺乏唯一性和复杂性，常见于消费电子、企业服务器和开源软件中，攻击者可利用其进行批量扫描和攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "默认凭证",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:50:58.635077"
+    }
+  },
+  {
+    "question": "默认凭证在哪些场景下常见？",
+    "answer": "默认凭证常见于企业网络中的初始设备配置、物联网设备部署、共享软件安装等场景。优缺点：优点是方便快速启动和测试；缺点是易受攻击，可能导致权限提升或数据丢失。实战案例：Mirai恶意软件通过扫描IoT设备的默认凭证发起DDoS攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "默认凭证",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:50:58.635077"
+    }
+  },
+  {
+    "question": "如何防御默认凭证的风险？",
+    "answer": "防御默认凭证的风险包括：更改默认凭证为强密码（包含大小写字母、数字和符号）、禁用不必要的服务、实施多因素认证、定期审计账户和监控异常登录。优缺点：优点是显著提升安全性；缺点是增加管理复杂性。实战案例：某公司通过强制密码策略避免了默认凭证攻击。最佳实践建议：定期更新系统、进行安全培训，并使用自动化工具检测未更改的凭证，确保全面防护。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "默认凭证",
+      "category": "漏洞类型",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:50:58.635077"
+    }
+  },
+  {
+    "question": "什么是等级保护2.0？",
+    "answer": "等级保护2.0是中国网络安全等级保护制度的升级版，基于GB/T 22239-2019标准。它将信息系统分为五个安全保护等级（一级到五级），根据系统的重要性、遭受破坏后的危害程度进行分级保护。核心是‘分等级、分对象、分措施’，强调动态防护和全生命周期管理。与1.0相比，2.0更注重精准防护，适用于关键信息基础设施保护，帮助组织系统化地提升网络安全水平。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "等级保护2.0",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:52:10.749179"
+    }
+  },
+  {
+    "question": "等级保护2.0的技术原理和工作机制是什么？",
+    "answer": "等级保护2.0采用纵深防御和分层防护技术原理，包括风险评估、安全建设、安全运维和安全监督。工作机制涉及持续监控和响应，例如使用入侵检测系统（IDS）和防火墙进行实时防护。技术原理包括身份认证、访问控制、网络安全和数据加密，通过全生命周期管理确保系统在不同阶段符合相应等级要求。这有助于及时发现威胁并采取措施，提升整体防御能力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "等级保护2.0",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:52:10.750191"
+    }
+  },
+  {
+    "question": "等级保护2.0的常见类型或分类有哪些？",
+    "answer": "等级保护2.0将信息系统分为五个等级：一级为通用、非关键系统；二级为轻微危害系统；三级为重要信息系统；四级为特别重要系统；五级为极其重要系统，如国家关键信息基础设施。分类基于信息系统的业务属性、服务范围、用户数量和潜在影响。每个等级对应不同的安全要求，例如三级以上需实施严格的安全审计和访问控制，确保保护力度与风险匹配。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "等级保护2.0",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:52:10.750191"
+    }
+  },
+  {
+    "question": "等级保护2.0在哪些实际场景中应用？如何进行防御？",
+    "answer": "等级保护2.0广泛应用于政府网站、金融系统、能源网络和医疗信息系统等场景。例如，政府机构用它保护敏感数据，金融企业用它防范网络攻击。防御措施包括定期风险评估、部署安全设备（如防火墙和SIEM系统）、实施访问控制和加密技术。通过安全运维和监控，及时响应威胁，确保系统符合相应等级要求，提高整体安全韧性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "等级保护2.0",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:52:10.750191"
+    }
+  },
+  {
+    "question": "等级保护2.0的优缺点是什么？有哪些实战案例和最佳实践建议？",
+    "answer": "优点：系统化、标准化，提升网络安全整体水平，但实施成本高，可能增加企业负担。缺点：执行复杂，需持续投入资源。实战案例：某银行通过等级保护2.0评估发现数据泄露风险并及时修补，避免了重大损失。最佳实践：定期员工培训、结合ISO 27001标准、持续改进安全策略，建议从小型系统开始试点，逐步扩展，以平衡成本与安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "等级保护2.0",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:52:10.750191"
+    }
+  },
+  {
+    "question": "什么是网络安全法？",
+    "answer": "网络安全法是指一系列旨在保护网络系统、数据和隐私的法律法规，例如中国的《网络安全法》。它通过规范网络运营者的行为、加强网络安全管理来防范网络攻击和数据泄露。核心目标包括保障国家安全、维护社会公共利益和个人权益。简单来说，它是用法律手段来应对网络安全威胁，确保网络空间的安全和秩序。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "网络安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:53:06.215083"
+    }
+  },
+  {
+    "question": "网络安全法有哪些常见类型或分类？",
+    "answer": "网络安全法可以根据适用范围和内容分为不同类型。例如，国家层面的法律如中国的《网络安全法》、欧盟的《通用数据保护条例》(GDPR)，以及行业特定法规如金融行业的《网络安全等级保护制度》。分类还包括基础法（如框架性法律）和实施细则（如数据保护细则）。这些类型通常基于国家法律体系、技术领域（如关键信息基础设施保护）和数据跨境流动规则，旨在根据不同风险等级进行针对性管理。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "网络安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:53:06.215083"
+    }
+  },
+  {
+    "question": "网络安全法在实际中如何应用？",
+    "answer": "网络安全法在实际中应用广泛，例如企业必须遵守数据保护要求，如在中国《网络安全法》下，运营者需定期进行安全评估和报告数据泄露事件。政府机构用它来监管网络运营商，确保关键基础设施安全。实际场景包括电商平台保护用户数据、医疗机构遵守隐私法规，从而减少网络攻击风险。通过法律执行，它帮助组织建立合规机制，提升整体网络安全水平，避免法律处罚和声誉损失。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "网络安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:53:06.215083"
+    }
+  },
+  {
+    "question": "如何通过网络安全法来防御网络威胁？",
+    "answer": "网络安全法通过立法强制要求采用技术措施和管理规范来防御网络威胁。例如，《网络安全法》规定网络运营者必须部署防火墙、入侵检测系统等技术手段，并实施风险评估和应急响应计划。法律还促进国际合作，如数据跨境传输审批，以减少外部攻击风险。防御机制包括定期审计、员工培训和合规检查，这些措施与技术工具结合，形成多层次防护体系，有效降低数据泄露和网络攻击的几率。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "网络安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:53:06.215083"
+    }
+  },
+  {
+    "question": "网络安全法的优缺点是什么？并提供一个实战案例。",
+    "answer": "网络安全法的优点包括加强网络安全意识、促进标准化和国际合作，帮助减少网络犯罪和数据泄露。缺点可能包括执行成本高、法规可能滞后于技术发展，以及可能限制创新或数据自由流动。实战案例：中国《网络安全法》实施后，某电商平台因未遵守数据保护要求而被罚款5000万元，促使企业加强安全措施，从而提升了整体行业安全水平。这展示了法律在防御网络威胁中的积极作用，但也提醒需持续更新法规以适应新挑战。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "网络安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:53:06.216096"
+    }
+  },
+  {
+    "question": "什么是数据安全法？",
+    "answer": "数据安全法是中国一部旨在保护数据安全、规范数据处理活动的法律，强调国家安全、公共利益和个人权益的保护。它涵盖了数据分类分级、数据安全义务和跨境数据传输等内容，目的是防止数据泄露、篡改和破坏，确保数据处理的合法性和安全性。作为基础性法律，它为数据安全提供了框架，适用于企业和个人数据处理场景，帮助提升整体数据保护水平。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:54:20.286971"
+    }
+  },
+  {
+    "question": "数据安全法如何对数据进行分类分级？请解释常见类型。",
+    "answer": "数据安全法将数据分为一般数据、重要数据和核心数据三个级别，基于其重要性和风险进行分类。一般数据指普通个人信息，保护要求较低；重要数据涉及国家安全、公共利益，需加强管理；核心数据则是关键基础设施数据，保护措施最严格。这种分类帮助组织根据数据级别采取相应安全措施，如访问控制和加密，确保数据安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:54:20.286971"
+    }
+  },
+  {
+    "question": "数据安全法在实际中有哪些应用场景？",
+    "answer": "数据安全法在实际场景中广泛应用，例如企业处理用户数据时需遵守数据分类分级要求，使用加密和访问控制技术；政府部门在跨境数据传输前必须获得批准，以防止数据泄露；电商平台在收集用户隐私数据时，必须实施安全审计和隐私保护措施。这些应用场景体现了法律对数据全生命周期的监管，帮助组织在日常运营中防范数据安全风险，保障用户权益和国家安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:54:20.286971"
+    }
+  },
+  {
+    "question": "组织如何应对数据安全法的要求？",
+    "answer": "组织应对数据安全法的要求，需建立数据安全管理制度，包括制定数据分类分级方案、实施技术措施如数据加密和访问控制、定期进行安全评估和员工培训。同时，必须遵守数据处理义务，如获得用户同意和报告数据安全事件。通过这些措施，组织可以降低法律风险，确保合规性，并提升整体数据安全防护能力，避免处罚。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:54:20.286971"
+    }
+  },
+  {
+    "question": "数据安全法的优缺点是什么？并给出最佳实践建议。",
+    "answer": "数据安全法的优点包括加强数据保护，提升国家安全和公共利益；缺点是可能增加企业合规成本和复杂性。最佳实践建议包括采用全生命周期数据管理，结合技术手段（如加密、AI监控）和法律合规工具，定期进行风险评估和应急演练。通过这些实践，组织可以平衡安全与效率，实现可持续发展，同时遵守法律要求，避免潜在风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "数据安全法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:54:20.286971"
+    }
+  },
+  {
+    "question": "什么是个人信息保护法？",
+    "answer": "个人信息保护法是中国于2021年实施的一部法律，旨在保护公民个人信息安全，规范数据处理活动。它定义了个人信息的范围，包括姓名、身份证号等，并强调合法、正当、最小必要原则。该法律设定了数据处理者的义务和数据主体的权利，如知情权和删除权，以应对日益严重的隐私泄露问题，促进网络安全和个人权益保护。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "个人信息保护法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:56:15.385503"
+    }
+  },
+  {
+    "question": "个人信息保护法涉及哪些技术原理来保护数据？",
+    "answer": "该法律鼓励使用技术原理如数据加密（确保数据在传输和存储中的机密性）、访问控制（限制授权用户访问数据）、匿名化处理（移除个人标识信息以降低隐私风险）等。这些机制通过加密算法保护数据完整性，访问控制矩阵管理权限，以及匿名化技术实现数据脱敏，共同构建个人信息保护的技术屏障，帮助企业实现合规处理。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "个人信息保护法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:56:15.385503"
+    }
+  },
+  {
+    "question": "个人信息可以分为哪些类型？",
+    "answer": "根据个人信息保护法，个人信息可分为一般个人信息和敏感个人信息。一般个人信息包括姓名、地址、联系方式等；敏感个人信息则涉及生物识别信息、宗教信仰、行踪轨迹等，这些信息的处理需要更高标准的同意和保护。分类有助于企业针对性地实施安全措施，减少隐私风险。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "个人信息保护法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:56:15.385503"
+    }
+  },
+  {
+    "question": "个人信息保护法在哪些场景中应用？",
+    "answer": "该法律在电子商务、社交媒体、在线服务等场景中广泛应用。例如，在电商平台，企业必须获得用户同意才能收集购物偏好；在社交媒体，平台需确保用户数据不被滥用。实际应用包括数据最小化原则（仅收集必要信息）、目的限制（数据用于特定用途）和用户权利保障（如查询或删除数据），以维护个人隐私和网络空间秩序。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "个人信息保护法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:56:15.385503"
+    }
+  },
+  {
+    "question": "如何应对个人信息保护法的挑战，并有哪些最佳实践建议？",
+    "answer": "挑战包括合规成本高和技术实施难度大。防御措施包括实施数据分类、定期安全审计和员工隐私培训。优缺点：优点是增强了个人隐私保护；缺点可能限制数据创新。实战案例：如某电商平台数据泄露事件显示了合规的重要性。最佳实践建议：采用隐私设计原则（Privacy by Design）、参考国际标准（如GDPR），并使用加密和访问控制技术来提升整体安全性和合规性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "个人信息保护法",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:56:15.385503"
+    }
+  },
+  {
+    "question": "什么是ISO27001？",
+    "answer": "ISO27001是国际标准化组织(ISO)发布的标准，全称为ISO/IEC 27001，它定义了信息安全管理体系(Information Security Management System, ISMS)的要求。ISMS是一种系统化的方法，帮助组织保护信息资产，通过风险管理、资产保护和合规性来应对网络安全威胁。该标准基于ISO27000系列，强调持续改进和风险评估。通过认证，组织可证明其对信息安全的承诺，适用于各种行业，如金融和医疗领域，长度约120字。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ISO27001",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:57:53.954871"
+    }
+  },
+  {
+    "question": "ISO27001的技术原理和工作机制是什么？",
+    "answer": "ISO27001的技术原理基于PDCA循环（Plan-Do-Check-Act），通过风险评估识别威胁和脆弱性，然后实施控制措施，如访问控制、加密和审计。工作机制包括建立ISMS框架、定义信息安全方针、实施控制措施、监控绩效和持续改进。技术上，它不指定具体技术，而是框架指导，组织可选择合适工具如防火墙或加密软件来实现。该机制强调预防、检测和响应，确保信息安全风险管理的有效性，长度约140字。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ISO27001",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:57:53.954871"
+    }
+  },
+  {
+    "question": "ISO27001在哪些实际场景中应用？",
+    "answer": "ISO27001广泛应用于各种组织，如金融、医疗、政府和IT服务提供商。例如，银行使用它保护客户数据，确保合规性；医院保护患者记录；企业实施它满足法规如GDPR。应用场景包括风险管理、访问控制、数据加密和员工培训，帮助组织减少数据泄露和网络攻击。实际中，它可提升组织安全意识，支持数字化转型，并在跨国业务中提供统一标准，长度约130字。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ISO27001",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:57:53.954871"
+    }
+  },
+  {
+    "question": "如何通过ISO27001防御网络安全威胁？",
+    "answer": "ISO27001通过建立信息安全管理体系(Information Security Management System, ISMS)来防御威胁，包括风险评估识别潜在风险，实施控制措施如访问控制、加密和审计。工作机制强调预防（如制定安全政策）、检测（如监控系统日志）和响应（如事件管理）。防御措施包括员工安全意识培训、双因素认证和定期安全审计，确保及时应对威胁。通过PDCA循环，组织可持续改进，减少网络攻击风险，长度约150字。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ISO27001",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:57:53.954871"
+    }
+  },
+  {
+    "question": "分析ISO27001的优缺点，并提供一个实战案例。",
+    "answer": "优点：提供系统化框架，提升安全意识，符合法规要求，促进持续改进，增强客户信任。缺点：实施成本高，需大量资源投入，认证过程复杂，可能不适合小型组织，且标准更新可能带来适应难度。案例：某零售公司通过ISO27001认证，识别出员工疏忽是主要威胁，实施培训和双因素认证后，数据泄露事件减少70%，提升了业务连续性和合规性。该案例展示了标准在实际中的有效性，长度约160字。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "ISO27001",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T16:57:53.954871"
+    }
+  },
+  {
+    "question": "什么是GDPR？",
+    "answer": "GDPR是《通用数据保护条例》的缩写，是欧盟于2018年生效的一项法律框架，旨在保护欧盟公民的个人数据隐私和权利。它适用于任何处理欧盟居民个人数据的组织，无论其地理位置。关键概念包括数据主体权利（如访问、删除数据）、数据控制者（决定数据用途的实体）和数据处理者（处理数据的实体）。GDPR强调数据最小化、目的限制和数据保护原则，目的是减少数据泄露风险，提升数据安全标准。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "GDPR",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:00:13.027778"
+    }
+  },
+  {
+    "question": "GDPR的技术原理和工作机制是什么？",
+    "answer": "GDPR本身是法律框架，但其技术原理要求组织实施适当的技术和组织措施来保护个人数据。技术原理包括使用加密（将数据转换为不可读形式）、假名化（移除直接标识符但保留分析用途）、访问控制（限制谁可以访问数据）等。工作机制涉及任命数据保护官（DPO）监督合规、进行数据保护影响评估（DPIA）识别风险，以及在数据泄露发生时的72小时报告机制。这些措施帮助组织通过技术手段实现GDPR要求，增强网络安全防护，但依赖于组织的技术能力和执行力。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "GDPR",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:00:13.027778"
+    }
+  },
+  {
+    "question": "GDPR中常见的数据类型或分类有哪些？",
+    "answer": "GDPR将个人数据定义为任何与已识别或可识别自然人相关的数据。常见分类包括直接标识符（如姓名、身份证号）、间接标识符（如IP地址、设备ID）、敏感数据（如健康记录、种族、宗教信仰）等。数据分为一般个人数据和特殊类别（如生物识别数据），组织需根据数据敏感性实施不同保护级别。例如，处理敏感数据时，必须获得明确同意并采取额外安全措施，以防止数据泄露或滥用，这与网络安全中的数据分类策略相关。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "GDPR",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:00:13.027778"
+    }
+  },
+  {
+    "question": "GDPR在实际场景中如何应用？",
+    "answer": "GDPR在实际场景中广泛应用于数据处理领域，例如社交媒体平台（如Facebook）处理用户数据时必须获得明确同意、提供数据访问和删除选项。跨境数据传输需通过标准合同条款或批准机制，以确保数据安全。典型应用场景包括电商网站收集用户偏好数据、医疗应用处理患者信息，违反GDPR可能导致高达4%全球营业额的罚款。这推动了企业采用隐私保护技术，如数据匿名化，以符合法规要求，同时提升了整体网络安全水平。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "GDPR",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:00:13.027778"
+    }
+  },
+  {
+    "question": "GDPR的优缺点分析及防御措施是什么？",
+    "answer": "GDPR的优点包括加强个人隐私保护、提高数据安全标准，促进全球数据合规实践；缺点是可能增加企业合规成本，尤其对小型组织。防御措施包括实施隐私设计（将隐私融入产品开发）、使用加密和访问控制技术、定期进行数据保护影响评估（DPIA）。优缺点分析显示，GDPR推动了网络安全最佳实践，但过度合规可能影响创新。实战案例如2019年Google被欧盟罚款因违反GDPR，强调了合规的重要性，组织应通过技术培训和审计来应对风险，确保数据安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "GDPR",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:00:13.027778"
+    }
+  },
+  {
+    "question": "什么是PCI-DSS？",
+    "answer": "PCI-DSS是Payment Card Industry Data Security Standard（支付卡行业数据安全标准），它是由信用卡公司如Visa和Mastercard制定的一套全球性安全标准，旨在保护持卡人数据免受泄露。适用于任何处理、存储或传输信用卡数据的组织，如电商平台、银行和零售商。核心目标是通过12个要求（如安全网络、加密、访问控制）来降低数据 breach 风险。简单说，它是确保信用卡交易安全的强制性框架。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "PCI-DSS",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:01:40.921957"
+    }
+  },
+  {
+    "question": "PCI-DSS的技术原理和工作机制是什么？",
+    "answer": "PCI-DSS的技术原理基于风险缓解和合规性，包括强制访问控制（如多因素认证）、网络安全（如防火墙配置）、数据加密（如SSL/TLS协议）和日志审计。工作机制涉及持续监控和定期评估，例如使用漏洞扫描工具检测系统弱点，并通过QSA（Qualified Security Assessor）进行认证。这确保了数据在传输和存储过程中得到保护，但需注意，它依赖于组织的实施力度，而非单一技术。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "PCI-DSS",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:01:40.922956"
+    }
+  },
+  {
+    "question": "PCI-DSS适用于哪些实际应用场景？",
+    "answer": "PCI-DSS主要应用于处理信用卡支付的场景，如在线购物网站、POS终端、ATM机和银行后台系统。例如，电商平台在用户输入卡号时必须遵守PCI-DSS，以防止数据盗窃；零售店使用符合标准的支付终端来减少欺诈风险。其他场景包括云服务提供商存储卡数据时，也需符合标准。总之，它覆盖了从在线到离线的支付生态系统，确保数据安全。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "PCI-DSS",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:01:40.922956"
+    }
+  },
+  {
+    "question": "PCI-DSS的优缺点是什么？",
+    "answer": "PCI-DSS的优点包括标准化安全要求，能显著降低数据泄露风险（如减少身份盗窃），并提升组织信誉；缺点是实施成本高（如需投资新系统和培训），可能导致业务灵活性降低。举例来说，优点是它帮助企业通过认证获得市场信任，缺点是小型商户可能因资源不足而难以合规。整体上，它平衡了安全与商业需求，但执行不当可能留下漏洞。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "PCI-DSS",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:01:40.922956"
+    }
+  },
+  {
+    "question": "如何实施PCI-DSS并避免常见问题？",
+    "answer": "实施PCI-DSS的最佳实践包括：定期进行渗透测试、员工安全培训和保持软件更新；防御措施如使用加密工具和访问控制来应对威胁；实战案例显示，Target数据泄露事件因未严格遵守标准导致损失，提醒组织需加强监控。优缺点分析表明，虽然它提升安全，但过度依赖标准可能忽略创新。建议：采用分阶段合规策略，结合自动化工具，并咨询QSA以优化实施。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "PCI-DSS",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:01:40.922956"
+    }
+  },
+  {
+    "question": "什么是OWASP Top 10？它为什么重要？",
+    "answer": "OWASP Top 10是OWASP组织发布的十大常见Web应用安全风险列表，旨在帮助开发者和安全专业人员识别和缓解最常见的漏洞。这些风险包括注入、不安全的直接对象引用等，每年更新以反映新威胁。重要性在于它提供了标准化框架，帮助组织优先处理安全问题，减少数据泄露和攻击事件，从而提升Web应用的整体安全性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "OWASP Top 10",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:02:21.153730"
+    }
+  },
+  {
+    "question": "OWASP Top 10中的风险是如何工作的？技术原理和工作机制是什么？",
+    "answer": "OWASP Top 10的风险如SQL注入，通过恶意输入欺骗Web应用后端数据库执行非法操作。技术原理包括攻击者利用输入验证不足，绕过安全控制；工作机制涉及请求处理流程，攻击代码在服务器端执行，导致数据窃取或系统破坏。理解这些机制有助于开发更 robust 的防御层，例如使用参数化查询来防止注入攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "OWASP Top 10",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:02:21.153730"
+    }
+  },
+  {
+    "question": "OWASP Top 10包括哪些具体的安全风险？它们的常见类型或分类是什么？",
+    "answer": "OWASP Top 10（2021版）包括：A1-注入、A2-失效的身份认证、A3-敏感信息泄露、A4-XML外部实体、A5-服务器端请求伪造、A6-安全配置错误、A7-跨站脚本、A8-不安全的反序列化、A9-使用含有已知漏洞的组件、A10-不足的日志记录和监控。这些风险按严重性和类型分类，如注入属于数据处理漏洞，XSS属于客户端安全问题，帮助开发者针对性地防范。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "OWASP Top 10",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:02:21.153730"
+    }
+  },
+  {
+    "question": "OWASP Top 10在实际Web应用开发中如何应用？它的优缺点是什么？",
+    "answer": "在实际开发中，OWASP Top 10用于指导安全审计和代码审查，例如通过自动化工具扫描漏洞或在SDLC中集成安全检查。优点是提供统一标准，便于教育和培训，提高团队安全意识；缺点是可能忽略新兴威胁，且过度依赖可能导致开发效率降低，需结合其他安全框架。应用时应定期更新，以适应变化的攻击环境。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "OWASP Top 10",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:02:21.153730"
+    }
+  },
+  {
+    "question": "如何防御OWASP Top 10中的风险？有哪些实战案例和最佳实践建议？",
+    "answer": "防御措施包括输入验证、使用安全框架（如OWASP ESAPI）、定期更新组件和加强日志审计。例如，针对SQL注入，采用参数化查询；实战案例是某电商平台通过OWASP Top 10检查发现并修复了XSS漏洞，避免了用户数据泄露。最佳实践是将安全融入开发过程（如DevSecOps），进行渗透测试和持续监控，以最小化风险并提升整体应用韧性。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "OWASP Top 10",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:02:21.153730"
+    }
+  },
+  {
+    "question": "CWE/SANS Top 25是什么？",
+    "answer": "CWE（Common Weakness Enumeration）是一个标准漏洞枚举系统，用于识别软件安全弱点；SANS Top 25是基于常见漏洞的前25个最危险弱点列表，由SANS机构发布。这些工具帮助安全专业人员和开发者优先处理高风险漏洞，提升软件安全性。CWE提供漏洞分类和编号，便于标准化审计；SANS Top 25强调实际威胁，指导防御策略。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CWE/SANS Top 25",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:04:10.736965"
+    }
+  },
+  {
+    "question": "CWE/SANS Top 25是如何工作的？",
+    "answer": "CWE通过枚举和分类软件弱点，使用标准化编号（如CWE-79：SQL注入）来描述漏洞机制；SANS Top 25基于分析历史漏洞数据，列出最常见的25个弱点，如缓冲区溢出或路径遍历。工作机制包括漏洞识别、优先级排序和风险评估，帮助开发者在编码时参考这些列表，进行代码审计和测试，从而预防潜在攻击。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CWE/SANS Top 25",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:04:10.736965"
+    }
+  },
+  {
+    "question": "CWE/SANS Top 25中有哪些常见漏洞类型？它们在实际中如何应用？",
+    "answer": "CWE/SANS Top 25包括常见类型如缓冲区溢出（CWE-119）、注入攻击（CWE-79）和不安全配置（CWE-259）。实际应用中，开发者使用这些列表进行代码审计，例如检查输入验证是否缺失；安全团队用它们指导渗透测试，优先修复高风险漏洞，确保软件在Web应用或系统中安全运行。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CWE/SANS Top 25",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:04:10.736965"
+    }
+  },
+  {
+    "question": "如何防御CWE/SANS Top 25中的漏洞？它们的优缺点是什么？",
+    "answer": "防御措施包括实施安全编码实践，如输入验证（防御注入攻击）和使用安全库；优点是覆盖广泛，便于标准化培训和工具集成；缺点是可能忽略上下文特定风险，导致过度防御。实战中，结合自动化工具扫描代码，提高效率，但需结合人工审计以应对复杂场景。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CWE/SANS Top 25",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:04:10.736965"
+    }
+  },
+  {
+    "question": "请提供一个CWE/SANS Top 25的实战案例，并给出最佳实践建议。",
+    "answer": "案例：SQL注入（CWE-79）在Web应用中发生，攻击者通过未参数化查询注入恶意SQL，导致数据泄露。最佳实践建议包括使用参数化查询、定期安全审计和教育开发团队，采用OWASP Top 10标准结合CWE/SANS列表，建立持续监控机制，以减少漏洞发生概率。",
+    "metadata": {
+      "prompt_type": "zero_shot_prompts",
+      "entity": "CWE/SANS Top 25",
+      "category": "标准法规",
+      "source_file": "01_zero_shot_prompts.json",
+      "generated_at": "2025-11-03T17:04:10.736965"
+    }
+  }
+]
