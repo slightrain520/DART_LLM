@@ -296,6 +296,13 @@ def extract_context(
         score_threshold=score_threshold,
         metric_type=metric_type
     )
+    print("使用的数据库: ", db_name)
+    print("使用的API基础URL: ", base_url)
+    print("使用的访问令牌: ", token)
+    print("使用的最大上下文长度: ", max_context_length)
+    print("使用的返回的最相似文档数量: ", top_k)
+    print("使用的相似度阈值: ", score_threshold)
+    print("使用的相似度度量类型: ", metric_type)
     
     # 2. 提取上下文
     context_text, filtered_results = processor.process_context(search_results)
@@ -309,7 +316,7 @@ def extract_context(
 # 测试代码
 if __name__ == "__main__":
     # 测试RAG检索功能
-    test_query = "什么是防火墙？"
+    test_query = "什么是蠕虫病毒？"
     
     print(f"正在检索: {test_query}")
     print("=" * 60)

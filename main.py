@@ -45,6 +45,7 @@ def process_query(user_query: str, conversation_context: str = "") -> Dict[str, 
             score_threshold=config.RAG_SCORE_THRESHOLD,
             metric_type=config.RAG_METRIC_TYPE
         )
+        print("context_text: ", context_text)
         
         # 3. 构建Prompt
         final_prompt = build_prompt(

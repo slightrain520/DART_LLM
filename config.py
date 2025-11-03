@@ -61,10 +61,10 @@ class Config:
     }
     
     # RAG检索配置
-    RAG_TOP_K = int(os.getenv("RAG_TOP_K", "5"))  # 检索返回的文档数量
-    RAG_SCORE_THRESHOLD = float(os.getenv("RAG_SCORE_THRESHOLD", "0.6"))  # 相似度阈值
-    RAG_MAX_CONTEXT_LENGTH = int(os.getenv("RAG_MAX_CONTEXT_LENGTH", "1500"))  # 最大上下文长度
-    RAG_METRIC_TYPE = os.getenv("RAG_METRIC_TYPE", "cosine")  # 相似度度量方式
+    RAG_TOP_K = int(os.getenv("TOP_K", "5"))  # 检索返回的文档数量
+    RAG_SCORE_THRESHOLD = float(os.getenv("SCORE_THRESHOLD", "0.6"))  # 相似度阈值
+    RAG_MAX_CONTEXT_LENGTH = int(os.getenv("MAX_CONTEXT_LENGTH", "1500"))  # 最大上下文长度
+    RAG_METRIC_TYPE = os.getenv("METRIC_TYPE", "cosine")  # 相似度度量方式
     
     # 验证配置
     @classmethod
