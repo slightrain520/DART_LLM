@@ -1,4 +1,4 @@
-# main.py（添加API服务代码）
+# main.py 
 import sys
 from typing import Dict, Any
 from flask import Flask, request, jsonify
@@ -158,7 +158,7 @@ def chat_api():
     result["session_id"] = session_id
     return jsonify(result)
 
-# 新增接口：获取会话列表（供前端展示历史会话）
+# 获取会话列表（供前端展示历史会话）
 @app.route('/api/conversations', methods=['GET'])
 def get_conversations():
     return jsonify({
@@ -166,7 +166,7 @@ def get_conversations():
         "conversations": conversation_manager.list_conversations()
     })
 
-# 新增接口：删除指定会话
+# 删除指定会话
 @app.route('/api/conversations/<session_id>', methods=['DELETE'])
 def delete_conversation(session_id):
     success = conversation_manager.delete_conversation(session_id)
@@ -175,7 +175,7 @@ def delete_conversation(session_id):
         "message": "会话删除成功" if success else "会话不存在"
     })
 
-# 测试接口（可选）
+# 测试接口
 @app.route('/api/test', methods=['GET'])
 def test_api():
     return jsonify({
@@ -187,10 +187,10 @@ def test_api():
 # 启动服务
 if __name__ == "__main__":
     # 测试API连接
-    print("📡 测试API连接...")
+    print("测试API连接...")
     if not test_connection():
         sys.exit(1)
     
     # 启动Flask服务（默认端口5000，允许外部访问）
-    print("🚀 API服务启动中...")
+    print("API服务启动中...")
     app.run(host='0.0.0.0', port=5000, debug=True)
