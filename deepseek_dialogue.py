@@ -1,14 +1,13 @@
-# api_client.py
 import os
 from openai import OpenAI
 
 # 基本配置
 _DEEPSEEK_BASE_URL = "https://llmapi.paratera.com"
-_DEEPSEEK_MODEL    = os.getenv("DEEPSEEK_MODEL", "DeepSeek-V3.1")  # 也可用 deepseek-reasoner
+_DEEPSEEK_MODEL    = os.getenv("DEEPSEEK_MODEL", "DeepSeek-V3.1")
 
 _client = OpenAI(
-    api_key=os.environ.get("DEEPSEEK_API_KEY", "sk-fc_Qf6bVyDypSplhVfWeTQ"),   # 必填
-    base_url=_DEEPSEEK_BASE_URL,                      # DeepSeek 兼容 OpenAI SDK
+    api_key=os.environ.get("DEEPSEEK_API_KEY", "sk-fc_Qf6bVyDypSplhVfWeTQ"),
+    base_url=_DEEPSEEK_BASE_URL,
 )
 
 def dialogue(user_input: str,
@@ -16,14 +15,6 @@ def dialogue(user_input: str,
              temperature: float = 0.0,
              max_tokens: int = 256,
              model: str = None) -> dict:
-    """
-    用 DeepSeek Chat Completions 完成一次对话调用。
-    保持与你原来上层调用的签名/字段一致：
-      - user_input: 你要审核的文本（放到 user role）
-      - custom_prompt: 作为 system 提示词
-    返回：
-      {"status":"success","response": "..."} 或 {"status":"error","message": "..."}
-    """
     try:
         messages = []
         if custom_prompt:

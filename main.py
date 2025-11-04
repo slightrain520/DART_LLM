@@ -4,7 +4,7 @@ from typing import Dict, Any
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # 解决跨域问题
 from config import config, setup_environment
-from guard import validate_user_input, validate_prompt, validate_history
+from guard import validate_user_input, validate_prompt
 from prompt_builder import build_prompt
 from data_processor import extract_context
 from api_client import dialogue, test_connection

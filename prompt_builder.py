@@ -13,14 +13,6 @@ Please answer all questions accurately based on this domain. If you don't have s
 def build_prompt(user_input, context, system_prompt=sys):
     """
     Combines the system prompt, user input, and context into a final prompt.
-
-    Args:
-        user_input (str): The user's input.
-        context (str): Additional context or instructions for the model.
-        system_prompt (str): The system's initial prompt (default is a basic assistant prompt).
-
-    Returns:
-        str: The final prompt to be sent to the LLM.
     """
     # Combine the system prompt, user input, and context into one string.
     final_prompt = f"{system_prompt}\nContext: {context}\nUser Input: {user_input}"
