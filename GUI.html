@@ -367,7 +367,7 @@
                     </div>
                     <div class="flex justify-between">
                         <span class="text-neutral-500">数据库</span>
-                        <span class="text-neutral-700">common_dataset</span>
+                        <span class="text-neutral-700">student_Group12_final</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-neutral-500">模型参数</span>
@@ -418,19 +418,36 @@
 
         // 处理行内Markdown格式
 		function processInlineMarkdown(text) {
-			// 保护数学公式
-			text = text.replace(/\$\$(.*?)\$\$/g, '<div class="math-formula">$$$1$$</div>');
-			text = text.replace(/\$(.*?)\$/g, '<span class="math-inline">$ $1 $</span>');
+			// 先保护数学公式
+			const mathBlocks = [];
+			const inlineMath = [];
 			
-			// 处理粗体
+			// 保护块级数学公式
+			text = text.replace(/\$\$(.*?)\$\$/g, (match, p1) => {
+				mathBlocks.push(p1);
+				return `@@MATH_BLOCK_${mathBlocks.length-1}@@`;
+			});
+			
+			// 保护行内数学公式
+			text = text.replace(/\$(.*?)\$/g, (match, p1) => {
+				inlineMath.push(p1);
+				return `@@INLINE_MATH_${inlineMath.length-1}@@`;
+			});
+			
+			// 处理其他Markdown格式
 			text = text.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
 			text = text.replace(/\*([^*\n]+?)\*/g, '<em>$1</em>');
-			
-			// 处理行内代码
 			text = text.replace(/`(.*?)`/g, '<code>$1</code>');
-			
-			// 处理链接
 			text = text.replace(/\[([^\[]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">$1</a>');
+			
+			// 恢复数学公式
+			text = text.replace(/@@MATH_BLOCK_(\d+)@@/g, (match, p1) => {
+				return `<div class="math-formula">$$${mathBlocks[p1]}$$</div>`;
+			});
+			
+			text = text.replace(/@@INLINE_MATH_(\d+)@@/g, (match, p1) => {
+				return `<span class="math-inline">$${inlineMath[p1]}$</span>`;
+			});
 			
 			return text;
 		}

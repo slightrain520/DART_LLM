@@ -23,11 +23,11 @@ class Config:
     # API基础URL
     BASE_URL = os.getenv("DART_BASE_URL", "http://10.1.0.220:9002/api")
     
-    # 用户认证Token
-    TOKEN = os.getenv("DART_API_TOKEN", "your_default_token_here")
+    # 用户认证Token - Group12专用Token
+    TOKEN = os.getenv("DART_API_TOKEN", "e-1qa4tLR9N_AnEEBemwaiOBoyoRoFHr00W0Wb3Uk5tWE5ziWJiCHh7sM1b73T2s")
     
-    # 默认数据库名称
-    DATABASE_NAME = os.getenv("DATABASE_NAME", "common_dataset")
+    # 默认数据库名称 - 使用自建的中文网安知识图谱数据库
+    DATABASE_NAME = os.getenv("DATABASE_NAME", "student_Group12_final")
     
     # 温度参数
     MODEL_TEMPERATURE = float(os.getenv("MODEL_TEMPERATURE", "0.1"))
@@ -60,6 +60,12 @@ class Config:
         "files": "/databases/{database_name}/files"
     }
     
+    # RAG检索配置
+    RAG_TOP_K = int(os.getenv("TOP_K", "5"))  # 检索返回的文档数量
+    RAG_SCORE_THRESHOLD = float(os.getenv("SCORE_THRESHOLD", "0.6"))  # 相似度阈值
+    RAG_MAX_CONTEXT_LENGTH = int(os.getenv("MAX_CONTEXT_LENGTH", "1500"))  # 最大上下文长度
+    RAG_METRIC_TYPE = os.getenv("METRIC_TYPE", "cosine")  # 相似度度量方式
+    
     # 验证配置
     @classmethod
     def validate_config(cls):
@@ -78,6 +84,9 @@ class Config:
         if cls.MAX_INPUT_LENGTH <= 0:
             errors.append("❌ MAX_INPUT_LENGTH 应该大于 0")
         
+        if cls.RAG_TOP_K <= 0:
+            errors.append("❌ RAG_TOP_K 应该大于 0")
+        
         return errors
     
     @classmethod
@@ -90,11 +99,12 @@ class Config:
         print(f"API地址: {cls.BASE_URL}")
         print(f"数据库: {cls.DATABASE_NAME}")
         print(f"模型参数: temperature={cls.MODEL_TEMPERATURE}, max_tokens={cls.MODEL_MAX_TOKENS}")
+        print(f"RAG配置: top_k={cls.RAG_TOP_K}, threshold={cls.RAG_SCORE_THRESHOLD}, metric={cls.RAG_METRIC_TYPE}")
         print(f"系统配置: 超时={cls.REQUEST_TIMEOUT}s, 重试={cls.MAX_RETRIES}次")
         
         # 检查Token是否已设置
         if cls.TOKEN and cls.TOKEN != "your_default_token_here":
-            print(f"Token状态: ✅ 已设置")
+            print(f"Token状态: ✅ 已设置 (Group12)")
         else:
             print("Token状态: ❌ 未设置")
         

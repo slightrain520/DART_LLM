@@ -6,8 +6,9 @@
 """
 import requests
 from typing import List, Dict, Tuple, Any
-
-
+TOKEN = "e-1qa4tLR9N_AnEEBemwaiOBoyoRoFHr00W0Wb3Uk5tWE5ziWJiCHh7sM1b73T2s"
+DBNAME = "student_Group12_final"
+METRIC_TYPE = "cosine"
 class DataProcessor:
     """数据处理器，用于处理RAG检索结果"""
     
@@ -30,7 +31,7 @@ class DataProcessor:
         token: str = "token_common",
         top_k: int = None,
         metric_type: str = "cosine",
-        score_threshold: float = 0.5
+        score_threshold: float = 0.0
 
     ) -> Dict[str, Any]:
         """
@@ -246,11 +247,11 @@ class DataProcessor:
 def extract_context(
     query: str,
     base_url: str = "http://10.1.0.220:9002/api",
-    db_name: str = "common_dataset",# 默认使用共享数据库
-    token: str = "token_common",
+    db_name: str = "student_Group12_final",# 使用最终版本数据库
+    token: str = "e-1qa4tLR9N_AnEEBemwaiOBoyoRoFHr00W0Wb3Uk5tWE5ziWJiCHh7sM1b73T2s",
     max_context_length: int = 2000,
     top_k: int = 5,
-    score_threshold: float = 0.5,
+    score_threshold: float = 0.0,
     metric_type: str = "cosine"
 ) -> Tuple[str, List[Dict[str, Any]], Dict[int, Dict[str, Any]]]:
     """
@@ -295,6 +296,13 @@ def extract_context(
         score_threshold=score_threshold,
         metric_type=metric_type
     )
+    print("使用的数据库: ", db_name)
+    print("使用的API基础URL: ", base_url)
+    print("使用的访问令牌: ", token)
+    print("使用的最大上下文长度: ", max_context_length)
+    print("使用的返回的最相似文档数量: ", top_k)
+    print("使用的相似度阈值: ", score_threshold)
+    print("使用的相似度度量类型: ", metric_type)
     
     # 2. 提取上下文
     context_text, filtered_results = processor.process_context(search_results)
@@ -308,7 +316,7 @@ def extract_context(
 # 测试代码
 if __name__ == "__main__":
     # 测试RAG检索功能
-    test_query = "什么是SQL"
+    test_query = "什么是蠕虫病毒？"
     
     print(f"正在检索: {test_query}")
     print("=" * 60)
@@ -316,9 +324,11 @@ if __name__ == "__main__":
     context, results, citations = extract_context(
         query=test_query,
         max_context_length=1500,
-        top_k=8,
-        score_threshold=0.69,
-        metric_type="cosine"
+        top_k=5,
+        score_threshold=0.2,
+        metric_type=METRIC_TYPE,
+        db_name = DBNAME,
+        token=TOKEN
     )
     
     print("\n提取的上下文：")
@@ -336,5 +346,5 @@ if __name__ == "__main__":
         print(f"引用ID: {result['citation_id']}")
         print(f"文件ID: {result['file_id']}")
         print(f"相似度: {result['score']:.4f}")
-        print(f"内容预览: {result['content'][:100]}...")
+        print(f"内容预览: {result['content']}...")
         print("-" * 40)

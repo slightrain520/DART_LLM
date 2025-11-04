@@ -1,4 +1,4 @@
-# main.py（添加API服务代码）
+# main.py 
 import sys
 from typing import Dict, Any
 from flask import Flask, request, jsonify
@@ -34,14 +34,18 @@ def process_query(user_query: str, conversation_context: str = "") -> Dict[str, 
         }
     
     try:
-        # 2. RAG检索（获取上下文）
+        # 2. RAG检索（获取上下文）- 使用配置文件中的参数
         context_text, filtered_results, citations = extract_context(
             query=user_query,
-            max_context_length=1500,
-            top_k=8,
-            score_threshold=0.69,
-            metric_type="cosine"
+            base_url=config.BASE_URL,
+            db_name=config.DATABASE_NAME,
+            token=config.TOKEN,
+            max_context_length=config.RAG_MAX_CONTEXT_LENGTH,
+            top_k=config.RAG_TOP_K,
+            score_threshold=config.RAG_SCORE_THRESHOLD,
+            metric_type=config.RAG_METRIC_TYPE
         )
+        print("context_text: ", context_text)
         
         # 3. 构建Prompt
         final_prompt = build_prompt(
@@ -155,7 +159,7 @@ def chat_api():
     result["session_id"] = session_id
     return jsonify(result)
 
-# 新增接口：获取会话列表（供前端展示历史会话）
+# 获取会话列表（供前端展示历史会话）
 @app.route('/api/conversations', methods=['GET'])
 def get_conversations():
     return jsonify({
@@ -163,7 +167,7 @@ def get_conversations():
         "conversations": conversation_manager.list_conversations()
     })
 
-# 新增接口：删除指定会话
+# 删除指定会话
 @app.route('/api/conversations/<session_id>', methods=['DELETE'])
 def delete_conversation(session_id):
     success = conversation_manager.delete_conversation(session_id)
@@ -172,7 +176,7 @@ def delete_conversation(session_id):
         "message": "会话删除成功" if success else "会话不存在"
     })
 
-# 测试接口（可选）
+# 测试接口
 @app.route('/api/test', methods=['GET'])
 def test_api():
     return jsonify({
@@ -184,10 +188,10 @@ def test_api():
 # 启动服务
 if __name__ == "__main__":
     # 测试API连接
-    print("📡 测试API连接...")
+    print("测试API连接...")
     if not test_connection():
         sys.exit(1)
     
     # 启动Flask服务（默认端口5000，允许外部访问）
-    print("🚀 API服务启动中...")
+    print("API服务启动中...")
     app.run(host='0.0.0.0', port=5000, debug=True)
