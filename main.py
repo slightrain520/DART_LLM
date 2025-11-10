@@ -78,7 +78,7 @@ def process_query(user_query: str, conversation_context: str = "") -> Dict[str, 
         # 5. 调用 LLM 获取回答 ...
         raw_answer = llm_response["response"]
 
-        # # 6. 对输出做安全审计
+        # 6. 对输出做安全审计
         # from guard import validate_llm_output  # 与 validate_user_input/validate_prompt 同文件
         if not validate_llm_output(raw_answer):
             return {
