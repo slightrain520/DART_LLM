@@ -24,7 +24,7 @@ if not ENV_SETUP_COMPLETED:
 
 
 def process_query(user_query: str, conversation_context: str = "") -> Dict[str, Any]:
-    """处理用户查询的核心逻辑（复用原main函数逻辑）"""
+    """处理用户查询的核心逻辑"""
     
     # 1. 校验用户输入合法性
     if not validate_user_input(user_query):
@@ -112,7 +112,7 @@ def chat_api():
     user_query = data.get('query', '').strip()
     session_id = data.get('session_id')  # 获取前端传递的session_id
     print("session_id: ", session_id)
-    # 关键修改：仅在session_id为空时创建新会话，否则验证是否存在
+    # 仅在session_id为空时创建新会话，否则验证是否存在
     if not session_id:
         session_id = conversation_manager.create_conversation()
     else:
@@ -174,6 +174,20 @@ def delete_conversation(session_id):
     return jsonify({
         "status": "success" if success else "error",
         "message": "会话删除成功" if success else "会话不存在"
+    })
+
+# 获取当前配置信息
+@app.route('/api/config', methods=['GET'])
+def get_config():
+    return jsonify({
+        "status": "success",
+        "config": {
+            "base_url": config.BASE_URL,
+            "database_name": config.DATABASE_NAME,
+            "model_temperature": config.MODEL_TEMPERATURE,
+            "model_max_tokens": config.MODEL_MAX_TOKENS,
+            "token_status": "已设置" if config.TOKEN and config.TOKEN != "your_default_token_here" else "未设置"
+        }
     })
 
 # 测试接口
