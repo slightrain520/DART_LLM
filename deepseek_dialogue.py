@@ -3,10 +3,9 @@ from openai import OpenAI
 
 # 基本配置
 _DEEPSEEK_BASE_URL = "https://llmapi.paratera.com"
-_DEEPSEEK_MODEL    = os.getenv("DEEPSEEK_MODEL", "DeepSeek-V3.1")
 
 _client = OpenAI(
-    api_key=os.environ.get("DEEPSEEK_API_KEY", "sk-fc_Qf6bVyDypSplhVfWeTQ"),
+    api_key="sk-fc_Qf6bVyDypSplhVfWeTQ",
     base_url=_DEEPSEEK_BASE_URL,
 )
 
@@ -14,7 +13,7 @@ def dialogue(user_input: str,
              custom_prompt: str = "",
              temperature: float = 0.0,
              max_tokens: int = 256,
-             model: str = None) -> dict:
+             model: str = "DeepSeek-V3.1") -> dict:
     try:
         messages = []
         if custom_prompt:
@@ -22,7 +21,7 @@ def dialogue(user_input: str,
         messages.append({"role": "user", "content": user_input})
 
         resp = _client.chat.completions.create(
-            model=model or _DEEPSEEK_MODEL,   # deepseek-chat | deepseek-reasoner
+            model=model,   # deepseek-chat | deepseek-reasoner
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens,

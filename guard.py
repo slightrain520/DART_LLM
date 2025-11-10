@@ -103,12 +103,13 @@ _MAX_PROMPT_LEN = 4000
 
 _HARMFUL_PATTERNS = []
 
-def _llm_json_classify(text: str, system_prompt: str):
+def _llm_json_classify(text: str, system_prompt: str, model: str="DeepSeek-V3.1"):
     res = dialogue(
         user_input=text,
         custom_prompt=system_prompt,
         temperature=0.0,
-        max_tokens=256
+        max_tokens=256,
+        model=model
     )
     if res.get("status") != "success":
         raise RuntimeError(f"LLM classify failed: {res.get('message', 'unknown error')}")
@@ -134,8 +135,12 @@ def validate_user_input(user_input):
 
     # LLM 安全分类
     try:
-        verdict = _llm_json_classify(user_input, _INPUT_SAFETY_SYSTEM_PROMPT)
-        return _confidence_decision(verdict, "validate_user_input")
+        verdict = _llm_json_classify(user_input, _INPUT_SAFETY_SYSTEM_PROMPT, model="Kimi-K2")
+        if not _confidence_decision(verdict, "validate_user_input"):
+            return _confidence_decision(verdict, "validate_user_input")
+        else:
+            verdict = _llm_json_classify(user_input, _INPUT_SAFETY_SYSTEM_PROMPT)
+            return _confidence_decision(verdict, "validate_user_input")
     except Exception as e:
         print(f"[validate_user_input] LLM safety classifier unavailable or error: {e}")
         return True
@@ -160,8 +165,12 @@ def validate_prompt(final_prompt):
 
     # LLM 安全分类
     try:
-        verdict = _llm_json_classify(final_prompt, _PROMPT_SAFETY_SYSTEM_PROMPT)
-        return _confidence_decision(verdict, "validate_prompt")
+        verdict = _llm_json_classify(final_prompt, _PROMPT_SAFETY_SYSTEM_PROMPT, model="Kimi-K2")
+        if not _confidence_decision(verdict, "validate_prompt"):
+            return _confidence_decision(verdict, "validate_prompt")
+        else:
+            verdict = _llm_json_classify(final_prompt, _PROMPT_SAFETY_SYSTEM_PROMPT)
+            return _confidence_decision(verdict, "validate_prompt")
     except Exception as e:
         print(f"[validate_prompt] LLM safety classifier unavailable or error: {e}")
         return True
@@ -194,12 +203,13 @@ def _extract_first_json_obj(text: str) -> str:
                 return s[start:i+1].strip()
     return ""
 
-def _llm_json_classify_output(assistant_text: str):
+def _llm_json_classify_output(assistant_text: str, model: str="DeepSeek-V3.1"):
     res = dialogue(
         user_input=assistant_text,
         custom_prompt=_OUTPUT_SAFETY_SYSTEM_PROMPT,
         temperature=0.0,
-        max_tokens=256
+        max_tokens=256,
+        model=model
     )
     if res.get("status") != "success":
         raise RuntimeError(f"LLM output classify failed: {res.get('message', 'unknown error')}")
@@ -224,14 +234,18 @@ def validate_llm_output(assistant_text: str) -> bool:
 
     # LLM 分类
     try:
-        verdict = _llm_json_classify_output(assistant_text)
-        return _confidence_decision(verdict, "validate_llm_output")
+        verdict = _llm_json_classify_output(assistant_text, model="Kimi-K2")
+        if not _confidence_decision(verdict, "validate_llm_output"):
+            return _confidence_decision(verdict, "validate_llm_output")
+        else:
+            verdict = _llm_json_classify_output(assistant_text)
+            return _confidence_decision(verdict, "validate_llm_output")
     except Exception as e:
         print(f"[validate_llm_output] LLM safety classifier unavailable or error: {e}")
         return True
 
 # 置信度阈值
-_CONF_BLOCK_T = 0.90
+_CONF_BLOCK_T = 0.95
 _CONF_WARN_T  = 0.50
 
 def _confidence_decision(verdict: dict, where: str) -> bool:
